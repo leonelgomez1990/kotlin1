@@ -1,23 +1,8 @@
 package com.lfg.kotlinclasses.entities
 
-class Mascota (nombre : String, tipo : String, raza : String, edad : Int) {
-    var nombre : String
-    var tipo : String
-    var raza : String
-    var edad : Int
+class Mascota (var nombre : String, var tipo : String, var raza : String, var edad : Int) {
 
-    init {
-        this.nombre = nombre
-        this.tipo   = tipo
-        this.raza   = raza
-        this.edad   = edad
-    }
-
-    fun CalcularEdad (edad : Int) : Int {
-        var edadnueva : Int
-        edadnueva = edad*7
-        return edadnueva
-    }
+    fun calcularEdad (edad : Int) : Int = edad*7
 
     class Constants {
         companion object {
@@ -26,7 +11,5 @@ class Mascota (nombre : String, tipo : String, raza : String, edad : Int) {
         }
     }
 
-    override fun toString(): String {
-        return "Mascota(nombre='$nombre', tipo='$tipo', raza='$raza', edad=$edad)"
-    }
+    override fun toString(): String = "Mascota(nombre='$nombre', tipo='$tipo', raza='$raza', edad=$edad)"
 }
