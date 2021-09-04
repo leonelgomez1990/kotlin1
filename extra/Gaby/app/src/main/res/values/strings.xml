@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Gaby</string>
+    <string name="btn_name">Hola Gabriela</string>
+    <string name="mod_1">Samsung</string>
+    <string name="mod_2">Motorola</string>
+    <string name="mod_3">LG</string>
+    <string name="mod_4">Iphone</string>
 </resources>

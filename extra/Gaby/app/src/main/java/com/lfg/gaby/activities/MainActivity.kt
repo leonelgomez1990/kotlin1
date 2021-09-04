@@ -1,7 +1,8 @@
-package com.lfg.gaby
+package com.lfg.gaby.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.lfg.gaby.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
