@@ -3,4 +3,7 @@
     <string name="screen_1">Esta es la pantalla 1</string>
     <string name="screen_2">Esta es la pantalla 2</string>
     <string name="bnt_navegate">Navegar</string>
+    <string name="txt_User">Ingrese usuario</string>
+    <string name="txt_Password">Ingrese contraseña</string>
+    <string name="msg_Empty">Campo de usuario vacío</string>
 </resources>
