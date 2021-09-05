@@ -1,7 +1,8 @@
-package com.lfg.navactivity
+package com.lfg.navactivity.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.lfg.navactivity.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

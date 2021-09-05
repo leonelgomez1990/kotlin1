@@ -10,7 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Navactivity">
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity2"
+            android:exported="true" />
+        <activity
+            android:name=".activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
