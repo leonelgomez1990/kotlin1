@@ -18,5 +18,8 @@
         android:id="@+id/fragment2"
         android:name="com.lfg.navigationtest.fragments.Fragment2"
         android:label="fragment2_fragment"
-        tools:layout="@layout/fragment2_fragment" />
+        tools:layout="@layout/fragment2_fragment" >
+        <argument android:name="argumento"
+            app:argType="string" />
+    </fragment>
 </navigation>

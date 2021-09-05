@@ -38,7 +38,7 @@ class Fragment1 : Fragment() {
         }
     }
     fun navegar (){
-        var action = Fragment1Directions.actionFragment1ToFragment2()
+        var action = Fragment1Directions.actionFragment1ToFragment2("Envio argumento")
         findNavController().navigate(action)
     }
 
