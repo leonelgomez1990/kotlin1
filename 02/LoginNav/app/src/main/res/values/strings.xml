@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Navactivity</string>
+    <string name="btn_navigate">Navegar</string>
+</resources>
