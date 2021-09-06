@@ -29,6 +29,7 @@ class Fragment1 : Fragment() {
     lateinit var txtPassword : TextView
     lateinit var frameLayout : ConstraintLayout
     private var userRepository = UserRepository()
+    lateinit var btnCreate : Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +40,7 @@ class Fragment1 : Fragment() {
         txtUser = v.findViewById(R.id.txtUser)
         txtPassword = v.findViewById(R.id.txtPassword)
         frameLayout = v.findViewById(R.id.frameLayout1)
+        btnCreate = v.findViewById(R.id.btnCreate)
 
         return v
     }
@@ -76,10 +78,14 @@ class Fragment1 : Fragment() {
                 }
             }
         }
+        btnCreate.setOnClickListener {
+            val action2 = Fragment1Directions.actionFragment1ToFragment3()
+            findNavController().navigate(action2)
+        }
     }
 
     fun navegar(user : String){
-        var action = Fragment1Directions.actionFragment1ToNavgraph2()
+        val action = Fragment1Directions.actionFragment1ToNavgraph2()
         findNavController().navigate(action)
     }
 
