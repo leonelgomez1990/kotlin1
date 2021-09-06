@@ -11,12 +11,8 @@
         android:label="fragment1_fragment"
         tools:layout="@layout/fragment1_fragment" >
         <action
-            android:id="@+id/action_fragment1_to_mainActivity2"
-            app:destination="@id/mainActivity2" />
+            android:id="@+id/action_fragment1_to_navgraph2"
+            app:destination="@id/navgraph2" />
     </fragment>
-    <activity
-        android:id="@+id/mainActivity2"
-        android:name="com.lfg.loginnav.activities.MainActivity2"
-        android:label="activity_main2"
-        tools:layout="@layout/activity_main2" />
+    <include app:graph="@navigation/navgraph2" />
 </navigation>

@@ -8,10 +8,11 @@
     tools:context=".fragments.Fragment2">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/txtHello"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

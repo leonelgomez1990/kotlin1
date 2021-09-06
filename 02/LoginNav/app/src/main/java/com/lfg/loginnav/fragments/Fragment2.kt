@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.lfg.loginnav.R
 import com.lfg.loginnav.viewmodels.Fragment2ViewModel
 
@@ -17,12 +18,14 @@ class Fragment2 : Fragment() {
 
     private lateinit var viewModel: Fragment2ViewModel
     lateinit var v : View
+    lateinit var txtHello : TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         v = inflater.inflate(R.layout.fragment2_fragment, container, false)
+        txtHello = v.findViewById(R.id.txtHello)
 
         return v
     }
