@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navgraph1"
+    app:startDestination="@id/fragment1">
+
+    <fragment
+        android:id="@+id/fragment1"
+        android:name="com.lfg.recyclerview.fragments.Fragment1"
+        android:label="fragment1_fragment"
+        tools:layout="@layout/fragment1_fragment" >
+        <action
+            android:id="@+id/action_fragment1_to_navgraph2"
+            app:destination="@id/navgraph2" />
+        <action
+            android:id="@+id/action_fragment1_to_fragment3"
+            app:destination="@id/fragment3" />
+    </fragment>
+    <include app:graph="@navigation/navgraph2" />
+    <fragment
+        android:id="@+id/fragment3"
+        android:name="com.lfg.recyclerview.fragments.Fragment3"
+        android:label="fragment3_fragment"
+        tools:layout="@layout/fragment3_fragment" />
+</navigation>
