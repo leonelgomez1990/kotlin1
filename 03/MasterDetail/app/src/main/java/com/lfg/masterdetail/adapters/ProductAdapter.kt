@@ -1,5 +1,6 @@
 package com.lfg.masterdetail.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,11 +8,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.lfg.masterdetail.R
 import com.lfg.masterdetail.entities.Product
 
 class ProductAdapter (
     private var productList : MutableList<Product>,
+    val context: Context,
     val onItemClick : (Int) -> Unit
 ) : RecyclerView.Adapter<ProductAdapter.ProductHolder>() {
 
@@ -43,6 +46,13 @@ class ProductAdapter (
         holder.getCardView().setOnClickListener() {
             onItemClick(position)
         }
+
+        Glide
+            .with(context)
+            .load(productList[position].urlImage)
+            .centerInside()
+            .into(holder.getImageView())
+
     }
 
     override fun getItemCount(): Int {

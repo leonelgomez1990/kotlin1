@@ -57,7 +57,7 @@ class ListFragment : Fragment() {
         recProduct.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(context)
         recProduct.layoutManager = linearLayoutManager
-        recProduct.adapter = ProductAdapter(productRepository.getList()) {
+        recProduct.adapter = ProductAdapter(productRepository.getList(),requireContext()) {
             pos -> onItemClick(pos)
         }
     }
