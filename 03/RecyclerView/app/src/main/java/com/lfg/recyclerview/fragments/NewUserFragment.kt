@@ -15,15 +15,15 @@ import com.lfg.recyclerview.R
 import com.lfg.recyclerview.entities.User
 import com.lfg.recyclerview.functions.hideKeyboard
 import com.lfg.recyclerview.repositories.UserRepository
-import com.lfg.recyclerview.viewmodels.Fragment3ViewModel
+import com.lfg.recyclerview.viewmodels.NewUserViewModel
 
-class Fragment3 : Fragment() {
+class NewUserFragment : Fragment() {
 
     companion object {
-        fun newInstance() = Fragment3()
+        fun newInstance() = NewUserFragment()
     }
 
-    private lateinit var viewModel: Fragment3ViewModel
+    private lateinit var viewModelNewUser: NewUserViewModel
     lateinit var v : View
     lateinit var txtUser : TextView
     lateinit var txtPassword : TextView
@@ -36,7 +36,7 @@ class Fragment3 : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        v = inflater.inflate(R.layout.fragment3_fragment, container, false)
+        v = inflater.inflate(R.layout.create_user_fragment, container, false)
         txtUser = v.findViewById(R.id.txtUser2)
         txtPassword = v.findViewById(R.id.txtPassword2)
         btnCreate = v.findViewById(R.id.btnCreate2)
@@ -76,7 +76,7 @@ class Fragment3 : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(Fragment3ViewModel::class.java)
+        viewModelNewUser = ViewModelProvider(this).get(NewUserViewModel::class.java)
         // TODO: Use the ViewModel
     }
 

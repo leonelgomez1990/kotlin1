@@ -9,20 +9,19 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.lfg.recyclerview.R
 import com.lfg.recyclerview.functions.hideKeyboard
 import com.lfg.recyclerview.repositories.UserRepository
-import com.lfg.recyclerview.viewmodels.Fragment1ViewModel
+import com.lfg.recyclerview.viewmodels.LoginViewModel
 
-class Fragment1 : Fragment() {
+class LoginFragment : Fragment() {
 
     companion object {
-        fun newInstance() = Fragment1()
+        fun newInstance() = LoginFragment()
     }
 
-    private lateinit var viewModel: Fragment1ViewModel
+    private lateinit var viewModelLogin: LoginViewModel
     lateinit var v : View
     lateinit var btnLogin : Button
     lateinit var txtUser : TextView
@@ -35,7 +34,7 @@ class Fragment1 : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        v = inflater.inflate(R.layout.fragment1_fragment, container, false)
+        v = inflater.inflate(R.layout.login_fragment, container, false)
         btnLogin = v.findViewById(R.id.btnLogin)
         txtUser = v.findViewById(R.id.txtUser)
         txtPassword = v.findViewById(R.id.txtPassword)
@@ -52,6 +51,9 @@ class Fragment1 : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        txtUser.text = ""
+        txtPassword.text = ""
+
         btnLogin.setOnClickListener {
             this.hideKeyboard()
             if(txtUser.length() <= 0) {
@@ -65,7 +67,7 @@ class Fragment1 : Fragment() {
                     //chequeo contraseña
                     if (txtPassword.text.toString() == id.password.toString())
                     {
-                        navegar(txtUser.text.toString())
+                        navegateLoginSuccesful()
                     }
                     else
                     {
@@ -79,19 +81,22 @@ class Fragment1 : Fragment() {
             }
         }
         btnCreate.setOnClickListener {
-            val action2 = Fragment1Directions.actionFragment1ToFragment3()
-            findNavController().navigate(action2)
+            navegateCreateNewUser()
         }
     }
 
-    fun navegar(user : String){
-        val action = Fragment1Directions.actionFragment1ToNavgraph2()
-        findNavController().navigate(action)
+    fun navegateLoginSuccesful(){
+        //val action = Fragment1Directions.actionFragment1ToMainActivity2()
+        //findNavController().navigate(action)
+    }
+    fun navegateCreateNewUser(){
+        //val action2 = Fragment1Directions.actionFragment1ToFragment3()
+        //findNavController().navigate(action2)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(Fragment1ViewModel::class.java)
+        viewModelLogin = ViewModelProvider(this).get(LoginViewModel::class.java)
         // TODO: Use the ViewModel
     }
 

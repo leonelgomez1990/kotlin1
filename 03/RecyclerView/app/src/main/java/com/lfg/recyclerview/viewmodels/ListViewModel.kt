@@ -2,6 +2,6 @@ package com.lfg.recyclerview.viewmodels
 
 import androidx.lifecycle.ViewModel
 
-class Fragment2ViewModel : ViewModel() {
+class ListViewModel : ViewModel() {
     // TODO: Implement the ViewModel
 }

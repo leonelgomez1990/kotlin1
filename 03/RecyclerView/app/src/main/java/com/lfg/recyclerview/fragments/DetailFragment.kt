@@ -6,38 +6,29 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import com.lfg.recyclerview.R
-import com.lfg.recyclerview.viewmodels.Fragment2ViewModel
+import com.lfg.recyclerview.viewmodels.DetailViewModel
 
-class Fragment2 : Fragment() {
+class DetailFragment : Fragment() {
 
     companion object {
-        fun newInstance() = Fragment2()
+        fun newInstance() = DetailFragment()
     }
 
-    private lateinit var viewModel: Fragment2ViewModel
+    private lateinit var viewModel: DetailViewModel
     lateinit var v : View
-    lateinit var txtHello : TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        v = inflater.inflate(R.layout.fragment2_fragment, container, false)
-        txtHello = v.findViewById(R.id.txtHello)
-
+        v = inflater.inflate(R.layout.detail_fragment, container, false)
         return v
-    }
-
-    override fun onStart() {
-        super.onStart()
-
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(Fragment2ViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
         // TODO: Use the ViewModel
     }
 
