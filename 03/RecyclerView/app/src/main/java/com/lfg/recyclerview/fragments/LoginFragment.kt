@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.lfg.recyclerview.R
 import com.lfg.recyclerview.functions.hideKeyboard
@@ -22,7 +23,7 @@ class LoginFragment : Fragment() {
     }
 
     private lateinit var viewModelLogin: LoginViewModel
-    lateinit var v : View
+    private lateinit var v : View
     lateinit var btnLogin : Button
     lateinit var txtUser : TextView
     lateinit var txtPassword : TextView
@@ -35,6 +36,7 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         v = inflater.inflate(R.layout.login_fragment, container, false)
+        //Binding
         btnLogin = v.findViewById(R.id.btnLogin)
         txtUser = v.findViewById(R.id.txtUser)
         txtPassword = v.findViewById(R.id.txtPassword)
@@ -61,11 +63,11 @@ class LoginFragment : Fragment() {
             }
             else
             {
-                var id = userRepository.userList.firstOrNull() { t -> t.user.toString().startsWith(txtUser.text) }
+                val id = userRepository.getList().firstOrNull() { t -> t.user == txtUser.text.toString() }
                 if(id != null)
                 {
                     //chequeo contraseña
-                    if (txtPassword.text.toString() == id.password.toString())
+                    if (txtPassword.text.toString() == id.password)
                     {
                         navegateLoginSuccesful()
                     }
@@ -86,12 +88,12 @@ class LoginFragment : Fragment() {
     }
 
     fun navegateLoginSuccesful(){
-        //val action = Fragment1Directions.actionFragment1ToMainActivity2()
-        //findNavController().navigate(action)
+        val action = LoginFragmentDirections.actionFragment1ToMainActivity2()
+        v.findNavController().navigate(action)
     }
     fun navegateCreateNewUser(){
-        //val action2 = Fragment1Directions.actionFragment1ToFragment3()
-        //findNavController().navigate(action2)
+        val action2 = LoginFragmentDirections.actionFragment1ToFragment3()
+        v.findNavController().navigate(action2)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

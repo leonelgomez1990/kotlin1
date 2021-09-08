@@ -22,7 +22,7 @@ class ListFragment : Fragment() {
     }
 
     private lateinit var viewModelList: ListViewModel
-    lateinit var v : View
+    private lateinit var v : View
     lateinit var txtHello : TextView
     private lateinit var recProduct : RecyclerView
     private var productRepository = ProductRepository()
@@ -34,6 +34,7 @@ class ListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         v = inflater.inflate(R.layout.list_fragment, container, false)
+        //Binding
         txtHello = v.findViewById(R.id.txtHello)
         recProduct = v.findViewById(R.id.recProduct)
 
@@ -55,7 +56,9 @@ class ListFragment : Fragment() {
         recProduct.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(context)
         recProduct.layoutManager = linearLayoutManager
-        recProduct.adapter = ProductAdapter(productRepository.getList())
+        recProduct.adapter = ProductAdapter(productRepository.getList()) {
+            pos -> onItemClick(pos)
+        }
     }
 
     fun onItemClick (position : Int) : Boolean {

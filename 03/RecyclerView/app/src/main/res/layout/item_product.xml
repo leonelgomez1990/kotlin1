@@ -5,7 +5,7 @@
     android:id="@+id/card_package_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="#B9F2FA"
+    app:cardBackgroundColor="@color/purple_500"
     app:cardCornerRadius="20dp"
     app:cardElevation="8dp">
 
@@ -15,9 +15,8 @@
 
         <TextView
             android:id="@+id/txtNameItem"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline6"

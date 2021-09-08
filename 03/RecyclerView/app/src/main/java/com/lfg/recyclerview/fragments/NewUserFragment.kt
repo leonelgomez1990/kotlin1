@@ -37,6 +37,7 @@ class NewUserFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         v = inflater.inflate(R.layout.create_user_fragment, container, false)
+        //Binding
         txtUser = v.findViewById(R.id.txtUser2)
         txtPassword = v.findViewById(R.id.txtPassword2)
         btnCreate = v.findViewById(R.id.btnCreate2)
@@ -53,13 +54,13 @@ class NewUserFragment : Fragment() {
             this.hideKeyboard()
 
             if((txtUser.text != "") && (txtPassword.text != "")){
-                var id = userRepository.userList.firstOrNull() { t -> t.user.toString().startsWith(txtUser.text) }
+                val id = userRepository.getList().firstOrNull() { t -> t.user == txtUser.text.toString() }
                 if(id != null)
                 {
                     Snackbar.make(frameLayout,R.string.msg_userexist,Snackbar.LENGTH_SHORT).show()
                 }
                 else{
-                    userRepository.userList.add(User(txtUser.text.toString(),txtPassword.text.toString()))
+                    userRepository.getList().add(User(txtUser.text.toString(),txtPassword.text.toString()))
                     Snackbar.make(frameLayout,R.string.msg_usercreated,Snackbar.LENGTH_LONG).show()
                     txtUser.text = ""
                     txtPassword.text = ""

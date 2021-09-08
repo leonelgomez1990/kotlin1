@@ -23,6 +23,8 @@ class DetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         v = inflater.inflate(R.layout.detail_fragment, container, false)
+        //Binding
+
         return v
     }
 
