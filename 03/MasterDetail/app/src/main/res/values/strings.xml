@@ -15,4 +15,8 @@
     <string name="msg_userexist">El usuario ya existe</string>
     <string name="msg_usercreated">Usuario creado exitosamente</string>
     <string name="btn_return">Volver</string>
+    <string name="txt_detail_id">Id</string>
+    <string name="txt_detail_brand">Marca</string>
+    <string name="txt_detail_pres">Presentación</string>
+    <string name="txt_detail_price">Precio</string>
 </resources>

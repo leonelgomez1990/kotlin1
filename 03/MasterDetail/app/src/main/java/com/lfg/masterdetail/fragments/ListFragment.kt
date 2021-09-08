@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -61,8 +62,8 @@ class ListFragment : Fragment() {
         }
     }
 
-    fun onItemClick (position : Int) : Boolean {
-        Snackbar.make(v, position.toString(), Snackbar.LENGTH_SHORT).show()
-        return true
+    fun onItemClick (position : Int) : Unit {
+        val action = ListFragmentDirections.actionFragmentListToDetailFragment(position)
+        v.findNavController().navigate(action)
     }
 }

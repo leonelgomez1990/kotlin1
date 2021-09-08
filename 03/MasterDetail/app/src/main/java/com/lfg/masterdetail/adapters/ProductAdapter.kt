@@ -12,7 +12,7 @@ import com.lfg.masterdetail.entities.Product
 
 class ProductAdapter (
     private var productList : MutableList<Product>,
-    val onItemClick : (Int) -> Boolean
+    val onItemClick : (Int) -> Unit
 ) : RecyclerView.Adapter<ProductAdapter.ProductHolder>() {
 
     class ProductHolder (v : View) : RecyclerView.ViewHolder(v) {
