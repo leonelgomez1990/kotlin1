@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/listFragment"
-        android:name="com.lfg.recyclerview.fragments.ListFragment"
+        android:name="com.lfg.masterdetail.fragments.ListFragment"
         android:label="fragment2_fragment"
         tools:layout="@layout/list_fragment" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.lfg.recyclerview.fragments.DetailFragment"
+        android:name="com.lfg.masterdetail.fragments.DetailFragment"
         android:label="detail_fragment"
         tools:layout="@layout/detail_fragment" >
         <argument

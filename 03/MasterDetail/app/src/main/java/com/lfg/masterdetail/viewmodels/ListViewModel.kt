@@ -1,4 +1,4 @@
-package com.lfg.recyclerview.viewmodels
+package com.lfg.masterdetail.viewmodels
 
 import androidx.lifecycle.ViewModel
 

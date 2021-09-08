@@ -1,6 +1,6 @@
-package com.lfg.recyclerview.repositories
+package com.lfg.masterdetail.repositories
 
-import com.lfg.recyclerview.entities.User
+import com.lfg.masterdetail.entities.User
 
 class UserRepository {
     private var userList : MutableList<User> = mutableListOf()

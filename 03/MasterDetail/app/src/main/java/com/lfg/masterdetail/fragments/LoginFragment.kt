@@ -1,4 +1,4 @@
-package com.lfg.recyclerview.fragments
+package com.lfg.masterdetail.fragments
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -11,10 +11,10 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
-import com.lfg.recyclerview.R
-import com.lfg.recyclerview.functions.hideKeyboard
-import com.lfg.recyclerview.repositories.UserRepository
-import com.lfg.recyclerview.viewmodels.LoginViewModel
+import com.lfg.masterdetail.R
+import com.lfg.masterdetail.functions.hideKeyboard
+import com.lfg.masterdetail.repositories.UserRepository
+import com.lfg.masterdetail.viewmodels.LoginViewModel
 
 class LoginFragment : Fragment() {
 

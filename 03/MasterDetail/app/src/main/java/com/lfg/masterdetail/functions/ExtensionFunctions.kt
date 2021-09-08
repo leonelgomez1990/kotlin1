@@ -4,7 +4,7 @@ el SnackBar
 Fuente: https://stackoverflow.com/questions/1109022/how-do-you-close-hide-the-android-soft-keyboard-programmatically
 */
 
-package com.lfg.recyclerview.functions
+package com.lfg.masterdetail.functions
 
 import android.app.Activity
 import android.view.View

@@ -1,4 +1,4 @@
-package com.lfg.recyclerview.fragments
+package com.lfg.masterdetail.fragments
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -10,10 +10,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.lfg.recyclerview.R
-import com.lfg.recyclerview.adapters.ProductAdapter
-import com.lfg.recyclerview.repositories.ProductRepository
-import com.lfg.recyclerview.viewmodels.ListViewModel
+import com.lfg.masterdetail.R
+import com.lfg.masterdetail.adapters.ProductAdapter
+import com.lfg.masterdetail.repositories.ProductRepository
+import com.lfg.masterdetail.viewmodels.ListViewModel
 
 class ListFragment : Fragment() {
 

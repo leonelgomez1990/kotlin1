@@ -1,4 +1,4 @@
-package com.lfg.recyclerview.adapters
+package com.lfg.masterdetail.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,8 +7,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.lfg.recyclerview.R
-import com.lfg.recyclerview.entities.Product
+import com.lfg.masterdetail.R
+import com.lfg.masterdetail.entities.Product
 
 class ProductAdapter (
     private var productList : MutableList<Product>,

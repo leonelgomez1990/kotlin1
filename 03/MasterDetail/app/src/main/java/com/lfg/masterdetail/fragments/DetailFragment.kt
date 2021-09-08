@@ -1,4 +1,4 @@
-package com.lfg.recyclerview.fragments
+package com.lfg.masterdetail.fragments
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -6,8 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.lfg.recyclerview.R
-import com.lfg.recyclerview.viewmodels.DetailViewModel
+import com.lfg.masterdetail.R
+import com.lfg.masterdetail.viewmodels.DetailViewModel
 
 class DetailFragment : Fragment() {
 

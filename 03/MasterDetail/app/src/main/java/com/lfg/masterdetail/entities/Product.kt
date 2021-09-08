@@ -1,4 +1,4 @@
-package com.lfg.recyclerview.entities
+package com.lfg.masterdetail.entities
 
 class Product (
     var id : String,

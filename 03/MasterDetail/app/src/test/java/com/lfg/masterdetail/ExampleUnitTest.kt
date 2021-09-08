@@ -1,4 +1,4 @@
-package com.lfg.recyclerview
+package com.lfg.masterdetail
 
 import org.junit.Test
 

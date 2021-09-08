@@ -1,4 +1,4 @@
-package com.lfg.recyclerview.fragments
+package com.lfg.masterdetail.fragments
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -11,11 +11,11 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import com.lfg.recyclerview.R
-import com.lfg.recyclerview.entities.User
-import com.lfg.recyclerview.functions.hideKeyboard
-import com.lfg.recyclerview.repositories.UserRepository
-import com.lfg.recyclerview.viewmodels.NewUserViewModel
+import com.lfg.masterdetail.R
+import com.lfg.masterdetail.entities.User
+import com.lfg.masterdetail.functions.hideKeyboard
+import com.lfg.masterdetail.repositories.UserRepository
+import com.lfg.masterdetail.viewmodels.NewUserViewModel
 
 class NewUserFragment : Fragment() {
 

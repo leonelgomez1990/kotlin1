@@ -1,4 +1,4 @@
-package com.lfg.recyclerview
+package com.lfg.masterdetail
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

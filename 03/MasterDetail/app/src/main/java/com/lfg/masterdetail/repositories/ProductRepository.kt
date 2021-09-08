@@ -1,6 +1,6 @@
-package com.lfg.recyclerview.repositories
+package com.lfg.masterdetail.repositories
 
-import com.lfg.recyclerview.entities.Product
+import com.lfg.masterdetail.entities.Product
 
 class ProductRepository {
 
