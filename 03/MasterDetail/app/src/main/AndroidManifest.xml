@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MasterDetail">
         <activity
-            android:name=".activities.MainActivity2"
+            android:name=".activities.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="true" />
         <activity

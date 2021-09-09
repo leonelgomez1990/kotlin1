@@ -19,12 +19,10 @@ class ProductAdapter (
 ) : RecyclerView.Adapter<ProductAdapter.ProductHolder>() {
 
     class ProductHolder (v : View) : RecyclerView.ViewHolder(v) {
-        private var view : View
-        init {
-            this.view = v
-        }
+        private var view : View = v
+
         fun setDescription (description : String){
-            var txtDescription : TextView = view.findViewById(R.id.txtNameItem)
+            val txtDescription : TextView = view.findViewById(R.id.txtNameItem)
             txtDescription.text = description
         }
         fun getCardView () : CardView {
@@ -43,7 +41,7 @@ class ProductAdapter (
 
     override fun onBindViewHolder(holder: ProductHolder, position: Int) {
         holder.setDescription(productList[position].description)
-        holder.getCardView().setOnClickListener() {
+        holder.getCardView().setOnClickListener {
             onItemClick(position)
         }
 

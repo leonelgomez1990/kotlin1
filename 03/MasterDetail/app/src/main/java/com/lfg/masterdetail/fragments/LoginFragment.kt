@@ -24,12 +24,12 @@ class LoginFragment : Fragment() {
 
     private lateinit var viewModelLogin: LoginViewModel
     private lateinit var v : View
-    lateinit var btnLogin : Button
-    lateinit var txtUser : TextView
-    lateinit var txtPassword : TextView
-    lateinit var frameLayout : ConstraintLayout
+    private lateinit var btnLogin : Button
+    private lateinit var txtUser : TextView
+    private lateinit var txtPassword : TextView
+    private lateinit var frameLayout : ConstraintLayout
     private var userRepository = UserRepository()
-    lateinit var btnCreate : Button
+    private lateinit var btnCreate : Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,7 +63,7 @@ class LoginFragment : Fragment() {
             }
             else
             {
-                val id = userRepository.getList().firstOrNull() { t -> t.user == txtUser.text.toString() }
+                val id = userRepository.getList().firstOrNull { t -> t.user == txtUser.text.toString() }
                 if(id != null)
                 {
                     //chequeo contraseña
@@ -87,11 +87,11 @@ class LoginFragment : Fragment() {
         }
     }
 
-    fun navegateLoginSuccesful(){
+    private fun navegateLoginSuccesful(){
         val action = LoginFragmentDirections.actionFragment1ToMainActivity2()
         v.findNavController().navigate(action)
     }
-    fun navegateCreateNewUser(){
+    private fun navegateCreateNewUser(){
         val action2 = LoginFragmentDirections.actionFragment1ToFragment3()
         v.findNavController().navigate(action2)
     }

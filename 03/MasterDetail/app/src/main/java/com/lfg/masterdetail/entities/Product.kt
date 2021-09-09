@@ -7,6 +7,4 @@ class Product (
     var price : Double,
     var presentation : String,
     var urlImage : String
-    ) {
-
-}
+)

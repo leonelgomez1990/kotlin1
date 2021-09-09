@@ -6,9 +6,6 @@ class UserRepository {
     private var userList : MutableList<User> = mutableListOf()
 
     init {
-        userList.add(User("Maxi", "morales"))
-        userList.add(User("Jane", "Doe"))
-        userList.add(User("Jessi", "Benja"))
         userList.add(User("leo", "g"))
     }
 

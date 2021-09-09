@@ -10,7 +10,6 @@ import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import com.lfg.masterdetail.R
 import com.lfg.masterdetail.adapters.ProductAdapter
 import com.lfg.masterdetail.repositories.ProductRepository
@@ -24,7 +23,7 @@ class ListFragment : Fragment() {
 
     private lateinit var viewModelList: ListViewModel
     private lateinit var v : View
-    lateinit var txtHello : TextView
+    private lateinit var txtHello : TextView
     private lateinit var recProduct : RecyclerView
     private var productRepository = ProductRepository()
     private lateinit var linearLayoutManager : LinearLayoutManager
@@ -53,7 +52,7 @@ class ListFragment : Fragment() {
         // TODO: Use the ViewModel
     }
 
-    fun setupRecycler(){
+    private fun setupRecycler(){
         recProduct.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(context)
         recProduct.layoutManager = linearLayoutManager
@@ -62,7 +61,7 @@ class ListFragment : Fragment() {
         }
     }
 
-    fun onItemClick (position : Int) : Unit {
+    private fun onItemClick (position : Int) {
         val action = ListFragmentDirections.actionFragmentListToDetailFragment(position)
         v.findNavController().navigate(action)
     }

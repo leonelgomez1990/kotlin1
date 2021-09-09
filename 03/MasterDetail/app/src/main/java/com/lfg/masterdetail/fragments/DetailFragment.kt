@@ -8,16 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.URLUtil
 import android.widget.ImageView
-import android.widget.TableLayout
-import android.widget.TableRow
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.lfg.masterdetail.R
 import com.lfg.masterdetail.repositories.ProductRepository
 import com.lfg.masterdetail.viewmodels.DetailViewModel
-import kotlinx.android.synthetic.main.detail_fragment.*
-import kotlinx.android.synthetic.main.login_fragment.view.*
 
 class DetailFragment : Fragment() {
 
@@ -28,12 +24,12 @@ class DetailFragment : Fragment() {
     private lateinit var viewModel: DetailViewModel
     lateinit var v : View
     private var productRepository = ProductRepository()
-    lateinit var txtDetailDescription : TextView
-    lateinit var txtDetailId : TextView
-    lateinit var txtDetailBrand : TextView
-    lateinit var txtDetailPresentation : TextView
-    lateinit var txtDetailPrice : TextView
-    lateinit var imgDetail : ImageView
+    private lateinit var txtDetailDescription : TextView
+    private lateinit var txtDetailId : TextView
+    private lateinit var txtDetailBrand : TextView
+    private lateinit var txtDetailPresentation : TextView
+    private lateinit var txtDetailPrice : TextView
+    private lateinit var imgDetail : ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,13 +49,13 @@ class DetailFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        var position  = DetailFragmentArgs.fromBundle(requireArguments()).position
-        var strDescription = productRepository.getList()[position].description
-        var strId = productRepository.getList()[position].id
-        var strBrand = productRepository.getList()[position].brand
-        var strPresentation = productRepository.getList()[position].presentation
-        var strPrice = productRepository.getList()[position].price
-        var strUrlImage = productRepository.getList()[position].urlImage
+        val position  = DetailFragmentArgs.fromBundle(requireArguments()).position
+        val strDescription = productRepository.getList()[position].description
+        val strId = productRepository.getList()[position].id
+        val strBrand = productRepository.getList()[position].brand
+        val strPresentation = productRepository.getList()[position].presentation
+        val strPrice = productRepository.getList()[position].price
+        val strUrlImage = productRepository.getList()[position].urlImage
         Snackbar.make(v, strDescription, Snackbar.LENGTH_SHORT).show()
 
         txtDetailDescription.text = strDescription

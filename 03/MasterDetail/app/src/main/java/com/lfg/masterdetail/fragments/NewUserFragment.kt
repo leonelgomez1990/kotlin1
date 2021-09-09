@@ -24,12 +24,12 @@ class NewUserFragment : Fragment() {
     }
 
     private lateinit var viewModelNewUser: NewUserViewModel
-    lateinit var v : View
-    lateinit var txtUser : TextView
-    lateinit var txtPassword : TextView
-    lateinit var btnCreate : Button
-    lateinit var btnReturn : Button
-    lateinit var frameLayout: ConstraintLayout
+    private lateinit var v : View
+    private lateinit var txtUser : TextView
+    private lateinit var txtPassword : TextView
+    private lateinit var btnCreate : Button
+    private lateinit var btnReturn : Button
+    private lateinit var frameLayout: ConstraintLayout
     private var userRepository = UserRepository()
 
     override fun onCreateView(
@@ -54,7 +54,7 @@ class NewUserFragment : Fragment() {
             this.hideKeyboard()
 
             if((txtUser.text != "") && (txtPassword.text != "")){
-                val id = userRepository.getList().firstOrNull() { t -> t.user == txtUser.text.toString() }
+                val id = userRepository.getList().firstOrNull { t -> t.user == txtUser.text.toString() }
                 if(id != null)
                 {
                     Snackbar.make(frameLayout,R.string.msg_userexist,Snackbar.LENGTH_SHORT).show()
