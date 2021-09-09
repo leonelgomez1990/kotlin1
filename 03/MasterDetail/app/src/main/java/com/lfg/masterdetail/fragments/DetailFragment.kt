@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.URLUtil
 import android.widget.ImageView
 import android.widget.TableLayout
 import android.widget.TableRow
@@ -65,11 +66,15 @@ class DetailFragment : Fragment() {
         txtDetailId.text = strId
         txtDetailBrand.text = strBrand
         txtDetailPresentation.text = strPresentation
-        txtDetailPrice.text = strPrice.toString()
+        txtDetailPrice.text = "$ " + strPrice.toString()
+
+        var strImage = strUrlImage
+        if (!URLUtil.isValidUrl(strUrlImage))
+            strImage = "https://www.preciosclaros.gob.ar/img/no-image.png"
 
         Glide
             .with(requireContext())
-            .load(strUrlImage)
+            .load(strImage)
             .centerInside()
             .into(imgDetail)
 

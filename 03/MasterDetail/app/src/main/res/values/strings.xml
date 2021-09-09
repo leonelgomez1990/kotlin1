@@ -4,9 +4,11 @@
     <string name="btn_ingresar">Ingresar</string>
     <string name="btn_create">Crear usuario</string>
     <string name="text_new">Nuevo usuario</string>
+    <string name="text_newreg">Nuevo usuario? Registrese</string>
     <string name="hint_user">Ingrese usuario</string>
     <string name="hint_password">Ingrese contraseña</string>
-    <string name="text_hello">Hola %1$s</string>
+    <string name="text_hello">Listado de productos</string>
+    <string name="text_hello2">Hola %1$s</string>
     <string name="text_list">Estos son los pañales disponibles</string>
     <string name="msg_empty">Campo de usuario vacío</string>
     <string name="msg_complete">Debe completar ambos campos</string>
