@@ -1,5 +1,7 @@
 package com.lfg.masterdetail.fragments
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -27,7 +29,7 @@ class ListFragment : Fragment() {
     private lateinit var recProduct : RecyclerView
     private var productRepository = ProductRepository()
     private lateinit var linearLayoutManager : LinearLayoutManager
-
+    private val PREF_NAME = "mySelection"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,7 +64,12 @@ class ListFragment : Fragment() {
     }
 
     private fun onItemClick (position : Int) {
-        val action = ListFragmentDirections.actionFragmentListToDetailFragment(position)
+        val sharedPref: SharedPreferences = requireContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        val editor = sharedPref.edit()
+        editor.putInt("position",position)
+        editor.apply()
+
+        val action = ListFragmentDirections.actionListFragmentToContainerFragment()
         v.findNavController().navigate(action)
     }
 }

@@ -1,5 +1,7 @@
 package com.lfg.masterdetail.fragments
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -30,6 +32,7 @@ class DetailFragment : Fragment() {
     private lateinit var txtDetailPresentation : TextView
     private lateinit var txtDetailPrice : TextView
     private lateinit var imgDetail : ImageView
+    private val PREF_NAME = "mySelection"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +52,10 @@ class DetailFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        val position  = DetailFragmentArgs.fromBundle(requireArguments()).position
+        //val position  = DetailFragmentArgs.fromBundle(requireArguments()).position
+        val sharedPref: SharedPreferences = requireContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        val position = sharedPref.getInt("position",0)!!
+
         val strDescription = productRepository.getList()[position].description
         val strId = productRepository.getList()[position].id
         val strBrand = productRepository.getList()[position].brand
