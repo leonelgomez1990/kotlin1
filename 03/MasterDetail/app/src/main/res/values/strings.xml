@@ -21,4 +21,6 @@
     <string name="txt_detail_brand">Marca</string>
     <string name="txt_detail_pres">Presentación</string>
     <string name="txt_detail_price">Precio</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hola a todos</string>
 </resources>
