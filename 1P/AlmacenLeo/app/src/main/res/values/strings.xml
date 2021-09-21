@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Almacen Leo</string>
     <!-- Strings related to login -->
-    <string name="prompt_user">Uusario</string>
+    <string name="prompt_user">Usuario</string>
     <string name="prompt_password">Contraseña</string>
     <string name="action_sign_in">Iniciar Sesión o registrarse</string>
     <string name="action_sign_in_short">Iniciar Sesión</string>
