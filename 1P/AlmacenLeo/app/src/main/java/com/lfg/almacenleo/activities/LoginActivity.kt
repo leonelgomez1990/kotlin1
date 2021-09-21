@@ -1,11 +1,12 @@
-package com.lfg.almacenleo
+package com.lfg.almacenleo.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.lfg.almacenleo.R
 
-class MainActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_login)
     }
 }
