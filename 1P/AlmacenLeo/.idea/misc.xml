@@ -5,6 +5,9 @@
       <map>
         <entry key="..\:/AndroidStudioProjects/kotlin1/1P/AlmacenLeo/app/src/main/res/layout/activity_login.xml" value="0.2234375" />
         <entry key="..\:/AndroidStudioProjects/kotlin1/1P/AlmacenLeo/app/src/main/res/layout/activity_main.xml" value="0.2234375" />
+        <entry key="..\:/AndroidStudioProjects/kotlin1/1P/AlmacenLeo/app/src/main/res/layout/fragment_login2.xml" value="0.209375" />
+        <entry key="..\:/AndroidStudioProjects/kotlin1/1P/AlmacenLeo/app/src/main/res/layout/fragment_splash.xml" value="0.2234375" />
+        <entry key="..\:/AndroidStudioProjects/kotlin1/1P/AlmacenLeo/app/src/main/res/layout/login_fragment.xml" value="0.2234375" />
       </map>
     </option>
   </component>
