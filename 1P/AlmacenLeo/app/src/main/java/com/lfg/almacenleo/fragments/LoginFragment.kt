@@ -9,9 +9,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.lfg.almacenleo.R
+import com.lfg.almacenleo.databinding.FragmentLoginBinding
 import com.lfg.almacenleo.functions.hideKeyboard
 import com.lfg.almacenleo.repositories.UserRepository
 import com.lfg.almacenleo.viewmodels.LoginViewModel
@@ -22,56 +24,46 @@ class LoginFragment : Fragment() {
         fun newInstance() = LoginFragment()
     }
 
-    private lateinit var viewModel: LoginViewModel
-    private lateinit var v : View
-    private lateinit var btnLogin : Button
-    private lateinit var txtUser : TextView
-    private lateinit var txtPassword : TextView
-    private lateinit var frameLayout : ConstraintLayout
+    private val viewModel: LoginViewModel by viewModels()
+    private lateinit var binding : FragmentLoginBinding
     private var userRepository = UserRepository()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        v = inflater.inflate(R.layout.fragment_login, container, false)
-        //Binding
-        btnLogin = v.findViewById(R.id.btnLogin)
-        txtUser = v.findViewById(R.id.txtUser)
-        txtPassword = v.findViewById(R.id.txtPassword)
-        frameLayout = v.findViewById(R.id.layoutLogin)
-
-        return v
+        binding = FragmentLoginBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onStart() {
         super.onStart()
-        txtUser.text = ""
-        txtPassword.text = ""
+        binding.txtUser.setText("")
+        binding.txtPassword.setText("")
 
-        btnLogin.setOnClickListener {
+        binding.btnLogin.setOnClickListener {
             this.hideKeyboard()
-            if(txtUser.length() <= 0) {
-                Snackbar.make(frameLayout, R.string.invalid_username, Snackbar.LENGTH_SHORT).show()
+            if(binding.txtUser.length() <= 0) {
+                Snackbar.make(binding.layoutLogin, R.string.invalid_emptyuser, Snackbar.LENGTH_SHORT).show()
             }
             else
             {
-                val id = userRepository.getList().firstOrNull { t -> t.user == txtUser.text.toString() }
+                val id = userRepository.getList().firstOrNull { t -> t.user == binding.txtUser.text.toString() }
                 if(id != null)
                 {
                     //chequeo contraseña
-                    if (txtPassword.text.toString() == id.password)
+                    if (binding.txtPassword.text.toString() == id.password)
                     {
                         navegateLoginSuccesful()
                     }
                     else
                     {
-                        Snackbar.make(frameLayout, R.string.invalid_password, Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(binding.layoutLogin, R.string.invalid_password, Snackbar.LENGTH_SHORT).show()
                     }
                 }
                 else
                 {
-                    Snackbar.make(frameLayout, R.string.invalid_username, Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(binding.layoutLogin, R.string.invalid_username, Snackbar.LENGTH_SHORT).show()
                 }
             }
         }
@@ -80,13 +72,7 @@ class LoginFragment : Fragment() {
 
     private fun navegateLoginSuccesful(){
         val action = LoginFragmentDirections.actionLoginFragmentToMainActivity()
-        v.findNavController().navigate(action)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
-        // TODO: Use the ViewModel
+        binding.layoutLogin.findNavController().navigate(action)
     }
 
 }
