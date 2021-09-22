@@ -1,7 +1,7 @@
 package com.lfg.almacenleo.entities
 
 class Product (
-    var id : String,
+    var id : Long,
     var brand : String,
     var description : String,
     var price : Double,
