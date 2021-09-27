@@ -1,6 +1,5 @@
 package com.lfg.almacenleo.fragments
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Handler
 import androidx.fragment.app.Fragment
@@ -9,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import com.lfg.almacenleo.R
 import com.lfg.almacenleo.databinding.FragmentSplashBinding
 import com.lfg.almacenleo.viewmodels.SplashViewModel
 
