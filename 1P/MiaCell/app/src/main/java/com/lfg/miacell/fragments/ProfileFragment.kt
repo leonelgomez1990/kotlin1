@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import com.lfg.miacell.databinding.FragmentProfileBinding
 import com.lfg.miacell.viewmodels.ProfileViewModel
 
@@ -33,14 +34,19 @@ class ProfileFragment : Fragment() {
         super.onStart()
 
         val sharedPref: SharedPreferences = requireContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        var user = sharedPref.getString("USER","default")!!
-        var display = sharedPref.getString("DISPLAY","default")!!
+        val user = sharedPref.getString("USER","default")!!
+        val display = sharedPref.getString("DISPLAY","default")!!
 
         binding.txtProfileDisplay.setText(display)
         binding.txtProfileUser.setText(user)
 
         binding.btnLogout.setOnClickListener {
             activity?.finish()
+        }
+
+        binding.btnSettings.setOnClickListener {
+            val action = ProfileFragmentDirections.actionProfileFragmentToSettingsFragment()
+            binding.layoutProfile.findNavController().navigate(action)
         }
     }
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lfg.miacell">
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -11,7 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.myApp">
         <activity
-            android:name="com.lfg.miacell.activities.LoginActivity"
+            android:name=".activities.SettingsActivity"
+            android:exported="true"
+            android:label="@string/title_activity_settings" />
+        <activity
+            android:name=".activities.LoginActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="true">
             <intent-filter>
@@ -21,10 +26,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.lfg.miacell.activities.MainActivity"
+            android:name=".activities.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
     </application>
 
 </manifest>

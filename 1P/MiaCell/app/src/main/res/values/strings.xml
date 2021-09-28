@@ -13,6 +13,7 @@
     <string name="action_sign_out">Cerrar Sesión</string>
     <string name="action_register">Registrarse</string>
     <string name="action_return">Volver</string>
+    <string name="action_settings">Preferencias</string>
     <string name="welcome">"Bienvenido!"</string>
     <!-- Messages - Login -->
     <string name="invalid_username">Usuario inválido</string>
@@ -28,4 +29,21 @@
     <!-- Bottom Navigation Bar Strings -->
     <string name="item_list">Listado</string>
     <string name="item_profile">Perfil</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="style_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Style Preferences -->
+    <string name="style_dark">Modo Dark</string>
+    <string name="style_dark_def_value">MODE_NIGHT_FOLLOW_SYSTEM</string>
+    <!--<string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>-->
 </resources>

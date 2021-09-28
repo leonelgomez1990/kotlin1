@@ -2,6 +2,8 @@ package com.lfg.miacell.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.preference.PreferenceManager
 import com.lfg.miacell.R
 
 class LoginActivity : AppCompatActivity() {
