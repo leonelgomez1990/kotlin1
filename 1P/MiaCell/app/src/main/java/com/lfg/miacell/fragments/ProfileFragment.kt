@@ -1,6 +1,7 @@
 package com.lfg.miacell.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
+import com.lfg.miacell.activities.SettingsActivity
 import com.lfg.miacell.databinding.FragmentProfileBinding
 import com.lfg.miacell.viewmodels.ProfileViewModel
 
@@ -45,8 +46,7 @@ class ProfileFragment : Fragment() {
         }
 
         binding.btnSettings.setOnClickListener {
-            val action = ProfileFragmentDirections.actionProfileFragmentToSettingsFragment()
-            binding.layoutProfile.findNavController().navigate(action)
+            activity?.startActivity(Intent(this.requireContext(),SettingsActivity::class.java))
         }
     }
 

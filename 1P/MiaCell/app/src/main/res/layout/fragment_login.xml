@@ -15,7 +15,6 @@
         android:fontFamily="sans-serif-light"
         android:text="@string/prompt_sign_in"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
