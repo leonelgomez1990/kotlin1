@@ -34,7 +34,7 @@ class SplashFragment : Fragment() {
         Handler().postDelayed(
             {
                 val action = SplashFragmentDirections.actionSplashFragmentToLoginFragment()
-                binding.frameLayout2.findNavController().navigate(action)
+                binding.layoutSplash.findNavController().navigate(action)
             }
             , SPLASH_TIME_OUT)
     }

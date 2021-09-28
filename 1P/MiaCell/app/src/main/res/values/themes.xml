@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <!-- Tema base con estilos comunes para light y dark. El tema de cada tipo debe heredar de este-->
-    <style name="Base.AppTheme.LightDark" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Base.AppTheme.LightDark" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <item name="colorOnPrimary">@color/white_50</item>
         <item name="colorOnSecondary">@color/white_50</item>
