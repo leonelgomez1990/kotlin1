@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Almacen Leo</string>
+    <string name="app_name">Mia Cell</string>
     <!-- Strings related to login -->
     <string name="prompt_user">Usuario</string>
     <string name="prompt_password">Contraseña</string>
