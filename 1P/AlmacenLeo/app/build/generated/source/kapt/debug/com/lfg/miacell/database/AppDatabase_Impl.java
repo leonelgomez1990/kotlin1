@@ -3,11 +3,17 @@ package com.lfg.miacell.database;
 import androidx.room.DatabaseConfiguration;
 import androidx.room.InvalidationTracker;
 import androidx.room.RoomOpenHelper;
+import androidx.room.RoomOpenHelper.Delegate;
+import androidx.room.RoomOpenHelper.ValidationResult;
 import androidx.room.util.DBUtil;
 import androidx.room.util.TableInfo;
+import androidx.room.util.TableInfo.Column;
+import androidx.room.util.TableInfo.ForeignKey;
+import androidx.room.util.TableInfo.Index;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
-
+import androidx.sqlite.db.SupportSQLiteOpenHelper.Callback;
+import androidx.sqlite.db.SupportSQLiteOpenHelper.Configuration;
 import java.lang.Class;
 import java.lang.Override;
 import java.lang.String;
@@ -83,7 +89,7 @@ public final class AppDatabase_Impl extends AppDatabase {
         final TableInfo _infoUsers = new TableInfo("users", _columnsUsers, _foreignKeysUsers, _indicesUsers);
         final TableInfo _existingUsers = TableInfo.read(_db, "users");
         if (! _infoUsers.equals(_existingUsers)) {
-          return new RoomOpenHelper.ValidationResult(false, "users(com.lfg.almacenleo.entities.User).\n"
+          return new RoomOpenHelper.ValidationResult(false, "users(com.lfg.miacell.entities.User).\n"
                   + " Expected:\n" + _infoUsers + "\n"
                   + " Found:\n" + _existingUsers);
         }

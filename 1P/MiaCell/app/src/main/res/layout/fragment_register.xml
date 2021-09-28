@@ -2,112 +2,108 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layoutLogin"
+    android:id="@+id/layoutRegister"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.LoginFragment">
+    tools:context=".fragments.RegisterFragment" >
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="90dp"
         android:fontFamily="sans-serif-light"
-        android:text="@string/prompt_sign_in"
+        android:text="@string/prompt_sign_up"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
+        android:id="@+id/txilNewName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout2"
+        app:layout_constraintBottom_toTopOf="@+id/txilNewUser"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
+        app:layout_constraintTop_toBottomOf="@+id/textView3">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txtUserName"
+            android:id="@+id/txtNewDisplay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:hint="@string/prompt_user"
-            android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
+            android:hint="@string/prompt_name"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout2"
+        android:id="@+id/txilNewUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
-        app:layout_constraintBottom_toTopOf="@+id/cbxRemember"
+        app:layout_constraintBottom_toTopOf="@+id/txilNewPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+        app:layout_constraintTop_toBottomOf="@+id/txilNewName">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txtPassword"
+            android:id="@+id/txtNewUser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:hint="@string/prompt_password"
-            android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            android:hint="@string/prompt_user"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <CheckBox
-        android:id="@+id/cbxRemember"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txilNewPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:text="@string/prompt_rememberid"
-        android:textAlignment="viewStart"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintBottom_toTopOf="@+id/btnLogin"
+        app:layout_constraintBottom_toTopOf="@+id/btnNewUser"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+        app:layout_constraintTop_toBottomOf="@+id/txilNewUser">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtNewPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/prompt_password" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/btnLogin"
+        android:id="@+id/btnNewUser"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="96dp"
         android:layout_marginEnd="96dp"
         android:background="@drawable/button_rounded"
-        android:text="@string/action_sign_in_short"
-        app:layout_constraintBottom_toTopOf="@+id/btnRegister"
+        android:text="@string/action_register"
+        app:layout_constraintBottom_toTopOf="@+id/btnBackLogin"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cbxRemember" />
+        app:layout_constraintTop_toBottomOf="@+id/txilNewPassword" />
 
     <Button
-        android:id="@+id/btnRegister"
+        android:id="@+id/btnBackLogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="96dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="96dp"
         android:layout_marginBottom="100dp"
         android:background="@drawable/button_rounded_border"
-        android:text="@string/action_register"
+        android:text="@string/action_return"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
-
+        app:layout_constraintTop_toBottomOf="@+id/btnNewUser" />
 </androidx.constraintlayout.widget.ConstraintLayout>

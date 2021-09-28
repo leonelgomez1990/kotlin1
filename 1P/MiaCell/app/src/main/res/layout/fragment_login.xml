@@ -11,7 +11,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="90dp"
         android:fontFamily="sans-serif-light"
         android:text="@string/prompt_sign_in"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"

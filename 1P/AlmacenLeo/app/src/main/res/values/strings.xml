@@ -1,19 +1,27 @@
 <resources>
     <string name="app_name">Mia Cell</string>
     <!-- Strings related to login -->
+    <string name="prompt_name">Nombre</string>
     <string name="prompt_user">Usuario</string>
     <string name="prompt_password">Contraseña</string>
     <string name="prompt_rememberid">Recordar mi ID</string>
     <string name="prompt_new_user">No tiene una cuenta?</string>
     <string name="prompt_sign_in">Iniciar sesión en la aplicación</string>
+    <string name="prompt_sign_up">Registrar un usuario</string>
     <string name="action_sign_in">Iniciar Sesión o registrarse</string>
     <string name="action_sign_in_short">Iniciar Sesión</string>
     <string name="action_register">Registrarse</string>
+    <string name="action_return">Volver</string>
     <string name="welcome">"Bienvenido!"</string>
+    <!-- Messages - Login -->
     <string name="invalid_username">Usuario inválido</string>
     <string name="invalid_password">Contraseña inválida</string>
     <string name="invalid_emptyuser">Campo de usuario vacío</string>
     <string name="login_failed">"Falló inicio de sesión"</string>
+    <!-- Messages - Register -->
+    <string name="not_user">Debe completar el campo nombre</string>
+    <string name="not_display">Debe completar el campo usuario</string>
+    <string name="not_password">Debe completar el campo contraseña</string>
     <!-- Bottom Navigation Bar Strings -->
     <string name="item_list">Listado</string>
     <string name="item_profile">Perfil</string>

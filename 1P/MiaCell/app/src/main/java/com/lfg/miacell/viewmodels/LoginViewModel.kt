@@ -19,7 +19,9 @@ class LoginViewModel : ViewModel() {
     fun onCreateDB (context : Context) {
         db = AppDatabase.getAppDataBase(context)
         userDao = db?.UserDao()
-        insertPerson("leo", "Leonel", "a")
+        var searchUser = userDao?.loadPersonByUserName("leo")
+        if (searchUser == null)
+            insertPerson("leo", "Leonel", "a")
     }
 
 
@@ -57,7 +59,8 @@ class LoginViewModel : ViewModel() {
 
     fun insertPerson (user : String, display : String, password : String)
     {
-        userDao?.insertPerson(User(Random.nextInt(1..10000000), user, display, password))
+        if (userDao?.loadPersonByUserName(user) == null)
+            userDao?.insertPerson(User(Random.nextInt(1..10000000), user, display, password))
     }
 
 }

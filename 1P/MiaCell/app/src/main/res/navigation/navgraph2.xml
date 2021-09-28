@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/listFragment"
-        android:name="com.lfg.almacenleo.fragments.ListFragment"
+        android:name="com.lfg.miacell.fragments.ListFragment"
         android:label="fragment_list"
         tools:layout="@layout/fragment_list" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.lfg.almacenleo.fragments.ProfileFragment"
+        android:name="com.lfg.miacell.fragments.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>
