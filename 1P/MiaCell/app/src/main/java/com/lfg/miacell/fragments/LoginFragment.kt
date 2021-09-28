@@ -1,6 +1,7 @@
 package com.lfg.miacell.fragments
 
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -32,8 +33,20 @@ class LoginFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        binding.txtUserName.setText("")
-        binding.txtPassword.setText("")
+        viewModel.onStartUser(requireContext())
+        binding.txtUserName.setText(viewModel.user?.user)
+        binding.txtPassword.setText(viewModel.user?.password)
+        binding.cbxRemember.isChecked = viewModel.memChecked
+        binding.chkAutoLogin.isChecked = viewModel.memAutoLogin
+        if(viewModel.memChecked && viewModel.memAutoLogin)
+        {
+            Handler().postDelayed(
+                {
+                    binding.btnLogin.performClick()
+                }
+                , 1000)
+
+        }
 
         binding.btnLogin.setOnClickListener {
             this.hideKeyboard()
@@ -47,6 +60,14 @@ class LoginFragment : Fragment() {
         binding.btnRegister.setOnClickListener {
             val action = LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
             binding.layoutLogin.findNavController().navigate(action)
+        }
+
+        binding.cbxRemember.setOnCheckedChangeListener { buttonView, isChecked ->
+            viewModel.checkedRemember(requireContext(), isChecked)
+        }
+
+        binding.chkAutoLogin.setOnCheckedChangeListener { buttonView, isChecked ->
+            viewModel.checkedAutoLogin(requireContext(), isChecked)
         }
     }
 

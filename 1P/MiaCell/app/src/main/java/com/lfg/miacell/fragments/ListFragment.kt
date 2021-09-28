@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lfg.miacell.adapters.ProductAdapter
 import com.lfg.miacell.databinding.FragmentListBinding
@@ -54,7 +55,7 @@ class ListFragment : Fragment() {
         editor.putInt("position",position)
         editor.apply()
 
-        //val action = ListFragmentDirections.actionListFragmentToContainerFragment()
-        //v.findNavController().navigate(action)
+        val action = ListFragmentDirections.actionListFragmentToDetailFragment()
+        binding.layoutList.findNavController().navigate(action)
     }
 }

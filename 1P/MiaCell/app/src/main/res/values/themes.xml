@@ -23,6 +23,10 @@
         <item name="tint">@color/white_50</item>
     </style>
 
+    <style name="TextAppearance.NotModify" parent="TextAppearance.AppCompat.Medium">
+        <item name="background">@color/grey_200</item>
+    </style>
+
     <!-- Configuración específica para light-->
     <style name="AppTheme.LightDark" parent="Base.AppTheme.LightDark">
         <item name="colorPrimary">@color/purple_500</item>

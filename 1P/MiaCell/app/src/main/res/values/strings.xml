@@ -5,6 +5,7 @@
     <string name="prompt_user">Usuario</string>
     <string name="prompt_password">Contraseña</string>
     <string name="prompt_rememberid">Recordar mi ID</string>
+    <string name="prompt_auto_login">Auto Login</string>
     <string name="prompt_new_user">No tiene una cuenta?</string>
     <string name="prompt_sign_in">Iniciar sesión en la aplicación</string>
     <string name="prompt_sign_up">Registrar un usuario</string>
@@ -30,6 +31,12 @@
     <string name="item_list">Listado</string>
     <string name="item_profile">Perfil</string>
     <string name="title_activity_settings">Settings</string>
+
+    <!-- Detail text -->
+    <string name="txt_detail_id">Id</string>
+    <string name="txt_detail_brand">Marca</string>
+    <string name="txt_detail_pres">Presentación</string>
+    <string name="txt_detail_price">Precio</string>
 
     <!-- Preference Titles -->
     <string name="style_header">Estilo</string>

@@ -11,6 +11,10 @@
         <item name="android:textColor">@color/purple_300</item>
     </style>
 
+    <style name="TextAppearance.NotModify" parent="TextAppearance.AppCompat.Medium">
+        <item name="background">@color/grey_900</item>
+    </style>
+
     <style name="Theme.myApp" parent="AppTheme.LightDark">
         <!-- Customize your theme here. -->
 

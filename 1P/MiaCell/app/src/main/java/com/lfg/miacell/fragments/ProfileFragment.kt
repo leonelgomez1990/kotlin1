@@ -42,6 +42,9 @@ class ProfileFragment : Fragment() {
         binding.txtProfileUser.setText(user)
 
         binding.btnLogout.setOnClickListener {
+            val editor = sharedPref.edit()
+            editor.putBoolean("AUTOLOGIN", false)
+            editor.apply()
             activity?.finish()
         }
 
