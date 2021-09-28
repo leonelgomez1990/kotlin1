@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.lfg.miacell.R
 import com.lfg.miacell.databinding.FragmentRegisterBinding
 import com.lfg.miacell.functions.hideKeyboard
 import com.lfg.miacell.viewmodels.RegisterViewModel
@@ -44,7 +45,7 @@ class RegisterFragment : Fragment() {
             hideKeyboard()
             var result = viewModel.checkNewUser(binding.txtNewUser.text.toString(), binding.txtNewDisplay.text.toString(), binding.txtNewPassword.text.toString())
             if (result == 0) {
-                showMessage(result)
+                showMessage(R.string.prompt_successful_newuser)
                 Handler().postDelayed(
                     {
                         findNavController().popBackStack()

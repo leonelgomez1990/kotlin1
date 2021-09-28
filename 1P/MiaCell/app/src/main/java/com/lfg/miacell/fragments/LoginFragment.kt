@@ -37,7 +37,7 @@ class LoginFragment : Fragment() {
 
         binding.btnLogin.setOnClickListener {
             this.hideKeyboard()
-            var result = viewModel.login(binding.txtUserName.text.toString(), binding.txtPassword.text.toString())
+            var result = viewModel.login(requireContext(), binding.txtUserName.text.toString(), binding.txtPassword.text.toString())
             if (result == 0)
                 navegateLoginSuccesful()
             else

@@ -1,6 +1,7 @@
 package com.lfg.miacell.viewmodels
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import com.lfg.miacell.R
 import com.lfg.miacell.database.AppDatabase
@@ -15,6 +16,7 @@ class LoginViewModel : ViewModel() {
     private var userDao: UserDao? = null
     var user: User? = null
     //private var userRepository = UserRepository()
+    private val PREF_NAME = "myUser"
 
     fun onCreateDB (context : Context) {
         db = AppDatabase.getAppDataBase(context)
@@ -29,7 +31,7 @@ class LoginViewModel : ViewModel() {
         user = null
     }
 
-    fun login (username : String, password : String) : Int {
+    fun login (context : Context, username : String, password : String) : Int {
         if(username.isEmpty()) {
             return R.string.invalid_emptyuser
         }
@@ -42,6 +44,14 @@ class LoginViewModel : ViewModel() {
                 //chequeo contraseña
                 if (password == foundUser.password)
                 {
+                    val sharedPref: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+                    val editor = sharedPref.edit()
+
+                    editor.putInt("ID", foundUser.id)
+                    editor.putString("USER", foundUser.user)
+                    editor.putString("DISPLAY", foundUser.display)
+                    editor.apply()
+
                     this.user = User(0,username, username, password)
                     return 0
                 }
@@ -57,10 +67,15 @@ class LoginViewModel : ViewModel() {
         }
     }
 
-    fun insertPerson (user : String, display : String, password : String)
+    fun insertPerson (user : String, display : String, password : String) : Boolean
     {
         if (userDao?.loadPersonByUserName(user) == null)
+        {
             userDao?.insertPerson(User(Random.nextInt(1..10000000), user, display, password))
+            return true
+        }
+        else
+            return false
     }
 
 }

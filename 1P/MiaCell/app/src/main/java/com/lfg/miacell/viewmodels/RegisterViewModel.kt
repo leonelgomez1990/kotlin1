@@ -1,12 +1,10 @@
 package com.lfg.miacell.viewmodels
 
 import android.content.Context
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import com.lfg.miacell.R
 import com.lfg.miacell.database.AppDatabase
 import com.lfg.miacell.database.UserDao
-import com.lfg.miacell.databinding.FragmentLoginBinding
 import com.lfg.miacell.entities.User
 import kotlin.random.Random
 import kotlin.random.nextInt
@@ -30,14 +28,21 @@ class RegisterViewModel : ViewModel() {
             return R.string.not_password
         else
         {
-            insertPerson(user, display, password)
-            return 0
+            if (insertPerson(user, display, password))
+                return 0
+            else
+                return R.string.already_user_exists
         }
     }
 
-    fun insertPerson (user : String, display : String, password : String)
+    fun insertPerson (user : String, display : String, password : String) : Boolean
     {
         if (userDao?.loadPersonByUserName(user) == null)
-           userDao?.insertPerson(User(Random.nextInt(1..10000000), user, display, password))
+        {
+            userDao?.insertPerson(User(Random.nextInt(1..10000000), user, display, password))
+            return true
+        }
+        else
+            return false
     }
 }

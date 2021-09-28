@@ -10,6 +10,7 @@
     <string name="prompt_sign_up">Registrar un usuario</string>
     <string name="action_sign_in">Iniciar Sesión o registrarse</string>
     <string name="action_sign_in_short">Iniciar Sesión</string>
+    <string name="action_sign_out">Cerrar Sesión</string>
     <string name="action_register">Registrarse</string>
     <string name="action_return">Volver</string>
     <string name="welcome">"Bienvenido!"</string>
@@ -22,6 +23,8 @@
     <string name="not_user">Debe completar el campo nombre</string>
     <string name="not_display">Debe completar el campo usuario</string>
     <string name="not_password">Debe completar el campo contraseña</string>
+    <string name="already_user_exists">El usuario ya existe</string>
+    <string name="prompt_successful_newuser">Usuario agregado exitosamente</string>
     <!-- Bottom Navigation Bar Strings -->
     <string name="item_list">Listado</string>
     <string name="item_profile">Perfil</string>

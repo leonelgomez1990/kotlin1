@@ -5,7 +5,8 @@
     android:id="@+id/layoutRegister"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.RegisterFragment" >
+    android:scrollbars="vertical"
+    tools:context=".fragments.RegisterFragment">
 
     <TextView
         android:id="@+id/textView3"
@@ -37,6 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/prompt_name"
+            android:inputType="textPersonName"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -57,6 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/prompt_user"
+            android:inputType="text"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -75,7 +78,9 @@
             android:id="@+id/txtNewPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/prompt_password" />
+            android:hint="@string/prompt_password"
+            android:inputType="textVisiblePassword"
+            android:singleLine="true" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
