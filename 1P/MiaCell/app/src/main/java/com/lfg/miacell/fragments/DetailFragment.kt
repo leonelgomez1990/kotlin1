@@ -11,6 +11,8 @@ import android.webkit.URLUtil
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
+import com.lfg.miacell.database.AppDatabase
+import com.lfg.miacell.database.ProductDao
 import com.lfg.miacell.databinding.FragmentDetailBinding
 import com.lfg.miacell.repositories.ProductRepository
 import com.lfg.miacell.viewmodels.DetailViewModel
@@ -25,6 +27,8 @@ class DetailFragment : Fragment() {
     private lateinit var binding : FragmentDetailBinding
     private var productRepository = ProductRepository()
     private val PREF_NAME = "mySelection"
+    private var db: AppDatabase? = null
+    private var productDao: ProductDao? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,13 +43,24 @@ class DetailFragment : Fragment() {
         //val position  = DetailFragmentArgs.fromBundle(requireArguments()).position
         val sharedPref: SharedPreferences = requireContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         val position = sharedPref.getInt("position",0)!!
+        val id = sharedPref.getLong("id",0)!!
+        db = AppDatabase.getAppDataBase(binding.layoutDetail.context)
+        productDao = db?.ProductDao()
+        var product = productDao?.loadProductById(id)!!
 
-        val strDescription = productRepository.getList()[position].description
-        val strId = productRepository.getList()[position].id
-        val strBrand = productRepository.getList()[position].brand
-        val strPresentation = productRepository.getList()[position].presentation
-        val strPrice = productRepository.getList()[position].price
-        val strUrlImage = productRepository.getList()[position].urlImage
+        //val strDescription = productRepository.getList()[position].description
+        //val strId = productRepository.getList()[position].id
+        //val strBrand = productRepository.getList()[position].brand
+        //val strPresentation = productRepository.getList()[position].presentation
+        //val strPrice = productRepository.getList()[position].price
+        //val strUrlImage = productRepository.getList()[position].urlImage
+        val strDescription = product.description
+        val strId = product.id
+        val strBrand = product.brand
+        val strPresentation = product.presentation
+        val strPrice = product.price
+        val strUrlImage = product.urlImage
+
         Snackbar.make(binding.layoutDetail, strDescription, Snackbar.LENGTH_SHORT).show()
 
         //binding.txtDetailDescription.text = strDescription

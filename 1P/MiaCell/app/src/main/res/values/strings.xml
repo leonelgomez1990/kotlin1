@@ -42,7 +42,7 @@
     <string name="style_header">Estilo</string>
 
     <!-- Style Preferences -->
-    <string name="style_dark">Modo Dark</string>
+    <string name="style_dark">Modificar Tema</string>
     <string name="style_dark_def_value">MODE_NIGHT_FOLLOW_SYSTEM</string>
     <!--<string name="attachment_title">Download incoming attachments</string>
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
