@@ -37,8 +37,13 @@
     <string name="txt_detail_brand">Marca</string>
     <string name="txt_detail_pres">Presentación</string>
     <string name="txt_detail_price">Precio</string>
+    <string name="txt_detail_description">Descripción</string>
+    <string name="btn_detail_cancel">Cancelar</string>
+    <string name="btn_detail_save">Guardar</string>
 
     <string name="txt_add_item">Agregar item</string>
+    <string name="txt_delete_item">Borrar item</string>
+    <string name="txt_edit_item">Editar item</string>
 
     <!-- Preference Titles -->
     <string name="style_header">Estilo</string>

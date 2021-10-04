@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.URLUtil
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
@@ -44,6 +45,7 @@ class DetailFragment : Fragment() {
         val sharedPref: SharedPreferences = requireContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         val position = sharedPref.getInt("position",0)!!
         val id : Long = sharedPref.getLong("id",0)!!
+        var mode = sharedPref.getString("detailMode","view")!!
         var strDescription = "nuevo"
         var strId : Long = 0
         var strBrand = "nuevo"
@@ -73,11 +75,20 @@ class DetailFragment : Fragment() {
             Snackbar.make(binding.layoutDetail, strDescription, Snackbar.LENGTH_SHORT).show()
         }
 
-        //binding.txtDetailDescription.text = strDescription
-        binding.txtDetailId.text = strId.toString()
-        binding.txtDetailBrand.text = strBrand
-        binding.txtDetailPresentation.text = strPresentation
-        binding.txtDetailPrice.text = "$ " + strPrice.toString()
+        binding.txtDetailId.setText(strId.toString())
+        binding.txtDetailBrand.setText(strBrand)
+        binding.txtDetailDescription.setText(strDescription)
+        binding.txtDetailPrice.setText("$ " + strPrice.toString())
+
+        if(mode == "view")
+        {
+            binding.txtDetailId.isEnabled = false
+            binding.txtDetailBrand.isEnabled = false
+            binding.txtDetailDescription.isEnabled = false
+            binding.txtDetailPrice.isEnabled = false
+            binding.btnDetailCancel.isVisible = false
+            binding.btnDetailSave.isVisible = false
+        }
 
         var strImage = strUrlImage
         if (!URLUtil.isValidUrl(strUrlImage))
@@ -88,6 +99,18 @@ class DetailFragment : Fragment() {
             .load(strImage)
             .centerInside()
             .into(binding.imgDetail)
+
+        binding.btnDetailEdit.setOnClickListener {
+            mode = "edit"
+            binding.txtDetailId.isEnabled = true
+            binding.txtDetailBrand.isEnabled = true
+            binding.txtDetailDescription.isEnabled = true
+            binding.txtDetailPrice.isEnabled = true
+            binding.btnDetailCancel.isVisible = true
+            binding.btnDetailSave.isVisible = true
+            binding.btnDetailEdit.isVisible = false
+
+        }
 
     }
 

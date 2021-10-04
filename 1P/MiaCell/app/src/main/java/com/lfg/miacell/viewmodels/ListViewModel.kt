@@ -56,4 +56,11 @@ class ListViewModel : ViewModel() {
         editor.apply()
     }
 
+    fun saveDetailMode (context : Context, mode : String)
+    {
+        val sharedPref: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        val editor = sharedPref.edit()
+        editor.putString("detailMode",mode)
+        editor.apply()
+    }
 }

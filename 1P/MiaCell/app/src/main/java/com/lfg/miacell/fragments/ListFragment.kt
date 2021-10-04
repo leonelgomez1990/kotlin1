@@ -37,6 +37,7 @@ class ListFragment : Fragment() {
 
         binding.btnListAdd.setOnClickListener {
             viewModel.savePosition(requireContext(), -1)
+            viewModel.saveDetailMode(requireContext(), "add")
             val action = ListFragmentDirections.actionListFragmentToDetailFragment()
             binding.layoutList.findNavController().navigate(action)
         }
@@ -53,6 +54,7 @@ class ListFragment : Fragment() {
 
     private fun onItemClick (position : Int) {
         viewModel.savePosition(requireContext(), position)
+        viewModel.saveDetailMode(requireContext(), "view")
         val action = ListFragmentDirections.actionListFragmentToDetailFragment()
         binding.layoutList.findNavController().navigate(action)
     }
