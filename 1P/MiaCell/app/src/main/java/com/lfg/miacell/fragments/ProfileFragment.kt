@@ -1,8 +1,6 @@
 package com.lfg.miacell.fragments
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,13 +13,8 @@ import com.lfg.miacell.viewmodels.ProfileViewModel
 
 class ProfileFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = ProfileFragment()
-    }
-
     private val viewModel : ProfileViewModel by viewModels()
     private lateinit var binding : FragmentProfileBinding
-    private val PREF_NAME = "myUser"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,18 +26,16 @@ class ProfileFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        viewModel.onStartProfile(requireContext())
 
-        val sharedPref: SharedPreferences = requireContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        val user = sharedPref.getString("USER","default")!!
-        val display = sharedPref.getString("DISPLAY","default")!!
-
-        binding.txtProfileDisplay.setText(display)
-        binding.txtProfileUser.setText(user)
-
+        viewModel.display.observe(viewLifecycleOwner, { result ->
+            binding.txtProfileDisplay.text = result.toString()
+        })
+        viewModel.user.observe(viewLifecycleOwner, { result ->
+            binding.txtProfileUser.text = result.toString()
+        })
         binding.btnLogout.setOnClickListener {
-            val editor = sharedPref.edit()
-            editor.putBoolean("AUTOLOGIN", false)
-            editor.apply()
+            viewModel.setAutoLoginFalse()
             activity?.finish()
         }
 
