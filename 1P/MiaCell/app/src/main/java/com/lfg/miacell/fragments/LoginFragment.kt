@@ -12,6 +12,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.lfg.miacell.databinding.FragmentLoginBinding
 import com.lfg.miacell.functions.hideKeyboard
 import com.lfg.miacell.viewmodels.LoginViewModel
+import android.widget.Toast
+import com.lfg.miacell.R
+
 
 class LoginFragment : Fragment() {
 
@@ -40,6 +43,12 @@ class LoginFragment : Fragment() {
         binding.chkAutoLogin.isChecked = viewModel.memAutoLogin
         if(viewModel.memChecked && viewModel.memAutoLogin)
         {
+            val toast1 = Toast.makeText(
+                requireContext(),
+                getString(R.string.txt_delay_autologin), Toast.LENGTH_SHORT
+            )
+
+            toast1.show()
             Handler().postDelayed(
                 {
                     binding.btnLogin.performClick()
@@ -62,11 +71,11 @@ class LoginFragment : Fragment() {
             binding.layoutLogin.findNavController().navigate(action)
         }
 
-        binding.cbxRemember.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.cbxRemember.setOnCheckedChangeListener { _, isChecked ->
             viewModel.checkedRemember(requireContext(), isChecked)
         }
 
-        binding.chkAutoLogin.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.chkAutoLogin.setOnCheckedChangeListener { _, isChecked ->
             viewModel.checkedAutoLogin(requireContext(), isChecked)
         }
     }

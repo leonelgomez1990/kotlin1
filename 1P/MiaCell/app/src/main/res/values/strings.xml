@@ -44,6 +44,7 @@
     <string name="txt_add_item">Agregar item</string>
     <string name="txt_delete_item">Borrar item</string>
     <string name="txt_edit_item">Editar item</string>
+    <string name="txt_delay_autologin">Auto login en segundos</string>
 
     <!-- Preference Titles -->
     <string name="style_header">Estilo</string>
