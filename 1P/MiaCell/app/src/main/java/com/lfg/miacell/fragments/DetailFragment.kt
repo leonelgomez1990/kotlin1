@@ -43,25 +43,35 @@ class DetailFragment : Fragment() {
         //val position  = DetailFragmentArgs.fromBundle(requireArguments()).position
         val sharedPref: SharedPreferences = requireContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         val position = sharedPref.getInt("position",0)!!
-        val id = sharedPref.getLong("id",0)!!
-        db = AppDatabase.getAppDataBase(binding.layoutDetail.context)
-        productDao = db?.ProductDao()
-        var product = productDao?.loadProductById(id)!!
+        val id : Long = sharedPref.getLong("id",0)!!
+        var strDescription = "nuevo"
+        var strId : Long = 0
+        var strBrand = "nuevo"
+        var strPresentation = "nuevo"
+        var strPrice = 0.0
+        var strUrlImage = "nuevo"
 
-        //val strDescription = productRepository.getList()[position].description
-        //val strId = productRepository.getList()[position].id
-        //val strBrand = productRepository.getList()[position].brand
-        //val strPresentation = productRepository.getList()[position].presentation
-        //val strPrice = productRepository.getList()[position].price
-        //val strUrlImage = productRepository.getList()[position].urlImage
-        val strDescription = product.description
-        val strId = product.id
-        val strBrand = product.brand
-        val strPresentation = product.presentation
-        val strPrice = product.price
-        val strUrlImage = product.urlImage
+        if(id >= 0)
+        {
+            db = AppDatabase.getAppDataBase(binding.layoutDetail.context)
+            productDao = db?.ProductDao()
+            var product = productDao?.loadProductById(id)!!
 
-        Snackbar.make(binding.layoutDetail, strDescription, Snackbar.LENGTH_SHORT).show()
+            //val strDescription = productRepository.getList()[position].description
+            //val strId = productRepository.getList()[position].id
+            //val strBrand = productRepository.getList()[position].brand
+            //val strPresentation = productRepository.getList()[position].presentation
+            //val strPrice = productRepository.getList()[position].price
+            //val strUrlImage = productRepository.getList()[position].urlImage
+            strDescription = product.description
+            strId = product.id
+            strBrand = product.brand
+            strPresentation = product.presentation
+            strPrice = product.price
+            strUrlImage = product.urlImage
+
+            Snackbar.make(binding.layoutDetail, strDescription, Snackbar.LENGTH_SHORT).show()
+        }
 
         //binding.txtDetailDescription.text = strDescription
         binding.txtDetailId.text = strId.toString()

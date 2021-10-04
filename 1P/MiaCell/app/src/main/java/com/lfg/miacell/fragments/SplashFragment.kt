@@ -6,8 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import com.lfg.miacell.databinding.FragmentSplashBinding
 import com.lfg.miacell.viewmodels.SplashViewModel
 
@@ -34,7 +34,7 @@ class SplashFragment : Fragment() {
         Handler().postDelayed(
             {
                 val action = SplashFragmentDirections.actionSplashFragmentToLoginFragment()
-                binding.layoutSplash.findNavController().navigate(action)
+                this.view?.findNavController()?.navigate(action)
             }
             , SPLASH_TIME_OUT)
     }

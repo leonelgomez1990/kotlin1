@@ -34,6 +34,12 @@ class ListFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         setupRecycler()
+
+        binding.btnListAdd.setOnClickListener {
+            viewModel.savePosition(requireContext(), -1)
+            val action = ListFragmentDirections.actionListFragmentToDetailFragment()
+            binding.layoutList.findNavController().navigate(action)
+        }
     }
 
     private fun setupRecycler(){

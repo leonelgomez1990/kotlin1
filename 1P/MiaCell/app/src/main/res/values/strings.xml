@@ -38,6 +38,8 @@
     <string name="txt_detail_pres">Presentación</string>
     <string name="txt_detail_price">Precio</string>
 
+    <string name="txt_add_item">Agregar item</string>
+
     <!-- Preference Titles -->
     <string name="style_header">Estilo</string>
 

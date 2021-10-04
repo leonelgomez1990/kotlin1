@@ -48,7 +48,9 @@ class ListViewModel : ViewModel() {
         val sharedPref: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         val editor = sharedPref.edit()
         editor.putInt("position",pos)
-        var id = productList[pos].id
+        var id : Long = -1
+        if (pos != -1)
+            id = productList[pos].id
         editor.putLong("id",id)
 
         editor.apply()
