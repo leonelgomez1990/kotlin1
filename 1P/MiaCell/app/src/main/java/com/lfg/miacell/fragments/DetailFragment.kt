@@ -7,14 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.lfg.miacell.databinding.FragmentDetailBinding
 import com.lfg.miacell.viewmodels.DetailViewModel
 
 class DetailFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = DetailFragment()
-    }
 
     private val viewModel: DetailViewModel by viewModels()
     private lateinit var binding : FragmentDetailBinding
@@ -36,9 +33,9 @@ class DetailFragment : Fragment() {
 
         viewModel.product.observe(viewLifecycleOwner, { result ->
             binding.txtDetailId.setText(result.id.toString())
-            binding.txtDetailBrand.setText(result.brand.toString())
-            binding.txtDetailDescription.setText(result.description.toString())
-            binding.txtDetailPrice.setText("$ " + result.price.toString())
+            binding.txtDetailBrand.setText(result.brand)
+            binding.txtDetailDescription.setText(result.description)
+            binding.txtDetailPrice.setText(result.price.toString())
         })
 
         binding.btnDetailEdit.setOnClickListener {
@@ -47,6 +44,34 @@ class DetailFragment : Fragment() {
 
         binding.imgDetail.setOnClickListener {
             viewModel.setViewImage(requireContext(),binding.imgDetail, binding.txtDetailId.text.toString())
+        }
+
+        binding.btnDetailSave.setOnClickListener {
+            when (viewModel.mode.value.toString()) {
+                "add" -> {
+                    viewModel.setProductData(binding.txtDetailId.text.toString(),binding.txtDetailBrand.text.toString(),binding.txtDetailDescription.text.toString(),binding.txtDetailPrice.text.toString())
+                    viewModel.addItem(binding.layoutDetail)
+                    viewModel.setMode("view")
+                }
+                "edit" -> {
+                    viewModel.setProductData(binding.txtDetailId.text.toString(),binding.txtDetailBrand.text.toString(),binding.txtDetailDescription.text.toString(),binding.txtDetailPrice.text.toString())
+                    viewModel.editItem(binding.layoutDetail)
+                    viewModel.setMode("view")
+                }
+                else -> {
+                }
+            }
+        }
+
+        binding.btnDetailCancel.setOnClickListener {
+            if(viewModel.mode.value == "add")
+                findNavController().popBackStack()
+            else
+                viewModel.setMode("view")
+        }
+        binding.btnDetailDelete.setOnClickListener {
+            viewModel.deteleItem(binding.layoutDetail)
+            findNavController().popBackStack()
         }
 
         viewModel.mode.observe(viewLifecycleOwner, { result ->
@@ -58,6 +83,8 @@ class DetailFragment : Fragment() {
                     binding.txtDetailPrice.isEnabled = false
                     binding.btnDetailCancel.isVisible = false
                     binding.btnDetailSave.isVisible = false
+                    binding.btnDetailEdit.isVisible = true
+                    binding.btnDetailDelete.isVisible = true
                 }
                 "add" -> {
                     binding.txtDetailId.isEnabled = true
@@ -67,15 +94,17 @@ class DetailFragment : Fragment() {
                     binding.btnDetailCancel.isVisible = true
                     binding.btnDetailSave.isVisible = true
                     binding.btnDetailEdit.isVisible = false
+                    binding.btnDetailDelete.isVisible = false
                 }
                 "edit" -> {
-                    binding.txtDetailId.isEnabled = true
+                    binding.txtDetailId.isEnabled = false
                     binding.txtDetailBrand.isEnabled = true
                     binding.txtDetailDescription.isEnabled = true
                     binding.txtDetailPrice.isEnabled = true
                     binding.btnDetailCancel.isVisible = true
                     binding.btnDetailSave.isVisible = true
                     binding.btnDetailEdit.isVisible = false
+                    binding.btnDetailDelete.isVisible = true
                 }
                 else -> {
                 }

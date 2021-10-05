@@ -2,11 +2,14 @@ package com.lfg.miacell.viewmodels
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.view.View
 import android.webkit.URLUtil
 import android.widget.ImageView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
+import com.lfg.miacell.R
 import com.lfg.miacell.database.AppDatabase
 import com.lfg.miacell.database.ProductDao
 import com.lfg.miacell.entities.Product
@@ -17,6 +20,7 @@ class DetailViewModel : ViewModel() {
     private var productDao: ProductDao? = null
     val product = MutableLiveData<Product>()
     val mode = MutableLiveData<String>()
+    lateinit var newProd : Product
 
     fun onCreateDB (context : Context) {
         db = AppDatabase.getAppDataBase(context)
@@ -60,5 +64,26 @@ class DetailViewModel : ViewModel() {
     fun setMode(str : String)
     {
         mode.value = str
+    }
+    fun deteleItem(view : View)
+    {
+        productDao?.delete(product.value)
+        Snackbar.make(view, R.string.txt_delete_detail, Snackbar.LENGTH_SHORT).show()
+    }
+    fun editItem(view : View)
+    {
+        productDao?.updateProduct(newProd)
+        Snackbar.make(view, R.string.txt_edit_detail, Snackbar.LENGTH_SHORT).show()
+    }
+    fun addItem(view : View)
+    {
+        productDao?.insertProduct(newProd)
+        Snackbar.make(view, R.string.txt_add_detail, Snackbar.LENGTH_SHORT).show()
+    }
+
+    fun setProductData(id : String, brand : String, desc : String, price : String)
+    {
+        val strImage = "https://imagenes.preciosclaros.gob.ar/productos/${id}.jpg"
+        newProd = Product(id.toLong(),brand,desc,price.toDouble(),"1.0 un", strImage)
     }
 }
