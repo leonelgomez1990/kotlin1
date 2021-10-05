@@ -1,21 +1,13 @@
 package com.lfg.miacell.fragments
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.URLUtil
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import com.bumptech.glide.Glide
-import com.google.android.material.snackbar.Snackbar
-import com.lfg.miacell.database.AppDatabase
-import com.lfg.miacell.database.ProductDao
 import com.lfg.miacell.databinding.FragmentDetailBinding
-import com.lfg.miacell.repositories.ProductRepository
 import com.lfg.miacell.viewmodels.DetailViewModel
 
 class DetailFragment : Fragment() {
@@ -26,91 +18,69 @@ class DetailFragment : Fragment() {
 
     private val viewModel: DetailViewModel by viewModels()
     private lateinit var binding : FragmentDetailBinding
-    private var productRepository = ProductRepository()
-    private val PREF_NAME = "mySelection"
-    private var db: AppDatabase? = null
-    private var productDao: ProductDao? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentDetailBinding.inflate(layoutInflater)
+        viewModel.onCreateDB(binding.layoutDetail.context)
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
-        //val position  = DetailFragmentArgs.fromBundle(requireArguments()).position
-        val sharedPref: SharedPreferences = requireContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        val position = sharedPref.getInt("position",0)!!
-        val id : Long = sharedPref.getLong("id",0)!!
-        var mode = sharedPref.getString("detailMode","view")!!
-        var strDescription = "nuevo"
-        var strId : Long = 0
-        var strBrand = "nuevo"
-        var strPresentation = "nuevo"
-        var strPrice = 0.0
-        var strUrlImage = "nuevo"
+        viewModel.onStartDetail(requireContext())
 
-        if(id >= 0)
-        {
-            db = AppDatabase.getAppDataBase(binding.layoutDetail.context)
-            productDao = db?.ProductDao()
-            var product = productDao?.loadProductById(id)!!
+        viewModel.setViewImage(requireContext(), binding.imgDetail, "")
 
-            //val strDescription = productRepository.getList()[position].description
-            //val strId = productRepository.getList()[position].id
-            //val strBrand = productRepository.getList()[position].brand
-            //val strPresentation = productRepository.getList()[position].presentation
-            //val strPrice = productRepository.getList()[position].price
-            //val strUrlImage = productRepository.getList()[position].urlImage
-            strDescription = product.description
-            strId = product.id
-            strBrand = product.brand
-            strPresentation = product.presentation
-            strPrice = product.price
-            strUrlImage = product.urlImage
-
-            Snackbar.make(binding.layoutDetail, strDescription, Snackbar.LENGTH_SHORT).show()
-        }
-
-        binding.txtDetailId.setText(strId.toString())
-        binding.txtDetailBrand.setText(strBrand)
-        binding.txtDetailDescription.setText(strDescription)
-        binding.txtDetailPrice.setText("$ " + strPrice.toString())
-
-        if(mode == "view")
-        {
-            binding.txtDetailId.isEnabled = false
-            binding.txtDetailBrand.isEnabled = false
-            binding.txtDetailDescription.isEnabled = false
-            binding.txtDetailPrice.isEnabled = false
-            binding.btnDetailCancel.isVisible = false
-            binding.btnDetailSave.isVisible = false
-        }
-
-        var strImage = strUrlImage
-        if (!URLUtil.isValidUrl(strUrlImage))
-            strImage = "https://www.preciosclaros.gob.ar/img/no-image.png"
-
-        Glide
-            .with(requireContext())
-            .load(strImage)
-            .centerInside()
-            .into(binding.imgDetail)
+        viewModel.product.observe(viewLifecycleOwner, { result ->
+            binding.txtDetailId.setText(result.id.toString())
+            binding.txtDetailBrand.setText(result.brand.toString())
+            binding.txtDetailDescription.setText(result.description.toString())
+            binding.txtDetailPrice.setText("$ " + result.price.toString())
+        })
 
         binding.btnDetailEdit.setOnClickListener {
-            mode = "edit"
-            binding.txtDetailId.isEnabled = true
-            binding.txtDetailBrand.isEnabled = true
-            binding.txtDetailDescription.isEnabled = true
-            binding.txtDetailPrice.isEnabled = true
-            binding.btnDetailCancel.isVisible = true
-            binding.btnDetailSave.isVisible = true
-            binding.btnDetailEdit.isVisible = false
-
+            viewModel.setMode("edit")
         }
+
+        binding.imgDetail.setOnClickListener {
+            viewModel.setViewImage(requireContext(),binding.imgDetail, binding.txtDetailId.text.toString())
+        }
+
+        viewModel.mode.observe(viewLifecycleOwner, { result ->
+            when (result.toString()) {
+                "view" -> {
+                    binding.txtDetailId.isEnabled = false
+                    binding.txtDetailBrand.isEnabled = false
+                    binding.txtDetailDescription.isEnabled = false
+                    binding.txtDetailPrice.isEnabled = false
+                    binding.btnDetailCancel.isVisible = false
+                    binding.btnDetailSave.isVisible = false
+                }
+                "add" -> {
+                    binding.txtDetailId.isEnabled = true
+                    binding.txtDetailBrand.isEnabled = true
+                    binding.txtDetailDescription.isEnabled = true
+                    binding.txtDetailPrice.isEnabled = true
+                    binding.btnDetailCancel.isVisible = true
+                    binding.btnDetailSave.isVisible = true
+                    binding.btnDetailEdit.isVisible = false
+                }
+                "edit" -> {
+                    binding.txtDetailId.isEnabled = true
+                    binding.txtDetailBrand.isEnabled = true
+                    binding.txtDetailDescription.isEnabled = true
+                    binding.txtDetailPrice.isEnabled = true
+                    binding.btnDetailCancel.isVisible = true
+                    binding.btnDetailSave.isVisible = true
+                    binding.btnDetailEdit.isVisible = false
+                }
+                else -> {
+                }
+            }
+        })
 
     }
 

@@ -36,8 +36,7 @@ class ListFragment : Fragment() {
         setupRecycler()
 
         binding.btnListAdd.setOnClickListener {
-            viewModel.savePosition(requireContext(), -1)
-            viewModel.saveDetailMode(requireContext(), "add")
+            viewModel.saveDetailData(requireContext(),-1, "add")
             val action = ListFragmentDirections.actionListFragmentToDetailFragment()
             binding.layoutList.findNavController().navigate(action)
         }
@@ -53,8 +52,7 @@ class ListFragment : Fragment() {
     }
 
     private fun onItemClick (position : Int) {
-        viewModel.savePosition(requireContext(), position)
-        viewModel.saveDetailMode(requireContext(), "view")
+        viewModel.saveDetailData(requireContext(),position, "view")
         val action = ListFragmentDirections.actionListFragmentToDetailFragment()
         binding.layoutList.findNavController().navigate(action)
     }
