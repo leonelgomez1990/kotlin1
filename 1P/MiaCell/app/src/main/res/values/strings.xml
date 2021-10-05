@@ -48,6 +48,12 @@
     <string name="txt_delete_detail">Producto Borrado</string>
     <string name="txt_edit_detail">Producto Editado</string>
     <string name="txt_add_detail">Producto Agregado</string>
+    <!-- Dialog Text -->
+    <string name="dialog_del_msg">¿Está seguro que desea borrar el elemento?</string>
+    <string name="dialog_del_yes">Si</string>
+    <string name="dialog_del_no">No</string>
+    <string name="dialog_del_title">Borrando</string>
+    <string name="dialog_del_cancel">Acción cancelada</string>
 
     <!-- Preference Titles -->
     <string name="style_header">Estilo</string>

@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.lfg.miacell.databinding.FragmentDetailBinding
+import com.lfg.miacell.functions.hideKeyboard
 import com.lfg.miacell.viewmodels.DetailViewModel
 
 class DetailFragment : Fragment() {
@@ -36,6 +37,13 @@ class DetailFragment : Fragment() {
             binding.txtDetailBrand.setText(result.brand)
             binding.txtDetailDescription.setText(result.description)
             binding.txtDetailPrice.setText(result.price.toString())
+            viewModel.setViewImage(requireContext(),binding.imgDetail, binding.txtDetailId.text.toString())
+            binding.txtDetailId.requestFocus()
+        })
+
+        viewModel.back.observe(viewLifecycleOwner, { result ->
+            if(result)
+                findNavController().popBackStack()
         })
 
         binding.btnDetailEdit.setOnClickListener {
@@ -47,6 +55,7 @@ class DetailFragment : Fragment() {
         }
 
         binding.btnDetailSave.setOnClickListener {
+            hideKeyboard()
             when (viewModel.mode.value.toString()) {
                 "add" -> {
                     viewModel.setProductData(binding.txtDetailId.text.toString(),binding.txtDetailBrand.text.toString(),binding.txtDetailDescription.text.toString(),binding.txtDetailPrice.text.toString())
@@ -70,8 +79,7 @@ class DetailFragment : Fragment() {
                 viewModel.setMode("view")
         }
         binding.btnDetailDelete.setOnClickListener {
-            viewModel.deteleItem(binding.layoutDetail)
-            findNavController().popBackStack()
+           viewModel.deteleItem(binding.layoutDetail)
         }
 
         viewModel.mode.observe(viewLifecycleOwner, { result ->

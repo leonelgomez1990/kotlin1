@@ -20,6 +20,7 @@ class DetailViewModel : ViewModel() {
     private var productDao: ProductDao? = null
     val product = MutableLiveData<Product>()
     val mode = MutableLiveData<String>()
+    val back = MutableLiveData<Boolean>()
     lateinit var newProd : Product
 
     fun onCreateDB (context : Context) {
@@ -67,8 +68,23 @@ class DetailViewModel : ViewModel() {
     }
     fun deteleItem(view : View)
     {
-        productDao?.delete(product.value)
-        Snackbar.make(view, R.string.txt_delete_detail, Snackbar.LENGTH_SHORT).show()
+        android.app.AlertDialog.Builder(view.context) //set icon
+            .setIcon(R.drawable.ic_warning_icon) //set title
+            .setTitle(R.string.dialog_del_title) //set message
+            .setMessage(R.string.dialog_del_msg) //set positive button
+            .setPositiveButton(
+                R.string.dialog_del_yes
+            ) { _, _ -> //set what would happen when positive button is clicked
+                productDao?.delete(product.value)
+                Snackbar.make(view, R.string.txt_delete_detail, Snackbar.LENGTH_SHORT).show()
+                back.value = true
+            } //set negative button
+            .setNegativeButton(
+                R.string.dialog_del_no
+            ) { _, _ -> //set what should happen when negative button is clicked
+                Snackbar.make(view, R.string.dialog_del_cancel, Snackbar.LENGTH_SHORT).show()
+            }
+            .show()
     }
     fun editItem(view : View)
     {
