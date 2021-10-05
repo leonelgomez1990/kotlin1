@@ -19,13 +19,13 @@ class ListViewModel : ViewModel() {
         db = AppDatabase.getAppDataBase(context)
         productDao = db?.ProductDao()
         productList = productDao?.loadAllProducts()!!
-        if (productList.size == 0)
+        /*if (productList.size == 0)
         {
             for (product in productRepository.getList()){
                 insertProduct(product)
             }
             productList = productDao?.loadAllProducts()!!
-        }
+        }*/
     }
 
     fun getProductData () : MutableList<Product> {

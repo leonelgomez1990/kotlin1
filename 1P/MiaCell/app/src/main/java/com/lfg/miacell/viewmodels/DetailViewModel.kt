@@ -32,16 +32,16 @@ class DetailViewModel : ViewModel() {
         val id : Long = sharedPref.getLong("id",0)
         setMode(sharedPref.getString("detailMode","view")!!)
 
-        product.value = Product(0,"","",0.0,"","")
-
+        product.value = Product(8806090,"","",0.0,"","")
         if(id >= 0)
-        {
-            val pr = productDao?.loadProductById(id)!!
-            if (pr.id > 0)
-            {
-                product.value = pr
-            }
-        }
+            setProductValueById(id)
+    }
+
+    private fun setProductValueById(id : Long)
+    {
+        val pr = productDao?.loadProductById(id)!!
+        if (pr.id > 0)
+            product.value = pr
     }
 
     fun setViewImage (context : Context, img : ImageView, id : String)
@@ -72,18 +72,30 @@ class DetailViewModel : ViewModel() {
     }
     fun editItem(view : View)
     {
-        productDao?.updateProduct(newProd)
-        Snackbar.make(view, R.string.txt_edit_detail, Snackbar.LENGTH_SHORT).show()
+        if(newProd.id>0)
+        {
+            productDao?.updateProduct(newProd)
+            setProductValueById(newProd.id)
+            Snackbar.make(view, R.string.txt_edit_detail, Snackbar.LENGTH_SHORT).show()
+        }
     }
     fun addItem(view : View)
     {
-        productDao?.insertProduct(newProd)
-        Snackbar.make(view, R.string.txt_add_detail, Snackbar.LENGTH_SHORT).show()
+        if(newProd.id>0)
+        {
+            productDao?.insertProduct(newProd)
+            setProductValueById(newProd.id)
+            Snackbar.make(view, R.string.txt_add_detail, Snackbar.LENGTH_SHORT).show()
+        }
     }
 
     fun setProductData(id : String, brand : String, desc : String, price : String)
     {
         val strImage = "https://imagenes.preciosclaros.gob.ar/productos/${id}.jpg"
-        newProd = Product(id.toLong(),brand,desc,price.toDouble(),"1.0 un", strImage)
+        newProd = try {
+            Product(id.toLong(),brand,desc,price.toDouble(),"1.0 un", strImage)
+        } catch (ex : Exception) {
+            Product(0,"","",0.0,"","")
+        }
     }
 }
