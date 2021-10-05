@@ -7,7 +7,6 @@ import com.lfg.miacell.R
 import com.lfg.miacell.database.AppDatabase
 import com.lfg.miacell.database.UserDao
 import com.lfg.miacell.entities.User
-//import com.lfg.almacenleo.repositories.UserRepository
 import kotlin.random.Random
 import kotlin.random.nextInt
 
@@ -15,7 +14,6 @@ class LoginViewModel : ViewModel() {
     private var db: AppDatabase? = null
     private var userDao: UserDao? = null
     var user: User? = null
-    //private var userRepository = UserRepository()
     private val PREF_NAME = "myUser"
     var memChecked = false
     var memAutoLogin = false
@@ -36,11 +34,6 @@ class LoginViewModel : ViewModel() {
 
     }
 
-
-    fun logout () {
-        user = null
-    }
-
     fun login (context : Context, username : String, password : String) : Int {
         if(username.isEmpty()) {
             return R.string.invalid_emptyuser
@@ -48,7 +41,6 @@ class LoginViewModel : ViewModel() {
         else
         {
             val foundUser = userDao?.loadPersonByUserName(username)
-            //val foundUser = userRepository.getList().firstOrNull { t -> t.user == username }
             if(foundUser != null)
             {
                 //chequeo contraseña

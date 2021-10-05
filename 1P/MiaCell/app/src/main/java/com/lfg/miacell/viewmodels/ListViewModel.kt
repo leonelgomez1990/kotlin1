@@ -6,12 +6,10 @@ import androidx.lifecycle.ViewModel
 import com.lfg.miacell.database.AppDatabase
 import com.lfg.miacell.database.ProductDao
 import com.lfg.miacell.entities.Product
-import com.lfg.miacell.repositories.ProductRepository
 
 class ListViewModel : ViewModel() {
     private var db: AppDatabase? = null
     private var productDao: ProductDao? = null
-    private var productRepository = ProductRepository()
     private var productList : MutableList<Product> = mutableListOf()
     private val PREF_NAME = "mySelection"
 
@@ -19,13 +17,6 @@ class ListViewModel : ViewModel() {
         db = AppDatabase.getAppDataBase(context)
         productDao = db?.ProductDao()
         productList = productDao?.loadAllProducts()!!
-        /*if (productList.size == 0)
-        {
-            for (product in productRepository.getList()){
-                insertProduct(product)
-            }
-            productList = productDao?.loadAllProducts()!!
-        }*/
     }
 
     fun getProductData () : MutableList<Product> {

@@ -33,7 +33,7 @@ class DetailViewModel : ViewModel() {
         val id : Long = sharedPref.getLong("id",0)
         setMode(sharedPref.getString("detailMode","view")!!)
 
-        product.value = Product(8806090,"","",0.0,"","")
+        product.value = Product(0,"","",0.0,"","")
         if(id >= 0)
             setProductValueById(id)
     }
