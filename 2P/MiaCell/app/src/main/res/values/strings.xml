@@ -1,0 +1,74 @@
+<resources>
+    <string name="app_name">Mia Cell</string>
+
+    <!-- Strings related to splash -->
+    <string name="welcome">"Bienvenido!"</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_name">Nombre</string>
+    <string name="prompt_user">Usuario</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="prompt_rememberid">Recordar credenciales</string>
+    <string name="prompt_auto_login">Auto Login</string>
+    <string name="prompt_new_user">No tiene una cuenta?</string>
+    <string name="prompt_sign_in">Iniciar sesión en la aplicación</string>
+    <string name="prompt_sign_up">Registrar un usuario</string>
+    <string name="action_sign_in">Iniciar Sesión o registrarse</string>
+    <string name="action_sign_in_short">Iniciar Sesión</string>
+    <string name="action_register">Registrarse</string>
+    <string name="action_return">Volver</string>
+
+    <!-- Strings related to profile -->
+    <string name="action_sign_out">Cerrar Sesión</string>
+    <string name="action_settings">Preferencias</string>
+
+    <!-- Messages - Login -->
+    <string name="invalid_username">Usuario inválido</string>
+    <string name="invalid_password">Contraseña inválida</string>
+    <string name="invalid_emptyuser">Campo de usuario vacío</string>
+    <string name="login_failed">"Falló inicio de sesión"</string>
+    <string name="txt_delay_autologin">Auto login en segundos</string>
+
+    <!-- Messages - Register -->
+    <string name="not_user">Debe completar el campo nombre</string>
+    <string name="not_display">Debe completar el campo usuario</string>
+    <string name="not_password">Debe completar el campo contraseña</string>
+    <string name="already_user_exists">El usuario ya existe</string>
+    <string name="prompt_successful_newuser">Usuario agregado exitosamente</string>
+
+    <!-- Bottom Navigation Bar Strings -->
+    <string name="item_list">Listado</string>
+    <string name="item_profile">Perfil</string>
+
+    <!-- Detail text -->
+    <string name="txt_detail_id">Id</string>
+    <string name="txt_detail_brand">Marca</string>
+    <string name="txt_detail_pres">Presentación</string>
+    <string name="txt_detail_price">Precio $</string>
+    <string name="txt_detail_description">Descripción</string>
+    <string name="btn_detail_cancel">Cancelar</string>
+    <string name="btn_detail_save">Guardar</string>
+
+    <!-- Item text -->
+    <string name="txt_add_item">Agregar item</string>
+    <string name="txt_delete_item">Borrar item</string>
+    <string name="txt_edit_item">Editar item</string>
+    <string name="txt_delete_detail">Producto Borrado</string>
+    <string name="txt_edit_detail">Producto Editado</string>
+    <string name="txt_add_detail">Producto Agregado</string>
+
+    <!-- Dialog Text -->
+    <string name="dialog_del_msg">¿Está seguro que desea borrar el elemento?</string>
+    <string name="dialog_del_yes">Si</string>
+    <string name="dialog_del_no">No</string>
+    <string name="dialog_del_title">Borrando</string>
+    <string name="dialog_del_cancel">Acción cancelada</string>
+
+    <!-- Preference Titles -->
+    <string name="title_activity_settings">Settings</string>
+    <string name="style_header">Estilo</string>
+
+    <!-- Style Preferences -->
+    <string name="style_dark">Modificar Tema</string>
+    <string name="style_dark_def_value">MODE_NIGHT_FOLLOW_SYSTEM</string>
+</resources>

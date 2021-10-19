@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--   purple palette -->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_300">#b869bd</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="purple_900">#6c0f74</color>
+    <!--   teal palette -->
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <!--   red palette -->
+    <color name="red_300">#c75b7a</color>
+    <color name="red_500">#af1541</color>
+    <!--   simple colors -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <!--   other colors -->
+    <color name="white_50">#ffffff</color>
+    <color name="black_900">#000000</color>
+    <color name="grey_200">#EEEEEE</color>
+    <color name="grey_900">#252525</color>
+    <color name="cyan_500">#00bcd4</color>
+</resources>
