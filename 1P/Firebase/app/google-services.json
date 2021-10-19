@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "1038236947817",
+    "project_id": "miacell1980",
+    "storage_bucket": "miacell1980.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1038236947817:android:1e53338b80913e2a7099f8",
+        "android_client_info": {
+          "package_name": "com.lfg.firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1038236947817-4fcl5kkc5anlb6sl0sa69td2q76mm88h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDY8aIVHrjWIc3GYjwfa1thHrJnh_zvMi0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1038236947817-4fcl5kkc5anlb6sl0sa69td2q76mm88h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1038236947817:android:249dcb5eca43eba67099f8",
+        "android_client_info": {
+          "package_name": "com.lfg.miacell"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1038236947817-4fcl5kkc5anlb6sl0sa69td2q76mm88h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDY8aIVHrjWIc3GYjwfa1thHrJnh_zvMi0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1038236947817-4fcl5kkc5anlb6sl0sa69td2q76mm88h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
