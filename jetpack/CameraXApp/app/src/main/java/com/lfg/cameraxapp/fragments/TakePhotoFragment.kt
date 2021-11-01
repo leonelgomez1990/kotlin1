@@ -30,6 +30,9 @@ class TakePhotoFragment : Fragment() {
         super.onStart()
         viewModel.onCreateCam(requireActivity(),requireContext())
 
+        viewModel.viewFnd = binding.viewFinder
+        viewModel.lifecyc = this
+
         // Set up the listener for take photo button
         binding.camCaptureButton.setOnClickListener { viewModel.takePhoto() }
 

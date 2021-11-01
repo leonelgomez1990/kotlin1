@@ -15,7 +15,9 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.lifecycle.LifecycleOwner
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.nio.ByteBuffer
@@ -30,6 +32,8 @@ class TakePhotoViewModel : ViewModel() {
 
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
+    lateinit var viewFnd : PreviewView
+    lateinit var lifecyc : LifecycleOwner
 
     companion object {
         private const val TAG = "CameraXBasic"
@@ -41,7 +45,7 @@ class TakePhotoViewModel : ViewModel() {
     fun onCreateCam(activity : Activity, context: Context) {
         // Request camera permissions
         if (allPermissionsGranted(context)) {
-            startCamera()
+            startCamera(context)
         } else {
             ActivityCompat.requestPermissions(
                 activity, TakePhotoViewModel.REQUIRED_PERMISSIONS, TakePhotoViewModel.REQUEST_CODE_PERMISSIONS
@@ -54,9 +58,41 @@ class TakePhotoViewModel : ViewModel() {
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
 
-    fun takePhoto() {}
+    fun takePhoto() {
 
-    private fun startCamera() {}
+    }
+
+    private fun startCamera(context : Context) {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
+
+        cameraProviderFuture.addListener(Runnable {
+            // Used to bind the lifecycle of cameras to the lifecycle owner
+            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+
+            // Preview
+            val preview = Preview.Builder()
+                .build()
+                .also {
+                    it.setSurfaceProvider(viewFnd.surfaceProvider)
+                }
+
+            // Select back camera as a default
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+            try {
+                // Unbind use cases before rebinding
+                cameraProvider.unbindAll()
+
+                // Bind use cases to camera
+                cameraProvider.bindToLifecycle(
+                    lifecyc, cameraSelector, preview)
+
+            } catch(exc: Exception) {
+                Log.e(TAG, "Use case binding failed", exc)
+            }
+
+        }, ContextCompat.getMainExecutor(context))
+    }
 
     private fun allPermissionsGranted(baseContext : Context) = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
@@ -79,7 +115,7 @@ class TakePhotoViewModel : ViewModel() {
     fun onRequestPermissionsResultCam(requestCode : Int ,context : Context) {
         if (requestCode == TakePhotoViewModel.REQUEST_CODE_PERMISSIONS) {
             if (allPermissionsGranted(context)) {
-                startCamera()
+                startCamera(context)
             } else {
                 Toast.makeText(context,
                     "Permissions not granted by the user.",
