@@ -137,7 +137,8 @@ class CameraHelper(
         private val listeners = ArrayList<BarcodeListener>().apply { listener?.let { add(it) } }
 
         val options = BarcodeScannerOptions.Builder()
-            .setBarcodeFormats(Barcode.FORMAT_ALL_FORMATS)
+            //.setBarcodeFormats(Barcode.FORMAT_ALL_FORMATS)
+            .setBarcodeFormats(Barcode.FORMAT_EAN_13)
             .build()
 
         @SuppressLint("UnsafeExperimentalUsageError", "UnsafeOptInUsageError")
