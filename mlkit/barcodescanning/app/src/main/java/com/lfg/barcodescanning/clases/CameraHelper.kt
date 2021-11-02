@@ -86,6 +86,10 @@ class CameraHelper(
 
             previewView.setSurfaceProvider(viewFinder.surfaceProvider)
 
+        } catch (illegalStateException: IllegalStateException) {
+            Log.e(TAG, illegalStateException.message ?: "IllegalStateException")
+        } catch (illegalArgumentException: IllegalArgumentException) {
+            Log.e(TAG, illegalArgumentException.message ?: "IllegalArgumentException")
         } catch (exc: Exception) {
             Log.e(TAG, "Use case binding failed $exc")
         }
@@ -152,10 +156,15 @@ class CameraHelper(
                     .addOnSuccessListener { barcodes ->
                         barcodes.forEach { barcode ->
                             listeners.forEach { it(barcode.displayValue) }
+                            Log.d(TAG, barcode.rawValue?:"")
                         }
-                        imageProxy.close()
                     }
                     .addOnFailureListener {
+                        Log.e(TAG, it.message ?: it.toString())
+                    }.addOnCompleteListener {
+                        // When the image is from CameraX analysis use case, must call image.close() on received
+                        // images when finished using them. Otherwise, new images may not be received or the camera
+                        // may stall.
                         imageProxy.close()
                     }
             }
