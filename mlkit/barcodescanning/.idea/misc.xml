@@ -5,6 +5,8 @@
       <map>
         <entry key="..\:/AndroidStudioProjects/kotlin1/mlkit/app/src/main/res/layout/activity_main.xml" value="0.2234375" />
         <entry key="..\:/AndroidStudioProjects/kotlin1/mlkit/app/src/main/res/layout/scan_fragment.xml" value="0.209375" />
+        <entry key="..\:/AndroidStudioProjects/kotlin1/mlkit/barcodescanning/app/src/main/res/layout/activity_main.xml" value="0.2234375" />
+        <entry key="..\:/AndroidStudioProjects/kotlin1/mlkit/barcodescanning/app/src/main/res/layout/scan_fragment.xml" value="0.21" />
       </map>
     </option>
   </component>

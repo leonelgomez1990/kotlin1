@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navgraph"
     app:startDestination="@id/scanFragment">
-
     <fragment
         android:id="@+id/scanFragment"
         android:name="com.lfg.barcodescanning.fragments.ScanFragment"
