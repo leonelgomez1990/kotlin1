@@ -30,7 +30,7 @@ typealias LumaListener = (luma: Double) -> Unit
 class TakePhotoViewModel : ViewModel() {
     private var imageCapture: ImageCapture? = null
 
-    private lateinit var outputDirectory: File
+    lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
     lateinit var viewFnd : PreviewView
     lateinit var lifecyc : LifecycleOwner
@@ -38,7 +38,7 @@ class TakePhotoViewModel : ViewModel() {
     companion object {
         private const val TAG = "CameraXBasic"
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
-        private const val REQUEST_CODE_PERMISSIONS = 10
+        internal const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
 
@@ -52,14 +52,37 @@ class TakePhotoViewModel : ViewModel() {
             )
         }
 
-
-        //outputDirectory = getOutputDirectory()
-
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
 
-    fun takePhoto() {
+    fun takePhoto(context : Context) {
+        // Get a stable reference of the modifiable image capture use case
+        val imageCapture = imageCapture ?: return
 
+        // Create time-stamped output file to hold the image
+        val photoFile = File(
+            outputDirectory,
+            SimpleDateFormat(FILENAME_FORMAT, Locale.US
+            ).format(System.currentTimeMillis()) + ".jpg")
+
+        // Create output options object which contains file + metadata
+        val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+
+        // Set up image capture listener, which is triggered after photo has
+        // been taken
+        imageCapture.takePicture(
+            outputOptions, ContextCompat.getMainExecutor(context), object : ImageCapture.OnImageSavedCallback {
+                override fun onError(exc: ImageCaptureException) {
+                    Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
+                }
+
+                override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+                    val savedUri = Uri.fromFile(photoFile)
+                    val msg = "Photo capture succeeded: $savedUri"
+                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+                    Log.d(TAG, msg)
+                }
+            })
     }
 
     private fun startCamera(context : Context) {
@@ -76,6 +99,9 @@ class TakePhotoViewModel : ViewModel() {
                     it.setSurfaceProvider(viewFnd.surfaceProvider)
                 }
 
+            imageCapture = ImageCapture.Builder()
+                .build()
+
             // Select back camera as a default
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
@@ -85,7 +111,7 @@ class TakePhotoViewModel : ViewModel() {
 
                 // Bind use cases to camera
                 cameraProvider.bindToLifecycle(
-                    lifecyc, cameraSelector, preview)
+                    lifecyc, cameraSelector, preview, imageCapture)
 
             } catch(exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
@@ -98,15 +124,6 @@ class TakePhotoViewModel : ViewModel() {
         ContextCompat.checkSelfPermission(
             baseContext, it) == PackageManager.PERMISSION_GRANTED
     }
-
-    /*
-    private fun getOutputDirectory(): File {
-        val mediaDir = externalMediaDirs.firstOrNull()?.let {
-            File(it, resources.getString(R.string.app_name)).apply { mkdirs() } }
-        return if (mediaDir != null && mediaDir.exists())
-            mediaDir else filesDir
-    }
-    */
 
     fun camShutdown() {
         cameraExecutor.shutdown()

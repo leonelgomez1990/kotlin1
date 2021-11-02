@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import com.lfg.cameraxapp.R
 import com.lfg.cameraxapp.databinding.TakePhotoFragmentBinding
 import com.lfg.cameraxapp.viewmodels.TakePhotoViewModel
+import java.io.File
 
 class TakePhotoFragment : Fragment() {
 
@@ -32,9 +34,10 @@ class TakePhotoFragment : Fragment() {
 
         viewModel.viewFnd = binding.viewFinder
         viewModel.lifecyc = this
+        viewModel.outputDirectory = getOutputDirectory()
 
         // Set up the listener for take photo button
-        binding.camCaptureButton.setOnClickListener { viewModel.takePhoto() }
+        binding.camCaptureButton.setOnClickListener { viewModel.takePhoto(requireContext()) }
 
     }
 
@@ -48,5 +51,12 @@ class TakePhotoFragment : Fragment() {
         IntArray) {
         onRequestPermissionsResult(requestCode, permissions, grantResults)
         viewModel.onRequestPermissionsResultCam(requestCode, requireContext())
+    }
+
+    private fun getOutputDirectory(): File {
+        val mediaDir = activity?.externalMediaDirs?.firstOrNull()?.let {
+            File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
+        }
+        return if (mediaDir != null && mediaDir.exists()) mediaDir else activity?.filesDir!!
     }
 }
