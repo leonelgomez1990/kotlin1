@@ -1,7 +1,8 @@
-package com.lfg.firestone
+package com.lfg.firestone.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.lfg.firestone.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
