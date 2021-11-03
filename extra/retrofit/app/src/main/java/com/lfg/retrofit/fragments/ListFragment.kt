@@ -10,8 +10,8 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lfg.retrofit.adapters.DogAdapter
-import com.lfg.retrofit.clases.DogsResponse
-import com.lfg.retrofit.clases.Retrofit
+import com.lfg.retrofit.clases.ItemResponse
+import com.lfg.retrofit.clases.ItemRetrofit
 import com.lfg.retrofit.databinding.ListFragmentBinding
 import com.lfg.retrofit.functions.hideKeyboard
 import com.lfg.retrofit.viewmodels.ListViewModel
@@ -26,7 +26,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener{
 
     private val viewModel : ListViewModel by viewModels()
     private lateinit var binding : ListFragmentBinding
-    lateinit var retrofit: Retrofit
+    lateinit var retrofit: ItemRetrofit
     private lateinit var adapter: DogAdapter
     private val dogImages = mutableListOf<String>()
 
@@ -37,13 +37,13 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener{
         binding = ListFragmentBinding.inflate(layoutInflater)
         initRecyclerView()
         binding.svDogs.setOnQueryTextListener(this)
-        retrofit = Retrofit { call -> onDogsResponse(call) }
+        retrofit = ItemRetrofit ("https://dog.ceo/api/breed/") { call -> onDogsResponse(call) }
         return binding.root
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         if(!query.isNullOrEmpty()){
-            retrofit.searchByName(query.lowercase(Locale.getDefault()))
+            retrofit.searchByQuery(query.lowercase(Locale.getDefault())+ "/images")
         }
         return true
     }
@@ -52,7 +52,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener{
         return true
     }
 
-    private fun onDogsResponse( call : Response<DogsResponse>) {
+    private fun onDogsResponse( call : Response<ItemResponse>) {
         val puppies = call.body()
         requireActivity().runOnUiThread {
             if(call.isSuccessful){
