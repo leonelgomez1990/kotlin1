@@ -1,7 +1,8 @@
-package com.lfg.homemarket
+package com.lfg.homemarket.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.lfg.homemarket.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
