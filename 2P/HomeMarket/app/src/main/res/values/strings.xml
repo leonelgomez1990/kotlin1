@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Home Market</string>
+    <string name="bottom_bar_search">Buscar</string>
+    <string name="bottom_bar_list">Listado</string>
 </resources>

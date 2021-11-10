@@ -10,4 +10,9 @@
         android:name="com.lfg.homemarket.fragments.ScanFragment"
         android:label="scan_fragment"
         tools:layout="@layout/scan_fragment" />
+    <fragment
+        android:id="@+id/listFragment"
+        android:name="com.lfg.homemarket.fragments.ListFragment"
+        android:label="list_fragment"
+        tools:layout="@layout/list_fragment" />
 </navigation>
