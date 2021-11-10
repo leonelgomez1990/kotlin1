@@ -51,6 +51,7 @@ class ScanFragment : Fragment() {
     private fun onResult(result: String) {
         Log.d(TAG, "Result is $result")
         binding.textResult.text = result
+        viewModel.saveScannedId(requireContext(), result)
     }
 
     override fun onRequestPermissionsResult(

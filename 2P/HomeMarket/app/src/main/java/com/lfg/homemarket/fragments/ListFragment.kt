@@ -42,6 +42,11 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener{
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+        binding.searchViewItems.setQuery(viewModel.onStartLoadId(requireContext()), false)
+    }
+
     override fun onQueryTextSubmit(query: String?): Boolean {
         if(!query.isNullOrEmpty()){
             retrofit.searchByQuery("producto?id_producto=${query.lowercase(Locale.getDefault())}&lat=-34.713078&lng=-58.497269")
