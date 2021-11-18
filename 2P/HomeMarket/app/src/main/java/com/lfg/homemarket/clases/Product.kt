@@ -20,6 +20,8 @@ class Product (
 
     var urlImage : String
 
+    constructor() : this(0,"","",0.0,"","")
+
     init {
         this.id = id
         this.brand = brand

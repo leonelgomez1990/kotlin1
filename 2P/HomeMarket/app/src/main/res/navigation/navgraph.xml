@@ -9,10 +9,27 @@
         android:id="@+id/scanFragment"
         android:name="com.lfg.homemarket.fragments.ScanFragment"
         android:label="scan_fragment"
-        tools:layout="@layout/scan_fragment" />
+        tools:layout="@layout/scan_fragment" >
+        <action
+            android:id="@+id/action_scanFragment_to_listFragment"
+            app:destination="@id/listFragment" />
+    </fragment>
     <fragment
         android:id="@+id/listFragment"
         android:name="com.lfg.homemarket.fragments.ListFragment"
         android:label="list_fragment"
-        tools:layout="@layout/list_fragment" />
+        tools:layout="@layout/list_fragment" >
+        <action
+            android:id="@+id/action_listFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+        <argument
+            android:name="id"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.lfg.homemarket.fragments.DetailFragment"
+        android:label="detail_fragment"
+        tools:layout="@layout/detail_fragment" />
 </navigation>

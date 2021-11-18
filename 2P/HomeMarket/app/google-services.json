@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "90900712297",
+    "project_id": "home-market-82694",
+    "storage_bucket": "home-market-82694.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90900712297:android:d9f88079ccf563b1e44bf8",
+        "android_client_info": {
+          "package_name": "com.lfg.firestone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "90900712297-st4j0r5kcp2fmr8d1de76sp7627vhm5i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMEOtOtb8xOAqyDo8Eh5ZJ_7XMaM4Ab6E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "90900712297-st4j0r5kcp2fmr8d1de76sp7627vhm5i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90900712297:android:0aa86886ea14e756e44bf8",
+        "android_client_info": {
+          "package_name": "com.lfg.homemarket"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "90900712297-st4j0r5kcp2fmr8d1de76sp7627vhm5i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMEOtOtb8xOAqyDo8Eh5ZJ_7XMaM4Ab6E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "90900712297-st4j0r5kcp2fmr8d1de76sp7627vhm5i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

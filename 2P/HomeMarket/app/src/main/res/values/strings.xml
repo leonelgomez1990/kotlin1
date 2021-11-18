@@ -2,4 +2,8 @@
     <string name="app_name">Home Market</string>
     <string name="bottom_bar_search">Buscar</string>
     <string name="bottom_bar_list">Listado</string>
+    <string name="detail_txt_title">Dónde Comprarlo</string>
+    <string name="detail_txt_price">Precio</string>
+    <string name="detail_txt_market">Local</string>
+    <string name="txt_add_item">Agregar item</string>
 </resources>

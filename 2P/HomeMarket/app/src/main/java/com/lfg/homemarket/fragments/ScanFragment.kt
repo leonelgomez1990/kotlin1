@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import com.lfg.homemarket.clases.CameraHelper
 import com.lfg.homemarket.databinding.ScanFragmentBinding
 import com.lfg.homemarket.viewmodels.ScanViewModel
@@ -33,6 +35,7 @@ class ScanFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        viewModel.scannedId.value = ""
 
         viewModel.cameraHelper = CameraHelper(
             owner = activity as AppCompatActivity,
@@ -41,6 +44,23 @@ class ScanFragment : Fragment() {
             onResult = ::onResult
         )
         viewModel.cameraHelper.start()
+
+        viewModel.scannedId.observe(viewLifecycleOwner, Observer { result ->
+            binding.textResult.text = result.toString()
+            if(result == "")
+                binding.btnListAdd.hide()
+            else
+                binding.btnListAdd.show()
+        })
+
+        binding.btnListAdd.setOnClickListener {
+            if(viewModel.scannedId.value.toString() != "")
+            viewModel.saveScannedId(requireContext(), viewModel.scannedId.value.toString())
+            //Navegar
+            val action = ScanFragmentDirections.actionScanFragmentToListFragment(viewModel.scannedId.value.toString())
+            binding.viewScanFragment.findNavController().navigate(action)
+         }
+
     }
 
     override fun onDestroy() {
@@ -50,8 +70,7 @@ class ScanFragment : Fragment() {
 
     private fun onResult(result: String) {
         Log.d(TAG, "Result is $result")
-        binding.textResult.text = result
-        viewModel.saveScannedId(requireContext(), result)
+        viewModel.scannedId.value = result
     }
 
     override fun onRequestPermissionsResult(

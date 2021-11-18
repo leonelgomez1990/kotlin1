@@ -9,7 +9,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 import com.lfg.homemarket.adapters.ProductRecyclerAdapter
 import com.lfg.homemarket.clases.ItemResponse
 import com.lfg.homemarket.clases.ItemRetrofit
@@ -20,7 +24,7 @@ import com.lfg.homemarket.viewmodels.ListViewModel
 import retrofit2.Response
 import java.util.*
 
-class ListFragment : Fragment(), SearchView.OnQueryTextListener{
+class ListFragment : Fragment(){
 
     companion object {
         fun newInstance() = ListFragment()
@@ -36,26 +40,52 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener{
         savedInstanceState: Bundle?
     ): View? {
         binding = ListFragmentBinding.inflate(layoutInflater)
-        setupRecycler()
-        binding.searchViewItems.setOnQueryTextListener(this)
+
         retrofit = ItemRetrofit ("https://d3e6htiiul5ek9.cloudfront.net/prod/") { call -> onProductResponse(call) }
+
+        try {
+            val idRecibido  = ListFragmentArgs.fromBundle(requireArguments()).id
+            if (idRecibido != "")
+                saveToDbId(idRecibido!!)
+        }
+        catch (ex : Exception) {}
+
         return binding.root
+    }
+
+    fun saveToDbId(id : String) {
+        retrofit.searchByQuery("producto?id_producto=${id.lowercase(Locale.getDefault())}&lat=-34.713078&lng=-58.497269")
     }
 
     override fun onStart() {
         super.onStart()
-        binding.searchViewItems.setQuery(viewModel.onStartLoadId(requireContext()), false)
-    }
 
-    override fun onQueryTextSubmit(query: String?): Boolean {
-        if(!query.isNullOrEmpty()){
-            retrofit.searchByQuery("producto?id_producto=${query.lowercase(Locale.getDefault())}&lat=-34.713078&lng=-58.497269")
-        }
-        return true
-    }
+        setupRecycler()
 
-    override fun onQueryTextChange(newText: String?): Boolean {
-        return true
+        viewModel.productList.clear()
+        //traer lista de datos
+        viewModel.db.collection("listaproductos")
+//             .whereEqualTo("tipo", "PERRO")
+//             .limit(20)
+//             .orderBy("edad")
+            .get()
+            .addOnSuccessListener { snapshot ->
+                if (snapshot != null) {
+                    for (prod in snapshot) {
+                        try {
+                            val pr  = prod.toObject<Product>()
+                            viewModel.productList.add(pr)
+                        }
+                        catch (ex: Exception) {
+                            Log.w("DB", "Error getting documents: ", ex)
+                        }
+                    }
+                    adapterP.notifyDataSetChanged()
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w("DB", "Error getting documents: ", exception)
+            }
     }
 
     private fun onProductResponse( call : Response<ItemResponse>) {
@@ -73,25 +103,29 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener{
 
                         }
                         val imageUrl = "https://imagenes.preciosclaros.gob.ar/productos/${pr.producto.id}.jpg"
-                        viewModel.productList.add(Product(pr.producto.id.toLong(), pr.producto.marca, pr.producto.nombre, precio, pr.producto.presentacion, imageUrl ))
+                        val pr2 = Product(pr.producto.id.toLong(), pr.producto.marca, pr.producto.nombre, precio, pr.producto.presentacion, imageUrl )
+                        viewModel.saveProductToDB(pr.producto.id, pr, pr2)
                         adapterP.notifyDataSetChanged()
                     }
-
+                    else
+                        showMessage("Producto Inexistente")
                 }
+                else
+                    showMessage("Status distinto de 200")
                 //show recyclerview
                 //val images = product?.producto ?: emptyList()
                 //dogImages.clear()
                 //dogImages.addAll(images)
             }else{
                 //show error
-                showError()
+                showMessage("Ha ocurrido un error")
             }
             hideKeyboard()
         }
     }
 
-    private fun showError() {
-        Toast.makeText(requireContext(), "Ha ocurrido un error", Toast.LENGTH_SHORT).show()
+    private fun showMessage(str : String) {
+        Toast.makeText(requireContext(), str, Toast.LENGTH_SHORT).show()
     }
 
     private fun setupRecycler(){
@@ -104,7 +138,12 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener{
     }
 
     private fun onItemClick (position : Int) {
+        viewModel.saveDetailData(requireContext(),position, "view")
         //Navegar
+        val action = ListFragmentDirections.actionListFragmentToDetailFragment()
+        binding.viewListFragment.findNavController().navigate(action)
+
+
     }
 
 }
