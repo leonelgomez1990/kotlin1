@@ -1,5 +1,7 @@
 package com.lfg.homemarket.fragments
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -34,6 +36,8 @@ class ListFragment : Fragment(){
     private lateinit var binding : ListFragmentBinding
     lateinit var retrofit: ItemRetrofit
     private lateinit var adapterP: ProductRecyclerAdapter
+    private val PREF_LOCATION = "myLocation"
+    private val BASE_URL = "https://d3e6htiiul5ek9.cloudfront.net/prod/"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +45,7 @@ class ListFragment : Fragment(){
     ): View? {
         binding = ListFragmentBinding.inflate(layoutInflater)
 
-        retrofit = ItemRetrofit ("https://d3e6htiiul5ek9.cloudfront.net/prod/") { call -> onProductResponse(call) }
+        retrofit = ItemRetrofit (BASE_URL) { call -> onProductResponse(call) }
 
         try {
             val idRecibido  = ListFragmentArgs.fromBundle(requireArguments()).id
@@ -54,7 +58,11 @@ class ListFragment : Fragment(){
     }
 
     fun saveToDbId(id : String) {
-        retrofit.searchByQuery("producto?id_producto=${id.lowercase(Locale.getDefault())}&lat=-34.713078&lng=-58.497269")
+        val sharedPref: SharedPreferences = requireContext().getSharedPreferences(PREF_LOCATION, Context.MODE_PRIVATE)
+        val latitud = sharedPref.getString("latitud","-34.713078")
+        val longitud = sharedPref.getString("longitud","-58.497269")
+
+        retrofit.searchByQuery("producto?id_producto=${id.lowercase(Locale.getDefault())}&lat=${latitud}}&lng=${longitud}")
     }
 
     override fun onStart() {

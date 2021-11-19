@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/locationFragment"
+        android:icon="@drawable/ic_location"
+        android:title="@string/bottom_bar_profile" />
+
+    <item
         android:id="@+id/scanFragment"
         android:icon="@drawable/ic_search"
         android:title="@string/bottom_bar_search" />
 
     <item
         android:id="@+id/listFragment"
-        android:icon="@drawable/ic_search"
+        android:icon="@drawable/ic_cart"
         android:title="@string/bottom_bar_list"
         />
 

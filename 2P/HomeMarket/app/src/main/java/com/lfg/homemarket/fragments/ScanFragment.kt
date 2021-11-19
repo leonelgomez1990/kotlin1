@@ -46,7 +46,7 @@ class ScanFragment : Fragment() {
         viewModel.cameraHelper.start()
 
         viewModel.scannedId.observe(viewLifecycleOwner, Observer { result ->
-            binding.textResult.text = result.toString()
+            binding.scanTextResult.text = result.toString()
             if(result == "")
                 binding.btnListAdd.hide()
             else

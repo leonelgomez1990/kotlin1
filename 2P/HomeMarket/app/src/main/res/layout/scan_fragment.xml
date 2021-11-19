@@ -7,6 +7,19 @@
     android:layout_height="match_parent"
     tools:context=".fragments.ScanFragment">
 
+    <TextView
+        android:id="@+id/txtScanTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
+        android:text="@string/txt_scan_title"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnListAdd"
         android:layout_width="wrap_content"
@@ -20,18 +33,21 @@
     <androidx.camera.view.PreviewView
         android:id="@+id/cameraView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toTopOf="@+id/textResult" />
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/scanTextResult"
+        app:layout_constraintTop_toBottomOf="@+id/txtScanTitle">
+
+    </androidx.camera.view.PreviewView>
 
     <TextView
-        android:id="@+id/textResult"
+        android:id="@+id/scanTextResult"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:background="@color/black"
         android:gravity="center"
         android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/white"
-        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
