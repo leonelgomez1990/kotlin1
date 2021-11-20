@@ -8,13 +8,13 @@ import com.lfg.homemarket.clases.CameraHelper
 
 class ScanViewModel : ViewModel() {
     lateinit var cameraHelper: CameraHelper
-    private val PREF_NAME = "mySelection"
+    private val PREF_SCANNED = "myScannedId"
     var flashState : Boolean = false
     var scannedId : MutableLiveData<String> = MutableLiveData<String>()
 
     fun saveScannedId (context : Context, id : String)
     {
-        val sharedPref: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        val sharedPref: SharedPreferences = context.getSharedPreferences(PREF_SCANNED, Context.MODE_PRIVATE)
         val editor = sharedPref.edit()
         editor.putString("id",id)
         editor.apply()

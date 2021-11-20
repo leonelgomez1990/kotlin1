@@ -1,7 +1,5 @@
 package com.lfg.homemarket.fragments
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,13 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.ktx.Firebase
 import com.lfg.homemarket.adapters.ProductRecyclerAdapter
 import com.lfg.homemarket.clases.ItemResponse
 import com.lfg.homemarket.clases.ItemRetrofit
@@ -23,77 +17,59 @@ import com.lfg.homemarket.clases.Product
 import com.lfg.homemarket.databinding.ListFragmentBinding
 import com.lfg.homemarket.functions.hideKeyboard
 import com.lfg.homemarket.viewmodels.ListViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import retrofit2.Response
-import java.util.*
 
 class ListFragment : Fragment(){
 
     companion object {
         fun newInstance() = ListFragment()
+        private const val BASE_URL = "https://d3e6htiiul5ek9.cloudfront.net/prod/"
     }
 
     private val viewModel : ListViewModel by viewModels()
     private lateinit var binding : ListFragmentBinding
-    lateinit var retrofit: ItemRetrofit
     private lateinit var adapterP: ProductRecyclerAdapter
-    private val PREF_LOCATION = "myLocation"
-    private val BASE_URL = "https://d3e6htiiul5ek9.cloudfront.net/prod/"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = ListFragmentBinding.inflate(layoutInflater)
-
-        retrofit = ItemRetrofit (BASE_URL) { call -> onProductResponse(call) }
-
-        try {
-            val idRecibido  = ListFragmentArgs.fromBundle(requireArguments()).id
-            if (idRecibido != "")
-                saveToDbId(idRecibido!!)
-        }
-        catch (ex : Exception) {}
-
         return binding.root
-    }
-
-    fun saveToDbId(id : String) {
-        val sharedPref: SharedPreferences = requireContext().getSharedPreferences(PREF_LOCATION, Context.MODE_PRIVATE)
-        val latitud = sharedPref.getString("latitud","-34.713078")
-        val longitud = sharedPref.getString("longitud","-58.497269")
-
-        retrofit.searchByQuery("producto?id_producto=${id.lowercase(Locale.getDefault())}&lat=${latitud}&lng=${longitud}")
     }
 
     override fun onStart() {
         super.onStart()
-
+        viewModel.getStoredCoordinates(requireContext())
+        val parentJob = Job()
+        val scope = CoroutineScope(Dispatchers.Main + parentJob)
         setupRecycler()
 
-        viewModel.productList.clear()
-        //traer lista de datos
-        viewModel.db.collection("listaproductos")
-//             .whereEqualTo("tipo", "PERRO")
-//             .limit(20)
-//             .orderBy("edad")
-            .get()
-            .addOnSuccessListener { snapshot ->
-                if (snapshot != null) {
-                    for (prod in snapshot) {
-                        try {
-                            val pr  = prod.toObject<Product>()
-                            viewModel.productList.add(pr)
-                        }
-                        catch (ex: Exception) {
-                            Log.w("DB", "Error getting documents: ", ex)
-                        }
-                    }
-                    adapterP.notifyDataSetChanged()
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.w("DB", "Error getting documents: ", exception)
-            }
+        scope.launch {
+            viewModel.getProductListFromCloud()
+            adapterP.notifyDataSetChanged()
+        }
+        viewModel.retrofit = ItemRetrofit (BASE_URL) { call -> onProductResponse(call) }
+        viewModel.loadScannedId(requireContext())
+    }
+
+    private fun showMessage(str : String) {
+        Toast.makeText(requireContext(), str, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun setupRecycler(){
+        adapterP = ProductRecyclerAdapter(viewModel.getProductData()) {
+                pos -> onItemClick(pos)
+        }
+        with(binding.recViewItems, {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = adapterP
+        })
     }
 
     private fun onProductResponse( call : Response<ItemResponse>) {
@@ -103,7 +79,7 @@ class ListFragment : Fragment(){
                 if(pr?.status == 200) {
                     if (pr.producto.msg != "Producto inexistente.") {
                         var precio = 0.0
-                        Log.d("Producto", "Id: ${pr.producto.id.toString()} ${pr.producto.nombre}")
+                        Log.d("Producto", "Id: ${pr.producto.id} ${pr.producto.nombre}")
                         pr.sucursales.forEach { suc ->
                             Log.d("Sucursal", "   ${suc.comercioRazonSocial} ${suc.preciosProducto.precioLista}")
                             if(suc.preciosProducto.precioLista != "")
@@ -111,9 +87,11 @@ class ListFragment : Fragment(){
 
                         }
                         val imageUrl = "https://imagenes.preciosclaros.gob.ar/productos/${pr.producto.id}.jpg"
+                        viewModel.productList.add(Product(pr.producto.id.toLong(), pr.producto.marca, pr.producto.nombre, precio, pr.producto.presentacion, imageUrl ))
                         val pr2 = Product(pr.producto.id.toLong(), pr.producto.marca, pr.producto.nombre, precio, pr.producto.presentacion, imageUrl )
                         viewModel.saveProductToDB(pr.producto.id, pr, pr2)
                         adapterP.notifyDataSetChanged()
+                        showMessage("Producto agregado: " + pr.producto.nombre)
                     }
                     else
                         showMessage("Producto Inexistente")
@@ -132,26 +110,13 @@ class ListFragment : Fragment(){
         }
     }
 
-    private fun showMessage(str : String) {
-        Toast.makeText(requireContext(), str, Toast.LENGTH_SHORT).show()
-    }
 
-    private fun setupRecycler(){
-        adapterP = ProductRecyclerAdapter(viewModel.getProductData()) {
-                pos -> onItemClick(pos)
-        }
-        binding.recViewItems.setHasFixedSize(true)
-        binding.recViewItems.layoutManager = LinearLayoutManager(requireContext())
-        binding.recViewItems.adapter = adapterP
-    }
 
     private fun onItemClick (position : Int) {
         viewModel.saveDetailData(requireContext(),position, "view")
         //Navegar
         val action = ListFragmentDirections.actionListFragmentToDetailFragment()
         binding.viewListFragment.findNavController().navigate(action)
-
-
     }
 
 }

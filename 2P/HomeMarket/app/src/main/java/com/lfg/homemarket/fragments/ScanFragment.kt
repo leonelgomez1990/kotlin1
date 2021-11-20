@@ -81,7 +81,7 @@ class ScanFragment : Fragment() {
             if(viewModel.scannedId.value.toString() != "")
             viewModel.saveScannedId(requireContext(), viewModel.scannedId.value.toString())
             //Navegar
-            val action = ScanFragmentDirections.actionScanFragmentToListFragment(viewModel.scannedId.value.toString())
+            val action = ScanFragmentDirections.actionScanFragmentToListFragment()
             binding.viewScanFragment.findNavController().navigate(action)
          }
 
