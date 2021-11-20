@@ -13,6 +13,9 @@ import com.lfg.homemarket.clases.ItemResponse
 import com.lfg.homemarket.clases.ItemRetrofit
 import com.lfg.homemarket.clases.Product
 import kotlinx.coroutines.tasks.await
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.text.SimpleDateFormat
 import java.util.*
 
 class ListViewModel : ViewModel() {
@@ -57,6 +60,7 @@ class ListViewModel : ViewModel() {
 //             .whereEqualTo("tipo", "PERRO")
 //             .limit(20)
 //             .orderBy("edad")
+            .whereEqualTo("show", true)
             .get()
             .addOnSuccessListener { snapshot ->
                 try {
@@ -120,8 +124,23 @@ class ListViewModel : ViewModel() {
         editor.apply()
     }
 
+    fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
+        val formatter = SimpleDateFormat(format, locale)
+        return formatter.format(this)
+    }
+
+    fun getCurrentDateTime(): Date {
+        return Calendar.getInstance().time
+    }
+
+    fun stringFromDouble(db : Double, num : Int) : String =
+        BigDecimal(db).setScale(num, RoundingMode.HALF_EVEN).toString()
+
     fun saveProductToDB(id : String, pr1 : ItemResponse, pr2 : Product) {
-        db.collection("preciosclaros").document(id).set(pr1)
+        val date = getCurrentDateTime()
+        var idStructure = date.toString("yyyyMMdd")
+        idStructure = "${id},${idStructure},${stringFromDouble(latitud.value!!.toDouble(),5)},${stringFromDouble(longitud.value!!.toDouble(),5)}"
+        db.collection("preciosclaros").document(idStructure).set(pr1)
         db.collection("listaproductos").document(id).set(pr2)
 
     }

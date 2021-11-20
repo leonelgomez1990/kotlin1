@@ -6,6 +6,7 @@ class Product (
     description : String,
     price : Double,
     presentation : String,
+    show : Boolean,
     urlImage : String
 ) {
     var id : Long
@@ -18,9 +19,11 @@ class Product (
 
     var presentation : String
 
+    var show : Boolean
+
     var urlImage : String
 
-    constructor() : this(0,"","",0.0,"","")
+    constructor() : this(0,"","",0.0,"",false, "")
 
     init {
         this.id = id
@@ -28,6 +31,7 @@ class Product (
         this.description = description
         this.price = price
         this.presentation = presentation
+        this.show = show
         this.urlImage = urlImage
     }
 }

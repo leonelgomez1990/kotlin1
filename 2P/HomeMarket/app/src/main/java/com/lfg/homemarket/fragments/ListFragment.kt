@@ -90,8 +90,8 @@ class ListFragment : Fragment(){
 
                         }
                         val imageUrl = "https://imagenes.preciosclaros.gob.ar/productos/${pr.producto.id}.jpg"
-                        viewModel.productList.add(Product(pr.producto.id.toLong(), pr.producto.marca, pr.producto.nombre, precio, pr.producto.presentacion, imageUrl ))
-                        val pr2 = Product(pr.producto.id.toLong(), pr.producto.marca, pr.producto.nombre, precio, pr.producto.presentacion, imageUrl )
+                        viewModel.productList.add(Product(pr.producto.id.toLong(), pr.producto.marca, pr.producto.nombre, precio, pr.producto.presentacion, true, imageUrl ))
+                        val pr2 = Product(pr.producto.id.toLong(), pr.producto.marca, pr.producto.nombre, precio, pr.producto.presentacion, true, imageUrl )
                         viewModel.saveProductToDB(pr.producto.id, pr, pr2)
                         adapterP.notifyDataSetChanged()
                         showMessage("Producto agregado: " + pr.producto.nombre)

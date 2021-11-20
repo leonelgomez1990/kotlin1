@@ -22,7 +22,7 @@ class DetailViewModel : ViewModel() {
         val sharedPref: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         val id : Long = sharedPref.getLong("id",0)
 
-        product.value = Product(0,"","",0.0,"","")
+        product.value = Product(0,"","",0.0,"",true,"")
         if(id >= 0)
             setProductValueById(id)
     }
@@ -69,9 +69,9 @@ class DetailViewModel : ViewModel() {
     {
         val strImage = "https://imagenes.preciosclaros.gob.ar/productos/${id}.jpg"
         val newProd = try {
-            Product(id.toLong(),brand,desc,price.toDouble(),"1.0 un", strImage)
+            Product(id.toLong(),brand,desc,price.toDouble(),"1.0 un", true, strImage)
         } catch (ex : Exception) {
-            Product(0,"","",0.0,"","")
+            Product(0,"","",0.0,"",true,"")
         }
     }
 }
