@@ -48,6 +48,7 @@ class CameraHelper(
     }
 
     fun stop() {
+        setTorchMode(false)
         cameraExecutor.shutdown()
     }
 
@@ -199,6 +200,15 @@ class CameraHelper(
             }
         }
         return true
+    }
+
+    fun setTorchMode(mode : Boolean) : Boolean {
+        return try {
+            camera!!.cameraControl.enableTorch(mode)
+            true
+        } catch (ex : Exception) {
+            false
+        }
     }
 
     companion object {

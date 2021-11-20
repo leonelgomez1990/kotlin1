@@ -62,7 +62,7 @@ class ListFragment : Fragment(){
         val latitud = sharedPref.getString("latitud","-34.713078")
         val longitud = sharedPref.getString("longitud","-58.497269")
 
-        retrofit.searchByQuery("producto?id_producto=${id.lowercase(Locale.getDefault())}&lat=${latitud}}&lng=${longitud}")
+        retrofit.searchByQuery("producto?id_producto=${id.lowercase(Locale.getDefault())}&lat=${latitud}&lng=${longitud}")
     }
 
     override fun onStart() {
@@ -137,7 +137,7 @@ class ListFragment : Fragment(){
     }
 
     private fun setupRecycler(){
-        adapterP = ProductRecyclerAdapter(viewModel.getProductData(),requireContext()) {
+        adapterP = ProductRecyclerAdapter(viewModel.getProductData()) {
                 pos -> onItemClick(pos)
         }
         binding.recViewItems.setHasFixedSize(true)
