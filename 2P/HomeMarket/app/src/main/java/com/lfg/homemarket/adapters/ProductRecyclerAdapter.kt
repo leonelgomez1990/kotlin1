@@ -6,29 +6,28 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.lfg.homemarket.R
 import com.lfg.homemarket.clases.Product
 import com.lfg.homemarket.databinding.ItemProductBinding
 import com.squareup.picasso.Picasso
 
 class ProductRecyclerAdapter (
     private var itemList : MutableList<Product>,
-    private val context: Context,
+    //   private val listener: OnItemClickListener,
     val onItemClick : (Int) -> Unit
 ) : RecyclerView.Adapter<ProductRecyclerAdapter.ItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = ItemProductBinding.inflate(layoutInflater)
-        return (ItemViewHolder(binding))
+        val binding = ItemProductBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ItemViewHolder(binding)
     }
 
     override fun getItemCount(): Int = itemList.size
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val item = itemList[position]
+        val currentItem = itemList[position]
         /* Uso de métodos definidos en el View Holder */
-
-        holder.bind(item)
+        holder.bind(currentItem)
         holder.getCardView().setOnClickListener {
             onItemClick(position)
         }
@@ -42,8 +41,29 @@ class ProductRecyclerAdapter (
         */
     }
 
-    class ItemViewHolder (private val binding: ItemProductBinding) : RecyclerView.ViewHolder(binding.cardPackageItem) {
-
+    inner class ItemViewHolder (private val binding: ItemProductBinding) : RecyclerView.ViewHolder(binding.root) {
+        /*
+        init {
+            binding.root.setOnClickListener{
+                val position = getAbsoluteAdapterPosition()
+                if (position != RecyclerView.NO_POSITION){
+                    val item = getItem(position)
+                    if (item != null){
+                        listener.onClick(item)
+                    }
+                }
+            }
+            binding.root.setOnLongClickListener{
+                val position = getBindingAdapterPosition()
+                if (position != RecyclerView.NO_POSITION){
+                    val item = getItem(position)
+                    if (item != null){
+                        listener.onLongClick(item)
+                    }
+                }
+            }
+        }
+         */
         fun bind(item: Product){
             binding.txtNameItem.text = item.description
 
@@ -51,7 +71,12 @@ class ProductRecyclerAdapter (
 
         }
         private fun ImageView.loadUrl(url: String) {
-            Picasso.get().load(url).into(this)
+            Picasso
+                .get()
+                .load(url)
+                .placeholder(R.mipmap.ic_no_picture)
+                .into(this)
+
         }
 
         fun getCardView () : CardView {
@@ -62,4 +87,11 @@ class ProductRecyclerAdapter (
         }
 
     }
+/*
+    interface OnItemClickListener{
+        fun onClick(position: Int)
+        fun onLongClick(position : Int)
+    }
+
+ */
 }
