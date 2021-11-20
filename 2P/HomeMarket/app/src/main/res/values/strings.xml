@@ -23,5 +23,6 @@
     <string name="location_msg_save_loc_error">Error al guardar la ubicación</string>
     <string name="location_msg_get_loc_ok">Ubicación obtenida exitosamente</string>
     <string name="location_msg_get_loc_error">Error al obtener la ubicación</string>
+    <string name="location_msg_not_permission">Permiso de ubicación no concedido</string>
     <string name="torch_msg_get_cam_error">Error al obtener el flash</string>
 </resources>
