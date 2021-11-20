@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -44,6 +45,7 @@ class ListFragment : Fragment(){
 
     override fun onStart() {
         super.onStart()
+        binding.progressBarListView.visibility = ProgressBar.VISIBLE
         viewModel.getStoredCoordinates(requireContext())
         val parentJob = Job()
         val scope = CoroutineScope(Dispatchers.Main + parentJob)
@@ -52,6 +54,7 @@ class ListFragment : Fragment(){
         scope.launch {
             viewModel.getProductListFromCloud()
             adapterP.notifyDataSetChanged()
+            binding.progressBarListView.visibility = ProgressBar.INVISIBLE
         }
         viewModel.retrofit = ItemRetrofit (BASE_URL) { call -> onProductResponse(call) }
         viewModel.loadScannedId(requireContext())
