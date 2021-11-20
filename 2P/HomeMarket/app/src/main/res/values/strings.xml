@@ -2,7 +2,7 @@
     <string name="app_name">Home Market</string>
 
     <string name="bottom_bar_profile">Ubicación</string>
-    <string name="bottom_bar_search">Buscar</string>
+    <string name="bottom_bar_search">Escanear</string>
     <string name="bottom_bar_list">Listado</string>
 
     <string name="detail_txt_title">Dónde Comprarlo</string>
@@ -25,4 +25,7 @@
     <string name="location_msg_get_loc_error">Error al obtener la ubicación</string>
     <string name="location_msg_not_permission">Permiso de ubicación no concedido</string>
     <string name="torch_msg_get_cam_error">Error al obtener el flash</string>
+
+    <string name="camera_msg_not_permission">Permiso de cámara no concedido</string>
+
 </resources>

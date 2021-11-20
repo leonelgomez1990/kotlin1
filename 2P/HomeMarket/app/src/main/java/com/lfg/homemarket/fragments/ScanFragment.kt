@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -24,6 +26,21 @@ class ScanFragment : Fragment() {
 
     private val viewModel: ScanViewModel by viewModels()
     private lateinit var binding : ScanFragmentBinding
+    private var activityResultLauncher: ActivityResultLauncher<Array<String>>
+
+    init{
+        this.activityResultLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()) { result ->
+            var allAreGranted = true
+            for(b in result.values)
+                allAreGranted = allAreGranted && b
+
+            if(allAreGranted)
+                viewModel.cameraHelper.start()
+            else
+                showMessage(getString(R.string.camera_msg_not_permission))
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,6 +48,12 @@ class ScanFragment : Fragment() {
     ): View? {
         binding = ScanFragmentBinding.inflate(layoutInflater)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        activityResultLauncher.launch(CameraHelper.REQUIRED_PERMISSIONS)
     }
 
     override fun onStart() {
@@ -65,8 +88,11 @@ class ScanFragment : Fragment() {
         binding.btnTorchMode.setOnClickListener {
             viewModel.flashState = !viewModel.flashState
             binding.btnTorchMode.isSelected = viewModel.flashState
-            if(!viewModel.cameraHelper.setTorchMode(viewModel.flashState))
+            if(!viewModel.cameraHelper.setTorchMode(viewModel.flashState)) {
+                viewModel.flashState = false
+                binding.btnTorchMode.isSelected = viewModel.flashState
                 showMessage(getString(R.string.torch_msg_get_cam_error))
+            }
         }
 
     }
@@ -84,14 +110,6 @@ class ScanFragment : Fragment() {
     private fun onResult(result: String) {
         Log.d(TAG, "Result is $result")
         viewModel.scannedId.value = result
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        viewModel.cameraHelper.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     private fun showMessage(str : String) {
