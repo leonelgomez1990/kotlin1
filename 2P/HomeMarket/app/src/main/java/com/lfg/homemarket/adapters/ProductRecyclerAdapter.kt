@@ -13,8 +13,7 @@ import java.text.DecimalFormat
 
 class ProductRecyclerAdapter (
     private var itemList : MutableList<Product>,
-    //   private val listener: OnItemClickListener,
-    val onItemClick : (Int) -> Unit
+    val onItemEventClick : (Int, Int) -> Boolean
 ) : RecyclerView.Adapter<ProductRecyclerAdapter.ItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -29,41 +28,15 @@ class ProductRecyclerAdapter (
         /* Uso de métodos definidos en el View Holder */
         holder.bind(currentItem)
         holder.getCardView().setOnClickListener {
-            onItemClick(position)
+            onItemEventClick(1, position)
         }
-
-        /*
-        Glide
-            .with(context)
-            .load(item.urlImage)
-            .centerInside()
-            .into(holder.getImageView())
-        */
+        holder.getCardView().setOnLongClickListener {
+            onItemEventClick(2, position)
+        }
     }
 
     inner class ItemViewHolder (private val binding: ItemProductBinding) : RecyclerView.ViewHolder(binding.root) {
-        /*
-        init {
-            binding.root.setOnClickListener{
-                val position = getAbsoluteAdapterPosition()
-                if (position != RecyclerView.NO_POSITION){
-                    val item = getItem(position)
-                    if (item != null){
-                        listener.onClick(item)
-                    }
-                }
-            }
-            binding.root.setOnLongClickListener{
-                val position = getBindingAdapterPosition()
-                if (position != RecyclerView.NO_POSITION){
-                    val item = getItem(position)
-                    if (item != null){
-                        listener.onLongClick(item)
-                    }
-                }
-            }
-        }
-         */
+
         fun bind(item: Product){
             val strPrice = "$ ${DecimalFormat("#.00").format(item.price)}"
             binding.txtNameItem.text = item.description
@@ -85,16 +58,6 @@ class ProductRecyclerAdapter (
         fun getCardView () : CardView {
             return binding.cardPackageItem
         }
-        fun getImageView () : ImageView {
-            return binding.imgItem
-        }
-
-    }
-/*
-    interface OnItemClickListener{
-        fun onClick(position: Int)
-        fun onLongClick(position : Int)
     }
 
- */
 }

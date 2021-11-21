@@ -66,7 +66,7 @@ class ListFragment : Fragment(){
 
     private fun setupRecycler(){
         adapterP = ProductRecyclerAdapter(viewModel.getProductData()) {
-                pos -> onItemClick(pos)
+                event, pos -> onItemEventClick(event, pos)
         }
         with(binding.recViewItems, {
             setHasFixedSize(true)
@@ -113,13 +113,19 @@ class ListFragment : Fragment(){
         }
     }
 
-
-
-    private fun onItemClick (position : Int) {
-        viewModel.saveDetailData(requireContext(),position, "view")
-        //Navegar
-        val action = ListFragmentDirections.actionListFragmentToDetailFragment()
-        binding.viewListFragment.findNavController().navigate(action)
+    private fun onItemEventClick (event : Int, position : Int): Boolean {
+        when(event) {
+            1 -> {
+                viewModel.saveDetailData(requireContext(),position, "view")
+                //Navegar
+                val action = ListFragmentDirections.actionListFragmentToDetailFragment()
+                binding.viewListFragment.findNavController().navigate(action)
+            }
+            2 -> {
+                showMessage("Presionó un clic largo")
+            }
+        }
+        return true
     }
 
 }
