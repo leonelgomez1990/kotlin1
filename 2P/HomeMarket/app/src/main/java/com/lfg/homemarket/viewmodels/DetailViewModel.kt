@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.lfg.homemarket.R
 import com.lfg.homemarket.clases.Product
 
 class DetailViewModel : ViewModel() {
@@ -61,6 +62,7 @@ class DetailViewModel : ViewModel() {
         Glide
             .with(context)
             .load(strImage)
+            .placeholder(R.mipmap.ic_no_picture)
             .centerInside()
             .into(img)
     }

@@ -31,4 +31,11 @@
 
     <string name="camera_msg_not_permission">Permiso de cámara no concedido</string>
 
+    <!-- Dialog Text -->
+    <string name="dialog_del_msg">¿Está seguro que desea borrar el elemento?</string>
+    <string name="dialog_del_yes">Si</string>
+    <string name="dialog_del_no">No</string>
+    <string name="dialog_del_title">Borrando</string>
+    <string name="dialog_del_cancel">Acción cancelada</string>
+
 </resources>

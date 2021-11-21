@@ -31,8 +31,10 @@ class DetailFragment : Fragment() {
         viewModel.onStartDetail(requireContext())
 
         viewModel.product.observe(viewLifecycleOwner, { result ->
-            binding.txtDetailName.text = result.description
-            viewModel.setViewImage(requireContext(),binding.imgDetailProduct, result.id.toString())
+            if(result.id > 0) {
+                binding.txtDetailName.text = result.description
+                viewModel.setViewImage(requireContext(),binding.imgDetailProduct, result.id.toString())
+            }
         })
     }
 

@@ -13,8 +13,14 @@ import java.text.DecimalFormat
 
 class ProductRecyclerAdapter (
     private var itemList : MutableList<Product>,
-    val onItemEventClick : (Int, Int) -> Boolean
+    val onItemEventClick : (EventEnum, Int) -> Boolean
 ) : RecyclerView.Adapter<ProductRecyclerAdapter.ItemViewHolder>() {
+
+    companion object {
+        enum class EventEnum {
+            CLICK, LONGCLICK
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding = ItemProductBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -28,10 +34,10 @@ class ProductRecyclerAdapter (
         /* Uso de métodos definidos en el View Holder */
         holder.bind(currentItem)
         holder.getCardView().setOnClickListener {
-            onItemEventClick(1, position)
+            onItemEventClick(EventEnum.CLICK, position)
         }
         holder.getCardView().setOnLongClickListener {
-            onItemEventClick(2, position)
+            onItemEventClick(EventEnum.LONGCLICK, position)
         }
     }
 

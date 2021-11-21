@@ -54,16 +54,13 @@ class ListViewModel : ViewModel() {
 
     suspend fun getProductListFromCloud(): Boolean {
         var result = false
-        productList.clear()
         //traer lista de datos
         db.collection("listaproductos")
-//             .whereEqualTo("tipo", "PERRO")
-//             .limit(20)
-//             .orderBy("edad")
             .whereEqualTo("show", true)
             .get()
             .addOnSuccessListener { snapshot ->
                 try {
+                    productList.clear()
                     productList.addAll(snapshot.toObjects())
                     result = true
                 }
@@ -76,6 +73,31 @@ class ListViewModel : ViewModel() {
             }
             .await()
         return result
+    }
+
+    fun snapshotListener(onActionResult : (Unit) -> Unit) {
+        val docRef = db.collection("listaproductos").whereEqualTo("show", true)
+        docRef.addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                Log.d("DB", "Listen failed.", e)
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null) {
+                try {
+                    productList.clear()
+                    productList.addAll(snapshot.toObjects())
+                    onActionResult(Unit)
+                }
+                catch (ex: Exception) {
+                    Log.w("DB", "Error getting documents: ", ex)
+                }
+            } else {
+                Log.d("DB", "Current data: null")
+            }
+        }
+
+
     }
 
     fun loadProductList() {
@@ -110,7 +132,7 @@ class ListViewModel : ViewModel() {
         return sharedPref.getString("id","")
     }
 
-    fun saveDetailData (context : Context, pos : Int, mode : String)
+    fun saveDetailData (context : Context, pos : Int)
     {
         val sharedPref: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         val editor = sharedPref.edit()
@@ -119,21 +141,20 @@ class ListViewModel : ViewModel() {
         if (pos != -1)
             id = productList[pos].id
         editor.putLong("id",id)
-        editor.putString("detailMode",mode)
 
         editor.apply()
     }
 
-    fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
+    private fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
         val formatter = SimpleDateFormat(format, locale)
         return formatter.format(this)
     }
 
-    fun getCurrentDateTime(): Date {
+    private fun getCurrentDateTime(): Date {
         return Calendar.getInstance().time
     }
 
-    fun stringFromDouble(db : Double, num : Int) : String =
+    private fun stringFromDouble(db : Double, num : Int) : String =
         BigDecimal(db).setScale(num, RoundingMode.HALF_EVEN).toString()
 
     fun saveProductToDB(id : String, pr1 : ItemResponse, pr2 : Product) {
@@ -143,5 +164,9 @@ class ListViewModel : ViewModel() {
         db.collection("preciosclaros").document(idStructure).set(pr1)
         db.collection("listaproductos").document(id).set(pr2)
 
+    }
+
+    fun deleteProductInDB(id : String) {
+        db.collection("listaproductos").document(id).update("show" , false)
     }
 }

@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.lfg.homemarket.R
 import com.lfg.homemarket.adapters.ProductRecyclerAdapter
 import com.lfg.homemarket.clases.ItemResponse
 import com.lfg.homemarket.clases.ItemRetrofit
@@ -47,10 +48,9 @@ class ListFragment : Fragment(){
         super.onStart()
         binding.progressBarListView.visibility = ProgressBar.VISIBLE
         viewModel.getStoredCoordinates(requireContext())
-        val parentJob = Job()
-        val scope = CoroutineScope(Dispatchers.Main + parentJob)
         setupRecycler()
 
+        val scope = CoroutineScope(Dispatchers.Main + Job())
         scope.launch {
             viewModel.getProductListFromCloud()
             adapterP.notifyDataSetChanged()
@@ -58,6 +58,11 @@ class ListFragment : Fragment(){
         }
         viewModel.retrofit = ItemRetrofit (BASE_URL) { call -> onProductResponse(call) }
         viewModel.loadScannedId(requireContext())
+
+        viewModel.snapshotListener() {
+            adapterP.notifyDataSetChanged()
+        }
+
     }
 
     private fun showMessage(str : String) {
@@ -75,24 +80,61 @@ class ListFragment : Fragment(){
         })
     }
 
+    private fun onItemEventClick (event : ProductRecyclerAdapter.Companion.EventEnum, position : Int): Boolean {
+        when (event) {
+            ProductRecyclerAdapter.Companion.EventEnum.CLICK -> {
+                viewModel.saveDetailData(requireContext(),position)
+                //Navegar
+                val action = ListFragmentDirections.actionListFragmentToDetailFragment()
+                binding.viewListFragment.findNavController().navigate(action)
+            }
+            ProductRecyclerAdapter.Companion.EventEnum.LONGCLICK -> {
+                android.app.AlertDialog.Builder(context) //set icon
+                    .setIcon(R.drawable.ic_baseline_warning_24) //set title
+                    .setTitle(R.string.dialog_del_title) //set message
+                    .setMessage(R.string.dialog_del_msg) //set positive button
+                    .setPositiveButton(
+                        R.string.dialog_del_yes
+                    ) { _, _ -> //set what would happen when positive button is clicked
+                        viewModel.deleteProductInDB(viewModel.productList[position].id.toString())
+                        showMessage("Se borró el elemento: " + viewModel.productList[position].description)
+                    } //set negative button
+                    .setNegativeButton(
+                        R.string.dialog_del_no
+                    ) { _, _ -> //set what should happen when negative button is clicked
+                        showMessage("Cancelado")
+                    }
+                    .show()
+            }
+        }
+        return true
+    }
+
     private fun onProductResponse( call : Response<ItemResponse>) {
         val pr = call.body()
         requireActivity().runOnUiThread {
-            if(call.isSuccessful){
-                if(pr?.status == 200) {
+            if (call.isSuccessful) {
+                if (pr?.status == 200) {
                     if (pr.producto.msg != "Producto inexistente.") {
                         var precio = 0.0
                         Log.d("Producto", "Id: ${pr.producto.id} ${pr.producto.nombre}")
                         pr.sucursales.forEach { suc ->
                             Log.d("Sucursal", "   ${suc.comercioRazonSocial} ${suc.preciosProducto.precioLista}")
-                            if(suc.preciosProducto.precioLista != "")
+                            if((suc.preciosProducto.precioLista != "") && (precio == 0.0))
                                 precio = suc.preciosProducto.precioLista.toDouble()
 
                         }
                         val imageUrl = "https://imagenes.preciosclaros.gob.ar/productos/${pr.producto.id}.jpg"
-                        viewModel.productList.add(Product(pr.producto.id.toLong(), pr.producto.marca, pr.producto.nombre, precio, pr.producto.presentacion, true, imageUrl ))
-                        val pr2 = Product(pr.producto.id.toLong(), pr.producto.marca, pr.producto.nombre, precio, pr.producto.presentacion, true, imageUrl )
-                        viewModel.saveProductToDB(pr.producto.id, pr, pr2)
+                        val prod = Product(
+                            pr.producto.id.toLong(),
+                            pr.producto.marca,
+                            pr.producto.nombre,
+                            precio,
+                            pr.producto.presentacion,
+                            true,
+                            imageUrl)
+                        viewModel.productList.add(prod)
+                        viewModel.saveProductToDB(pr.producto.id, pr, prod)
                         adapterP.notifyDataSetChanged()
                         showMessage("Producto agregado: " + pr.producto.nombre)
                     }
@@ -100,32 +142,16 @@ class ListFragment : Fragment(){
                         showMessage("Producto Inexistente")
                 }
                 else
-                    showMessage("Status distinto de 200")
+                    showMessage("Error: Status ${pr?.status}")
                 //show recyclerview
                 //val images = product?.producto ?: emptyList()
                 //dogImages.clear()
                 //dogImages.addAll(images)
             }else{
-                //show error
-                showMessage("Ha ocurrido un error")
+                showMessage("Error: la llamada no fue exitosa")
             }
             hideKeyboard()
         }
-    }
-
-    private fun onItemEventClick (event : Int, position : Int): Boolean {
-        when(event) {
-            1 -> {
-                viewModel.saveDetailData(requireContext(),position, "view")
-                //Navegar
-                val action = ListFragmentDirections.actionListFragmentToDetailFragment()
-                binding.viewListFragment.findNavController().navigate(action)
-            }
-            2 -> {
-                showMessage("Presionó un clic largo")
-            }
-        }
-        return true
     }
 
 }
