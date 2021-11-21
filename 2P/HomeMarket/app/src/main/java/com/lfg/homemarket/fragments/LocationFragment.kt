@@ -127,7 +127,7 @@ class LocationFragment : Fragment() {
             }
         }
         else {
-            showCustomSnackBar(getString(R.string.location_msg_not_permission), getString(R.string.location_msg_action_retry)) {
+            showCustomSnackBar(getString(R.string.location_msg_not_permission), getString(R.string.msg_action_retry)) {
                 askForLocationPermissions()
             }
         }

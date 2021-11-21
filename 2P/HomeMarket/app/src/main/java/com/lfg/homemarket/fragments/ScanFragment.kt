@@ -6,12 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.lfg.homemarket.R
 import com.lfg.homemarket.clases.CameraHelper
 import com.lfg.homemarket.databinding.ScanFragmentBinding
@@ -26,20 +28,10 @@ class ScanFragment : Fragment() {
 
     private val viewModel: ScanViewModel by viewModels()
     private lateinit var binding : ScanFragmentBinding
-    private var activityResultLauncher: ActivityResultLauncher<Array<String>>
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Array<String>>
 
     init{
-        this.activityResultLauncher = registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()) { result ->
-            var allAreGranted = true
-            for(b in result.values)
-                allAreGranted = allAreGranted && b
-
-            if(allAreGranted)
-                viewModel.cameraHelper.start()
-            else
-                showMessage(getString(R.string.camera_msg_not_permission))
-        }
+        onInitActivityResultRegistration()
     }
 
     override fun onCreateView(
@@ -53,7 +45,7 @@ class ScanFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activityResultLauncher.launch(CameraHelper.REQUIRED_PERMISSIONS)
+        askForCameraPermissions()
     }
 
     override fun onStart() {
@@ -65,7 +57,7 @@ class ScanFragment : Fragment() {
             owner = activity as AppCompatActivity,
             context = requireContext(),
             viewFinder = binding.cameraView,
-            onResult = ::onResult
+            onResult = ::onBarScannedResult
         )
         viewModel.cameraHelper.start()
 
@@ -107,7 +99,7 @@ class ScanFragment : Fragment() {
         viewModel.cameraHelper.stop()
     }
 
-    private fun onResult(result: String) {
+    private fun onBarScannedResult(result: String) {
         Log.d(TAG, "Result is $result")
         viewModel.scannedId.value = result
     }
@@ -116,4 +108,58 @@ class ScanFragment : Fragment() {
         Toast.makeText(requireContext(), str, Toast.LENGTH_SHORT).show()
     }
 
+    private fun onInitActivityResultRegistration() = activityResultRegistration {
+            result -> actionPermissionForCamera(result)
+    }
+
+    private fun activityResultRegistration(actionWhenRequestPermissionIsFinished : (Boolean) -> Unit) {
+        this.activityResultLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()) { result ->
+            var allPermissionsAreGranted = true
+            for(b in result.values)
+                allPermissionsAreGranted = allPermissionsAreGranted && b
+
+            if(allPermissionsAreGranted) {
+                actionWhenRequestPermissionIsFinished(true)
+            } else actionWhenRequestPermissionIsFinished(false)
+        }
+    }
+
+    private fun actionPermissionForCamera(result : Boolean) {
+        if(result) {
+            viewModel.cameraHelper.start()
+        }
+        else {
+            showCustomSnackBar(getString(R.string.camera_msg_not_permission), getString(R.string.msg_action_retry)) {
+                askForCameraPermissions()
+            }
+        }
+    }
+
+    private fun askForCameraPermissions() = this.activityResultLauncher.launch(CameraHelper.REQUIRED_PERMISSIONS)
+
+    private fun showCustomSnackBar(
+        msgText: String,
+        actionText: String,
+        onActionClick : (Unit) -> Unit
+    ) {
+        val snackBar = Snackbar.make(
+            binding.viewScanFragment,
+            msgText,
+            Snackbar.LENGTH_LONG
+        ).setAction(
+            actionText
+        ) {
+            onActionClick(Unit)
+        }
+        //setting action text color o red
+        snackBar.setActionTextColor(resources.getColor(R.color.red))
+        val sbView = snackBar.view
+        //getting the textview of the snackbar
+        val textView =
+            sbView.findViewById<View>(com.google.android.material.R.id.snackbar_text) as TextView
+        //setting snackbar text color to green
+        textView.setTextColor(resources.getColor(R.color.green))
+        snackBar.show()
+    }
 }

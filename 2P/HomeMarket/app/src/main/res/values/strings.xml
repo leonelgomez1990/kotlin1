@@ -13,6 +13,8 @@
     <string name="txt_scan_title">ESCANEO DE PRODUCTO</string>
     <string name="txt_scan_torch">Linterna</string>
 
+    <string name="msg_action_retry">REINTENTAR</string>
+
     <string name="location_txt_title">Al guardar este ajuste, será aplicado a la búsqueda de precios de productos para encontrar los comercios más cercanos</string>
     <string name="location_txt_lat">Latitud</string>
     <string name="location_txt_long">Longitud</string>
@@ -25,7 +27,6 @@
     <string name="location_msg_get_loc_ok">Ubicación obtenida exitosamente</string>
     <string name="location_msg_get_loc_error">Error al obtener la ubicación</string>
     <string name="location_msg_not_permission">Permiso de ubicación no concedido</string>
-    <string name="location_msg_action_retry">REINTENTAR</string>
     <string name="torch_msg_get_cam_error">Error al obtener el flash</string>
 
     <string name="camera_msg_not_permission">Permiso de cámara no concedido</string>
