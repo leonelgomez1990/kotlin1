@@ -3,32 +3,23 @@ package com.lfg.homemarket.viewmodels
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
-import com.lfg.homemarket.clases.ItemResponse
-import com.lfg.homemarket.clases.ItemRetrofit
-import com.lfg.homemarket.clases.LocationCoordinates
-import com.lfg.homemarket.clases.Product
+import com.lfg.homemarket.clases.*
 import kotlinx.coroutines.tasks.await
-import java.math.BigDecimal
-import java.math.RoundingMode
-import java.text.SimpleDateFormat
 import java.util.*
 
 class ListViewModel : ViewModel() {
     var productList : MutableList<Product> = mutableListOf()
     private val PREF_NAME = "mySelection"
     private val PREF_SCANNED = "myScannedId"
-    val db = Firebase.firestore
+    private val db = Firebase.firestore
     lateinit var retrofit: ItemRetrofit
 
-    fun getProductData () : MutableList<Product> {
-        return productList
-    }
+    fun getProductData () : MutableList<Product> = productList
 
     fun loadScannedId(context : Context) {
         val sharedPref: SharedPreferences = context.getSharedPreferences(PREF_SCANNED, Context.MODE_PRIVATE)
@@ -101,15 +92,13 @@ class ListViewModel : ViewModel() {
 //             .orderBy("edad")
             .get()
             .addOnSuccessListener { snapshot ->
-                if (snapshot != null) {
-                    for (prod in snapshot) {
-                        try {
-                            val pr  = prod.toObject<Product>()
-                            productList.add(pr)
-                        }
-                        catch (ex: Exception) {
-                            Log.w("DB", "Error getting documents: ", ex)
-                        }
+                for (prod in snapshot) {
+                    try {
+                        val pr  = prod.toObject<Product>()
+                        productList.add(pr)
+                    }
+                    catch (ex: Exception) {
+                        Log.w("DB", "Error getting documents: ", ex)
                     }
                 }
             }
@@ -117,11 +106,6 @@ class ListViewModel : ViewModel() {
                 Log.w("DB", "Error getting documents: ", exception)
             }
 
-    }
-
-    fun onStartLoadId (context : Context) : String? {
-        val sharedPref: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        return sharedPref.getString("id","")
     }
 
     fun saveDetailData (context : Context, pos : Int)
@@ -137,24 +121,8 @@ class ListViewModel : ViewModel() {
         editor.apply()
     }
 
-    private fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
-        val formatter = SimpleDateFormat(format, locale)
-        return formatter.format(this)
-    }
-
-    private fun getCurrentDateTime(): Date {
-        return Calendar.getInstance().time
-    }
-
-    private fun stringFromDouble(db : Double, num : Int) : String =
-        BigDecimal(db).setScale(num, RoundingMode.HALF_EVEN).toString()
-
     fun saveProductToDB(id : String, pr1 : ItemResponse, pr2 : Product) {
-        val date = getCurrentDateTime()
-        val latitud = stringFromDouble(LocationCoordinates.latitud.toDouble(),5)
-        val longitud = stringFromDouble(LocationCoordinates.longitud.toDouble(),5)
-        var idStructure = date.toString("yyyyMMdd")
-        idStructure = "${id},${idStructure},${latitud},${longitud}"
+        val idStructure = ProductIdStructure.getFromId(id)
         db.collection("preciosclaros").document(idStructure).set(pr1)
         db.collection("listaproductos").document(id).set(pr2)
 

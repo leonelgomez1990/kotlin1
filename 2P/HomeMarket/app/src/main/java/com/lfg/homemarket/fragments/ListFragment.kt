@@ -58,7 +58,7 @@ class ListFragment : Fragment(){
         viewModel.retrofit = ItemRetrofit (BASE_URL) { call -> onProductResponse(call) }
         viewModel.loadScannedId(requireContext())
 
-        viewModel.snapshotListener() {
+        viewModel.snapshotListener {
             adapterP.notifyDataSetChanged()
         }
 
