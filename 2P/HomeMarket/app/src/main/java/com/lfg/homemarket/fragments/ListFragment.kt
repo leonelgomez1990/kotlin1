@@ -47,7 +47,6 @@ class ListFragment : Fragment(){
     override fun onStart() {
         super.onStart()
         binding.progressBarListView.visibility = ProgressBar.VISIBLE
-        viewModel.getStoredCoordinates(requireContext())
         setupRecycler()
 
         val scope = CoroutineScope(Dispatchers.Main + Job())

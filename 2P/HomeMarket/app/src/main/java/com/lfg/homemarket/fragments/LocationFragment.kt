@@ -58,10 +58,10 @@ class LocationFragment : Fragment() {
         binding.btnLocationSaveLoc.setOnClickListener {
             if(viewModel.saveLocationValue(binding.txtLocationLat.text.toString(), binding.txtLocationLong.text.toString())) {
                 viewModel.setStoredCoordinates(requireContext())
-                showMessage(getString(R.string.location_msg_get_loc_ok))
+                showMessage(getString(R.string.location_msg_save_loc_ok))
             }
             else
-                showMessage(getString(R.string.location_msg_get_loc_error))
+                showMessage(getString(R.string.location_msg_save_loc_error))
         }
 
         binding.txtLocationLat.addTextChangedListener(object : TextWatcher {

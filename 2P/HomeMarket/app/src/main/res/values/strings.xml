@@ -8,6 +8,8 @@
     <string name="detail_txt_title">Dónde Comprarlo</string>
     <string name="detail_txt_price">Precio</string>
     <string name="detail_txt_market">Local</string>
+    <string name="detail_txt_brand">Marca</string>
+    <string name="detail_txt_presentation">Presentación</string>
 
     <string name="txt_add_item">Agregar item</string>
     <string name="txt_scan_title">ESCANEO DE PRODUCTO</string>

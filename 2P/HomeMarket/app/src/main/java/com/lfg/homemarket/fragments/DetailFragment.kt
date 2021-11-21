@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.lfg.homemarket.databinding.DetailFragmentBinding
 import com.lfg.homemarket.viewmodels.DetailViewModel
+import java.text.DecimalFormat
 
 class DetailFragment : Fragment() {
 
@@ -32,8 +33,12 @@ class DetailFragment : Fragment() {
 
         viewModel.product.observe(viewLifecycleOwner, { result ->
             if(result.id > 0) {
-                binding.txtDetailName.text = result.description
+                val strPrice = "$ ${DecimalFormat("#.00").format(result.price)}"
                 viewModel.setViewImage(requireContext(),binding.imgDetailProduct, result.id.toString())
+                binding.txtDetailName.text = result.description
+                binding.txtDetailBrand.text = result.brand
+                binding.txtDetailPresentation.text = result.presentation
+                binding.txtDetailPrice.text = strPrice
             }
         })
     }

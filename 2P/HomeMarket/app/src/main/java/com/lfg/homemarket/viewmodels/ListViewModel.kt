@@ -11,6 +11,7 @@ import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import com.lfg.homemarket.clases.ItemResponse
 import com.lfg.homemarket.clases.ItemRetrofit
+import com.lfg.homemarket.clases.LocationCoordinates
 import com.lfg.homemarket.clases.Product
 import kotlinx.coroutines.tasks.await
 import java.math.BigDecimal
@@ -21,21 +22,12 @@ import java.util.*
 class ListViewModel : ViewModel() {
     var productList : MutableList<Product> = mutableListOf()
     private val PREF_NAME = "mySelection"
-    private val PREF_LOCATION = "myLocation"
     private val PREF_SCANNED = "myScannedId"
-    var latitud = MutableLiveData<String>()
-    var longitud = MutableLiveData<String>()
     val db = Firebase.firestore
     lateinit var retrofit: ItemRetrofit
 
     fun getProductData () : MutableList<Product> {
         return productList
-    }
-
-    fun getStoredCoordinates(context : Context) {
-        val sharedPref: SharedPreferences = context.getSharedPreferences(PREF_LOCATION, Context.MODE_PRIVATE)
-        latitud.value = sharedPref.getString("latitud","-34.5986333")   //UTN FRBA
-        longitud.value = sharedPref.getString("longitud","-58.4199851")
     }
 
     fun loadScannedId(context : Context) {
@@ -49,7 +41,7 @@ class ListViewModel : ViewModel() {
     }
 
     private fun saveToDbId(id : String) {
-        retrofit.searchByQuery("producto?id_producto=${id.lowercase(Locale.getDefault())}&lat=${latitud.value}&lng=${longitud.value}")
+        retrofit.searchByQuery("producto?id_producto=${id.lowercase(Locale.getDefault())}&lat=${LocationCoordinates.latitud}&lng=${LocationCoordinates.longitud}")
     }
 
     suspend fun getProductListFromCloud(): Boolean {
@@ -159,8 +151,10 @@ class ListViewModel : ViewModel() {
 
     fun saveProductToDB(id : String, pr1 : ItemResponse, pr2 : Product) {
         val date = getCurrentDateTime()
+        val latitud = stringFromDouble(LocationCoordinates.latitud.toDouble(),5)
+        val longitud = stringFromDouble(LocationCoordinates.longitud.toDouble(),5)
         var idStructure = date.toString("yyyyMMdd")
-        idStructure = "${id},${idStructure},${stringFromDouble(latitud.value!!.toDouble(),5)},${stringFromDouble(longitud.value!!.toDouble(),5)}"
+        idStructure = "${id},${idStructure},${latitud},${longitud}"
         db.collection("preciosclaros").document(idStructure).set(pr1)
         db.collection("listaproductos").document(id).set(pr2)
 
