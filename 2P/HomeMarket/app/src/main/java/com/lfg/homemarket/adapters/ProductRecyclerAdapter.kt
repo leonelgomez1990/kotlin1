@@ -1,6 +1,5 @@
 package com.lfg.homemarket.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -10,6 +9,7 @@ import com.lfg.homemarket.R
 import com.lfg.homemarket.clases.Product
 import com.lfg.homemarket.databinding.ItemProductBinding
 import com.squareup.picasso.Picasso
+import java.text.DecimalFormat
 
 class ProductRecyclerAdapter (
     private var itemList : MutableList<Product>,
@@ -65,7 +65,10 @@ class ProductRecyclerAdapter (
         }
          */
         fun bind(item: Product){
+            val strPrice = "$ ${DecimalFormat("#.00").format(item.price)}"
             binding.txtNameItem.text = item.description
+            if(item.price > 0)
+                binding.txtPriceItem.text = strPrice
 
             binding.imgItem.loadUrl(item.urlImage)
 

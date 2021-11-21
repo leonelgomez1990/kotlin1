@@ -2,21 +2,24 @@ package com.lfg.homemarket.fragments
 
 import android.location.Geocoder
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.material.snackbar.Snackbar
 import com.lfg.homemarket.R
 import com.lfg.homemarket.clases.LocationHelper
 import com.lfg.homemarket.databinding.LocationFragmentBinding
 import com.lfg.homemarket.viewmodels.LocationViewModel
-import android.text.Editable
-import android.text.TextWatcher
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
+
 
 class LocationFragment : Fragment() {
 
@@ -26,20 +29,10 @@ class LocationFragment : Fragment() {
 
     private val viewModel: LocationViewModel by viewModels()
     private lateinit var binding : LocationFragmentBinding
-    private var activityResultLauncher: ActivityResultLauncher<Array<String>>
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Array<String>>
 
     init{
-        this.activityResultLauncher = registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()) { result ->
-            var allAreGranted = true
-            for(b in result.values)
-                allAreGranted = allAreGranted && b
-
-            if(allAreGranted)
-                askForLocation()
-            else
-                showMessage(getString(R.string.location_msg_not_permission))
-        }
+        onInitActivityResultRegistration()
     }
 
     override fun onCreateView(
@@ -54,7 +47,7 @@ class LocationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnLocationGetLoc.setOnClickListener {
-            activityResultLauncher.launch(LocationHelper.REQUIRED_PERMISSIONS)
+            askForLocationPermissions()
         }
     }
 
@@ -106,11 +99,41 @@ class LocationFragment : Fragment() {
 
     }
 
-    private fun askForLocation() {
-        LocationHelper(activity as AppCompatActivity,requireContext()) {
-                lat, long -> onGettingLocation(lat, long)
+    private fun showMessage(str : String) {
+        Toast.makeText(requireContext(), str, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun onInitActivityResultRegistration() = activityResultRegistration {
+        result -> actionPermissionForLocation(result)
+    }
+
+    private fun activityResultRegistration(actionWhenRequestPermissionIsFinished : (Boolean) -> Unit) {
+        this.activityResultLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()) { result ->
+            var allPermissionsAreGranted = true
+            for(b in result.values)
+                allPermissionsAreGranted = allPermissionsAreGranted && b
+
+            if(allPermissionsAreGranted) {
+                actionWhenRequestPermissionIsFinished(true)
+            } else actionWhenRequestPermissionIsFinished(false)
         }
     }
+
+    private fun actionPermissionForLocation(result : Boolean) {
+        if(result) {
+            LocationHelper(activity as AppCompatActivity,requireContext()) {
+                    lat, long -> onGettingLocation(lat, long)
+            }
+        }
+        else {
+            showCustomSnackBar(getString(R.string.location_msg_not_permission), getString(R.string.location_msg_action_retry)) {
+                askForLocationPermissions()
+            }
+        }
+    }
+
+    private fun askForLocationPermissions() = this.activityResultLauncher.launch(LocationHelper.REQUIRED_PERMISSIONS)
 
     private fun onGettingLocation(lat : String, long : String ) {
         if(viewModel.saveLocationValue(lat, long))
@@ -132,13 +155,34 @@ class LocationFragment : Fragment() {
         }
     }
 
-    private fun showMessage(str : String) {
-        Toast.makeText(requireContext(), str, Toast.LENGTH_SHORT).show()
-    }
-
     private fun getAddress(lat: Double, lng: Double): String {
         val geocoder = Geocoder(requireContext())
         val list = geocoder.getFromLocation(lat, lng, 1)
         return list[0].getAddressLine(0)
+    }
+
+    private fun showCustomSnackBar(
+        msgText: String,
+        actionText: String,
+        onActionClick : (Unit) -> Unit
+    ) {
+        val snackBar = Snackbar.make(
+            binding.viewProfileFragment,
+            msgText,
+            Snackbar.LENGTH_LONG
+        ).setAction(
+            actionText
+        ) {
+            onActionClick(Unit)
+        }
+        //setting action text color o red
+        snackBar.setActionTextColor(resources.getColor(R.color.red))
+        val sbView = snackBar.view
+        //getting the textview of the snackbar
+        val textView =
+            sbView.findViewById<View>(com.google.android.material.R.id.snackbar_text) as TextView
+        //setting snackbar text color to green
+        textView.setTextColor(resources.getColor(R.color.green))
+        snackBar.show()
     }
 }
