@@ -9,7 +9,9 @@ data class ItemResponse(
     @SerializedName("maxLimitPermitido") val maxLimitPermitido : Int,
     @SerializedName("totalPagina") val totalPagina : Int,
     @SerializedName("sucursales") val sucursales : List<Sucursales>
-)
+) {
+    constructor() : this(0,0,Producto(),0,0,listOf(Sucursales()))
+}
 
 data class Producto (
     @SerializedName("msg") val msg : String?,
@@ -17,7 +19,9 @@ data class Producto (
     @SerializedName("nombre") val nombre : String,
     @SerializedName("id") val id : String,
     @SerializedName("marca") val marca : String
-)
+) {
+    constructor() : this("","","","","")
+}
 
 data class Sucursales (
 
@@ -38,7 +42,11 @@ data class Sucursales (
     @SerializedName("localidad") val localidad : String,
     @SerializedName("comercioRazonSocial") val comercioRazonSocial : String,
     @SerializedName("comercioId") val comercioId : Int
-)
+) {
+    constructor() : this(0.0,"",0,"",0.0,0.0,"",0,"","",
+        PreciosProducto(), false, "", "", "", "", 0
+    )
+}
 
 data class PreciosProducto (
 
@@ -49,7 +57,9 @@ data class PreciosProducto (
     @SerializedName("promo2") val promo2 : Promo2,
     @SerializedName("precio_bulto_sin_iva") val precio_bulto_sin_iva : String,
     @SerializedName("precio_bulto_con_iva") val precio_bulto_con_iva : String
-)
+) {
+    constructor() : this(Promo1(),"","","",Promo2(),"","")
+}
 
 data class Promo1 (
 
@@ -57,7 +67,9 @@ data class Promo1 (
     @SerializedName("precio_unitario_sin_iva") val precio_unitario_sin_iva : String,
     @SerializedName("precio_unitario_con_iva") val precio_unitario_con_iva : String,
     @SerializedName("precio") val precio : String
-)
+) {
+    constructor() : this("","","","")
+}
 
 data class Promo2 (
 
@@ -65,4 +77,6 @@ data class Promo2 (
     @SerializedName("precio_unitario_sin_iva") val precio_unitario_sin_iva : String,
     @SerializedName("precio_unitario_con_iva") val precio_unitario_con_iva : String,
     @SerializedName("precio") val precio : String
-)
+) {
+    constructor() : this("","","","")
+}

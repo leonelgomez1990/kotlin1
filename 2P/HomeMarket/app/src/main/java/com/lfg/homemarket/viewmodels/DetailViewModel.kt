@@ -12,12 +12,15 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.lfg.homemarket.R
-import com.lfg.homemarket.clases.Product
+import com.lfg.homemarket.clases.*
+import kotlinx.coroutines.tasks.await
 
 class DetailViewModel : ViewModel() {
+    var branchList : MutableList<PriceBranch> = mutableListOf()
     private val PREF_NAME = "mySelection"
     val product = MutableLiveData<Product>()
     val db = Firebase.firestore
+    lateinit var retrofit: ItemRetrofit
 
     fun onStartDetail (context : Context) {
         val sharedPref: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
@@ -67,13 +70,62 @@ class DetailViewModel : ViewModel() {
             .into(img)
     }
 
-    fun setProductData(id : String, brand : String, desc : String, price : String)
-    {
-        val strImage = "https://imagenes.preciosclaros.gob.ar/productos/${id}.jpg"
-        val newProd = try {
-            Product(id.toLong(),brand,desc,price.toDouble(),"1.0 un", true, strImage)
-        } catch (ex : Exception) {
-            Product(0,"","",0.0,"",true,"")
-        }
+    private fun searchProductData(id : String) {
+        retrofit.searchByQuery(PreciosClarosServer.getQuery(id))
     }
+
+    suspend fun getBranchListFromCloud(): Boolean {
+        var result = false
+        val id = product.value!!.id
+        val idStructure = ProductIdStructure.getFromId(id.toString())
+        //traer lista de datos
+        db.collection("preciosclaros").document(idStructure)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                try {
+                    branchList.clear()
+                    val itr  = snapshot.toObject<ItemResponse>()
+                    if(itr == null) {
+                        searchProductData(id.toString())
+                    }
+                    else {
+                        for (suc in itr?.sucursales!!) {
+                            val price = if (suc.sucursalTipo == "Mayorista")
+                                suc.preciosProducto.precio_unitario_con_iva.toDouble()
+                            else
+                                suc.preciosProducto.precioLista.toDouble()
+                            val urlImage = "https://imagenes.preciosclaros.gob.ar/comercios/${suc.comercioId}-${suc.banderaId}.jpg"
+
+                            val branch = PriceBranch(
+                                id,
+                                suc.sucursalTipo,
+                                suc.banderaDescripcion,
+                                price,
+                                suc.direccion,
+                                suc.distanciaNumero,
+                                urlImage
+                            )
+                            branchList.add(branch)
+                        }
+                    }
+                    result = true
+                }
+                catch (ex: Exception) {
+                    Log.w("DB", "Error getting documents: ", ex)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w("DB", "Error getting documents: ", exception)
+            }
+            .await()
+
+
+        return result
+    }
+
+    fun saveTodayDataToDB(id : String, pr1 : ItemResponse) {
+        val idStructure = ProductIdStructure.getFromId(id)
+        db.collection("preciosclaros").document(idStructure).set(pr1)
+    }
+
 }

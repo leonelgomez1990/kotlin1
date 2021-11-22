@@ -28,11 +28,11 @@ class ListViewModel : ViewModel() {
         editor.putString("id","")
         editor.apply()
         if(scannedId!="")
-            saveToDbId(scannedId)
+            searchProductData(scannedId)
     }
 
-    private fun saveToDbId(id : String) {
-        retrofit.searchByQuery("producto?id_producto=${id.lowercase(Locale.getDefault())}&lat=${LocationCoordinates.latitud}&lng=${LocationCoordinates.longitud}")
+    private fun searchProductData(id : String) {
+        retrofit.searchByQuery(PreciosClarosServer.getQuery(id))
     }
 
     suspend fun getProductListFromCloud(): Boolean {

@@ -15,6 +15,7 @@ import com.lfg.homemarket.R
 import com.lfg.homemarket.adapters.ProductRecyclerAdapter
 import com.lfg.homemarket.clases.ItemResponse
 import com.lfg.homemarket.clases.ItemRetrofit
+import com.lfg.homemarket.clases.PreciosClarosServer
 import com.lfg.homemarket.clases.Product
 import com.lfg.homemarket.databinding.ListFragmentBinding
 import com.lfg.homemarket.functions.hideKeyboard
@@ -29,7 +30,6 @@ class ListFragment : Fragment(){
 
     companion object {
         fun newInstance() = ListFragment()
-        private const val BASE_URL = "https://d3e6htiiul5ek9.cloudfront.net/prod/"
     }
 
     private val viewModel : ListViewModel by viewModels()
@@ -55,7 +55,7 @@ class ListFragment : Fragment(){
             adapterP.notifyDataSetChanged()
             binding.progressBarListView.visibility = ProgressBar.INVISIBLE
         }
-        viewModel.retrofit = ItemRetrofit (BASE_URL) { call -> onProductResponse(call) }
+        viewModel.retrofit = ItemRetrofit (PreciosClarosServer.BASE_URL) { call -> onProductResponse(call) }
         viewModel.loadScannedId(requireContext())
 
         viewModel.snapshotListener {
