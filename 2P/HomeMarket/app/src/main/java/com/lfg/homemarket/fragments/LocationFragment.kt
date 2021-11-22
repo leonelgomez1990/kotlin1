@@ -90,11 +90,9 @@ class LocationFragment : Fragment() {
 
         viewModel.latitud.observe(viewLifecycleOwner, { result ->
             binding.txtLocationLat.setText(result.toString())
-            getStringAddressFromLocation()
         })
         viewModel.longitud.observe(viewLifecycleOwner, { result ->
             binding.txtLocationLong.setText(result.toString())
-            getStringAddressFromLocation()
         })
 
     }
@@ -150,7 +148,7 @@ class LocationFragment : Fragment() {
                 binding.txtLocationAddress.text = address
             }
             catch (ex : Exception) {
-                showMessage(getString(R.string.location_msg_get_loc_error))
+                showMessage(getString(R.string.location_msg_get_address_error))
             }
         }
     }

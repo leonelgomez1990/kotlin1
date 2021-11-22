@@ -30,6 +30,10 @@
     <string name="location_msg_get_loc_error">Error al obtener la ubicación</string>
     <string name="location_msg_not_permission">Permiso de ubicación no concedido</string>
     <string name="torch_msg_get_cam_error">Error al obtener el flash</string>
+    <string name="location_msg_get_address_error">Error al obtener la dirección desde internet</string>
+
+    //"No network available, please check your WiFi or Data connection"
+    <string name="internet_msg_not_connection">Sin conexión a internet, chequee su wifi o datos</string>
 
     <string name="camera_msg_not_permission">Permiso de cámara no concedido</string>
 
