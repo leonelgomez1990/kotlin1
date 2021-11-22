@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lfg.homemarket.adapters.BranchRecyclerAdapter
@@ -42,7 +43,7 @@ class DetailFragment : Fragment() {
         super.onStart()
         viewModel.onStartDetail(requireContext())
         binding.progressBarDetailView.visibility = ProgressBar.VISIBLE
-        viewModel.retrofit = ItemRetrofit (PreciosClarosServer.BASE_URL) { call -> onDataServerResponse(call) }
+        viewModel.retrofit = ItemRetrofit (PreciosClarosServer.BASE_URL, requireContext()) { call -> onDataServerResponse(call) }
         setupRecycler()
 
         viewModel.product.observe(viewLifecycleOwner, { result ->
@@ -63,10 +64,14 @@ class DetailFragment : Fragment() {
                 }
             }
         })
+
+        binding.imgDetailProduct.setOnClickListener {
+            viewModel.setViewImage(requireContext(),binding.imgDetailProduct,viewModel.product.value?.id.toString())
+        }
     }
 
     private fun setupRecycler(){
-        adapterP = BranchRecyclerAdapter(viewModel.getItemData()) {
+        adapterP = BranchRecyclerAdapter(viewModel.getItemData(), requireContext()) {
                 event, pos -> onItemEventClick(event, pos)
         }
         with(binding.recDetailMarket, {
@@ -76,29 +81,40 @@ class DetailFragment : Fragment() {
         })
     }
 
+    private fun showMessage(str : String, long : Boolean = false) {
+        Toast.makeText(requireContext(), str, if(long)Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
+    }
+
     private fun onItemEventClick (event : BranchRecyclerAdapter.Companion.EventEnum, position : Int): Boolean {
         when (event) {
             BranchRecyclerAdapter.Companion.EventEnum.CLICK -> {
             }
             BranchRecyclerAdapter.Companion.EventEnum.LONGCLICK -> {
             }
+            BranchRecyclerAdapter.Companion.EventEnum.IMGCLICK -> {
+                showMessage(viewModel.branchList[position].urlImage)
+            }
         }
         return true
     }
 
-    private fun onDataServerResponse( call : Response<ItemResponse>) {
-        var errorText = ""
-        val pr = call.body()
+    private fun onDataServerResponse( call : Response<ItemResponse>?) {
         requireActivity().runOnUiThread {
-            if (call.isSuccessful) {
-                if (pr?.status == 200) {
-                    if (pr.producto.msg != "Producto inexistente.") {
-                        var precio = 0.0
-                        Log.d("Producto", "Id: ${pr.producto.id} ${pr.producto.nombre}")
-                        pr.sucursales.forEach { suc ->
-                            Log.d("Sucursal", "   ${suc.comercioRazonSocial} ${suc.preciosProducto.precioLista}")
-                            if((suc.preciosProducto.precioLista != "") && (precio == 0.0))
-                                precio = suc.preciosProducto.precioLista.toDouble()
+            if(call == null) {
+                showMessage(ItemRetrofit.lastErrorMessage, true)
+            }
+            else {
+                var errorText = ""
+                val pr = call.body()
+                if (call.isSuccessful) {
+                    if (pr?.status == 200) {
+                        if (pr.producto.msg != "Producto inexistente.") {
+                            var precio = 0.0
+                            Log.d("Producto", "Id: ${pr.producto.id} ${pr.producto.nombre}")
+                            pr.sucursales.forEach { suc ->
+                                Log.d("Sucursal", "   ${suc.comercioRazonSocial} ${suc.preciosProducto.precioLista}")
+                                if((suc.preciosProducto.precioLista != "") && (precio == 0.0))
+                                    precio = suc.preciosProducto.precioLista.toDouble()
                                 val price = if (suc.sucursalTipo == "Mayorista")
                                     suc.preciosProducto.precio_unitario_con_iva.toDouble()
                                 else
@@ -115,19 +131,20 @@ class DetailFragment : Fragment() {
                                     urlImage
                                 )
                                 viewModel.branchList.add(branch)
+                            }
+                            viewModel.saveTodayDataToDB(pr.producto.id, pr)
+                            errorText = "Producto agregado: " + pr.producto.nombre
+                            adapterP.notifyDataSetChanged()
+                            binding.progressBarDetailView.visibility = ProgressBar.INVISIBLE
                         }
-                        viewModel.saveTodayDataToDB(pr.producto.id, pr)
-                        errorText = "Producto agregado: " + pr.producto.nombre
-                        adapterP.notifyDataSetChanged()
-                        binding.progressBarDetailView.visibility = ProgressBar.INVISIBLE
+                        else
+                            errorText = "Producto Inexistente"
                     }
                     else
-                        errorText = "Producto Inexistente"
+                        errorText = "Error: Status ${pr?.status}"
+                }else{
+                    errorText = "Error: la llamada no fue exitosa"
                 }
-                else
-                    errorText = "Error: Status ${pr?.status}"
-            }else{
-                errorText = "Error: la llamada no fue exitosa"
             }
         }
     }

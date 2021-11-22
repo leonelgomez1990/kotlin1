@@ -1,6 +1,7 @@
 package com.lfg.homemarket.fragments
 
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,7 +19,6 @@ import com.lfg.homemarket.clases.ItemRetrofit
 import com.lfg.homemarket.clases.PreciosClarosServer
 import com.lfg.homemarket.clases.Product
 import com.lfg.homemarket.databinding.ListFragmentBinding
-import com.lfg.homemarket.functions.hideKeyboard
 import com.lfg.homemarket.viewmodels.ListViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +30,7 @@ class ListFragment : Fragment(){
 
     companion object {
         fun newInstance() = ListFragment()
+        private val SCAN_MSG_TIME_OUT:Long = 3000 // 3 sec
     }
 
     private val viewModel : ListViewModel by viewModels()
@@ -47,6 +48,9 @@ class ListFragment : Fragment(){
     override fun onStart() {
         super.onStart()
         binding.progressBarListView.visibility = ProgressBar.VISIBLE
+        viewModel.retrofit = ItemRetrofit (PreciosClarosServer.BASE_URL, requireContext()) { call -> onDataServerResponse(call) }
+        viewModel.loadScannedId(requireContext())
+
         setupRecycler()
 
         val scope = CoroutineScope(Dispatchers.Main + Job())
@@ -55,17 +59,15 @@ class ListFragment : Fragment(){
             adapterP.notifyDataSetChanged()
             binding.progressBarListView.visibility = ProgressBar.INVISIBLE
         }
-        viewModel.retrofit = ItemRetrofit (PreciosClarosServer.BASE_URL) { call -> onDataServerResponse(call) }
-        viewModel.loadScannedId(requireContext())
 
-        viewModel.snapshotListener {
-            adapterP.notifyDataSetChanged()
-        }
+        //viewModel.snapshotListener {
+        //    adapterP.notifyDataSetChanged()
+        //}
 
     }
 
-    private fun showMessage(str : String) {
-        Toast.makeText(requireContext(), str, Toast.LENGTH_SHORT).show()
+    private fun showMessage(str : String, long : Boolean = false) {
+        Toast.makeText(requireContext(), str, if(long)Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
     }
 
     private fun setupRecycler(){
@@ -109,51 +111,76 @@ class ListFragment : Fragment(){
         return true
     }
 
-    private fun onDataServerResponse( call : Response<ItemResponse>) {
-        val pr = call.body()
+    private fun onDataServerResponse( call : Response<ItemResponse>?) {
         requireActivity().runOnUiThread {
-            if (call.isSuccessful) {
-                if (pr?.status == 200) {
-                    if (pr.producto.msg != "Producto inexistente.") {
-                        var precio = 0.0
-                        Log.d("Producto", "Id: ${pr.producto.id} ${pr.producto.nombre}")
-                        pr.sucursales.forEach { suc ->
-                            Log.d("Sucursal", "   ${suc.comercioRazonSocial} ${suc.preciosProducto.precioLista}")
-                            precio = suc.preciosProducto.precioLista.toDouble()
-                            val price = if (suc.sucursalTipo == "Mayorista")
-                                suc.preciosProducto.precio_unitario_con_iva.toDouble()
-                            else
-                                suc.preciosProducto.precioLista.toDouble()
-                            if((price > 0 ) && (precio == 0.0))
-                                precio = price
+            if(call == null) {
+                showMessage(ItemRetrofit.lastErrorMessage, true)
+            }
+            else {
+                val pr = call.body()
+                if (call.isSuccessful) {
+                    if (pr?.status == 200) {
+                        if (pr.producto.msg != "Producto inexistente.") {
+                            try {
+                                var precio = 0.0
+                                val id = pr.producto.id.toLong()
+                                Log.d("Producto", "Id: ${pr.producto.id} ${pr.producto.nombre}")
+                                pr.sucursales.forEach { suc ->
+                                    Log.d("Sucursal", "   ${suc.comercioRazonSocial} ${suc.preciosProducto.precioLista}")
+                                    val price = if (suc.sucursalTipo == "Mayorista")
+                                        suc.preciosProducto.precio_unitario_con_iva.toDouble()?:0.0
+                                    else
+                                        suc.preciosProducto.precioLista.toDouble()?:0.0
+                                    if((price > 0 ) && (precio == 0.0))
+                                        precio = price
+                                }
+                                val imageUrl = "https://imagenes.preciosclaros.gob.ar/productos/${pr.producto.id}.jpg"
+                                val prod = Product(
+                                    id,
+                                    pr.producto.marca,
+                                    pr.producto.nombre,
+                                    precio,
+                                    pr.producto.presentacion,
+                                    true,
+                                    imageUrl)
+                                viewModel.productList.add(prod)
+                                viewModel.saveProductToDB(pr.producto.id, pr, prod)
+                                adapterP.notifyDataSetChanged()
+                                showMessage("Producto agregado: " + pr.producto.nombre)
+
+                                var lastIndex = 0
+                                for(index in 0 until viewModel.productList.size){
+                                    if(viewModel.productList[index].id == id) {
+                                        lastIndex = index
+                                        break
+                                    }
+                                }
+
+                                Handler().postDelayed(
+                                    {
+                                        //Accedo al último elemento agregado
+                                        viewModel.saveDetailData(requireContext(),lastIndex)
+                                        //Navegar
+                                        val action = ListFragmentDirections.actionListFragmentToDetailFragment()
+                                        binding.viewListFragment.findNavController().navigate(action)
+
+                                    }
+                                    , SCAN_MSG_TIME_OUT)
+
+                            }
+                            catch (ex: Exception) {
+                                showMessage("ERROR al agregar el producto: " + pr.producto.nombre)
+                            }
                         }
-                        val imageUrl = "https://imagenes.preciosclaros.gob.ar/productos/${pr.producto.id}.jpg"
-                        val prod = Product(
-                            pr.producto.id.toLong(),
-                            pr.producto.marca,
-                            pr.producto.nombre,
-                            precio,
-                            pr.producto.presentacion,
-                            true,
-                            imageUrl)
-                        viewModel.productList.add(prod)
-                        viewModel.saveProductToDB(pr.producto.id, pr, prod)
-                        adapterP.notifyDataSetChanged()
-                        showMessage("Producto agregado: " + pr.producto.nombre)
+                        else
+                            showMessage("Producto Inexistente")
                     }
                     else
-                        showMessage("Producto Inexistente")
+                        showMessage("Error: Status ${pr?.status}")
+                }else{
+                    showMessage("Error: la llamada no fue exitosa")
                 }
-                else
-                    showMessage("Error: Status ${pr?.status}")
-                //show recyclerview
-                //val images = product?.producto ?: emptyList()
-                //dogImages.clear()
-                //dogImages.addAll(images)
-            }else{
-                showMessage("Error: la llamada no fue exitosa")
             }
-            hideKeyboard()
         }
     }
 
