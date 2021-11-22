@@ -8,9 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.lfg.homemarket.adapters.BranchRecyclerAdapter
 import com.lfg.homemarket.clases.*
 import com.lfg.homemarket.databinding.DetailFragmentBinding
-import com.lfg.homemarket.functions.hideKeyboard
 import com.lfg.homemarket.viewmodels.DetailViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +28,7 @@ class DetailFragment : Fragment() {
 
     private val viewModel: DetailViewModel by viewModels()
     private lateinit var binding : DetailFragmentBinding
+    private lateinit var adapterP: BranchRecyclerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +42,8 @@ class DetailFragment : Fragment() {
         super.onStart()
         viewModel.onStartDetail(requireContext())
         binding.progressBarDetailView.visibility = ProgressBar.VISIBLE
-        viewModel.retrofit = ItemRetrofit (PreciosClarosServer.BASE_URL) { call -> onProductResponse(call) }
+        viewModel.retrofit = ItemRetrofit (PreciosClarosServer.BASE_URL) { call -> onDataServerResponse(call) }
+        setupRecycler()
 
         viewModel.product.observe(viewLifecycleOwner, { result ->
             if(result.id > 0) {
@@ -53,14 +56,37 @@ class DetailFragment : Fragment() {
 
                 val scope = CoroutineScope(Dispatchers.Main + Job())
                 scope.launch {
-                    viewModel.getBranchListFromCloud()
-                    binding.progressBarDetailView.visibility = ProgressBar.INVISIBLE
+                    if(viewModel.getBranchListFromCloud()) {
+                        adapterP.notifyDataSetChanged()
+                        binding.progressBarDetailView.visibility = ProgressBar.INVISIBLE
+                    }
                 }
             }
         })
     }
 
-    private fun onProductResponse( call : Response<ItemResponse>) {
+    private fun setupRecycler(){
+        adapterP = BranchRecyclerAdapter(viewModel.getItemData()) {
+                event, pos -> onItemEventClick(event, pos)
+        }
+        with(binding.recDetailMarket, {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = adapterP
+        })
+    }
+
+    private fun onItemEventClick (event : BranchRecyclerAdapter.Companion.EventEnum, position : Int): Boolean {
+        when (event) {
+            BranchRecyclerAdapter.Companion.EventEnum.CLICK -> {
+            }
+            BranchRecyclerAdapter.Companion.EventEnum.LONGCLICK -> {
+            }
+        }
+        return true
+    }
+
+    private fun onDataServerResponse( call : Response<ItemResponse>) {
         var errorText = ""
         val pr = call.body()
         requireActivity().runOnUiThread {
@@ -92,6 +118,8 @@ class DetailFragment : Fragment() {
                         }
                         viewModel.saveTodayDataToDB(pr.producto.id, pr)
                         errorText = "Producto agregado: " + pr.producto.nombre
+                        adapterP.notifyDataSetChanged()
+                        binding.progressBarDetailView.visibility = ProgressBar.INVISIBLE
                     }
                     else
                         errorText = "Producto Inexistente"
@@ -103,6 +131,4 @@ class DetailFragment : Fragment() {
             }
         }
     }
-
-
 }

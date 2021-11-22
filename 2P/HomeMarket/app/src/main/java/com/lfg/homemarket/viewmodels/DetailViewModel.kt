@@ -19,8 +19,10 @@ class DetailViewModel : ViewModel() {
     var branchList : MutableList<PriceBranch> = mutableListOf()
     private val PREF_NAME = "mySelection"
     val product = MutableLiveData<Product>()
-    val db = Firebase.firestore
+    private val db = Firebase.firestore
     lateinit var retrofit: ItemRetrofit
+
+    fun getItemData () : MutableList<PriceBranch> = branchList
 
     fun onStartDetail (context : Context) {
         val sharedPref: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
@@ -107,8 +109,8 @@ class DetailViewModel : ViewModel() {
                             )
                             branchList.add(branch)
                         }
+                        result = true
                     }
-                    result = true
                 }
                 catch (ex: Exception) {
                     Log.w("DB", "Error getting documents: ", ex)

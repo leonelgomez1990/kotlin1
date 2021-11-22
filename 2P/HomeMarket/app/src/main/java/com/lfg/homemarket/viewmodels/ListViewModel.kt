@@ -19,7 +19,7 @@ class ListViewModel : ViewModel() {
     private val db = Firebase.firestore
     lateinit var retrofit: ItemRetrofit
 
-    fun getProductData () : MutableList<Product> = productList
+    fun getItemData () : MutableList<Product> = productList
 
     fun loadScannedId(context : Context) {
         val sharedPref: SharedPreferences = context.getSharedPreferences(PREF_SCANNED, Context.MODE_PRIVATE)

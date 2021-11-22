@@ -55,7 +55,7 @@ class ListFragment : Fragment(){
             adapterP.notifyDataSetChanged()
             binding.progressBarListView.visibility = ProgressBar.INVISIBLE
         }
-        viewModel.retrofit = ItemRetrofit (PreciosClarosServer.BASE_URL) { call -> onProductResponse(call) }
+        viewModel.retrofit = ItemRetrofit (PreciosClarosServer.BASE_URL) { call -> onDataServerResponse(call) }
         viewModel.loadScannedId(requireContext())
 
         viewModel.snapshotListener {
@@ -69,7 +69,7 @@ class ListFragment : Fragment(){
     }
 
     private fun setupRecycler(){
-        adapterP = ProductRecyclerAdapter(viewModel.getProductData()) {
+        adapterP = ProductRecyclerAdapter(viewModel.getItemData()) {
                 event, pos -> onItemEventClick(event, pos)
         }
         with(binding.recViewItems, {
@@ -109,7 +109,7 @@ class ListFragment : Fragment(){
         return true
     }
 
-    private fun onProductResponse( call : Response<ItemResponse>) {
+    private fun onDataServerResponse( call : Response<ItemResponse>) {
         val pr = call.body()
         requireActivity().runOnUiThread {
             if (call.isSuccessful) {
@@ -119,9 +119,13 @@ class ListFragment : Fragment(){
                         Log.d("Producto", "Id: ${pr.producto.id} ${pr.producto.nombre}")
                         pr.sucursales.forEach { suc ->
                             Log.d("Sucursal", "   ${suc.comercioRazonSocial} ${suc.preciosProducto.precioLista}")
-                            if((suc.preciosProducto.precioLista != "") && (precio == 0.0))
-                                precio = suc.preciosProducto.precioLista.toDouble()
-
+                            precio = suc.preciosProducto.precioLista.toDouble()
+                            val price = if (suc.sucursalTipo == "Mayorista")
+                                suc.preciosProducto.precio_unitario_con_iva.toDouble()
+                            else
+                                suc.preciosProducto.precioLista.toDouble()
+                            if((price > 0 ) && (precio == 0.0))
+                                precio = price
                         }
                         val imageUrl = "https://imagenes.preciosclaros.gob.ar/productos/${pr.producto.id}.jpg"
                         val prod = Product(

@@ -6,15 +6,15 @@ import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.lfg.homemarket.R
-import com.lfg.homemarket.clases.Product
-import com.lfg.homemarket.databinding.ItemProductBinding
+import com.lfg.homemarket.clases.PriceBranch
+import com.lfg.homemarket.databinding.ItemMarketBinding
 import com.squareup.picasso.Picasso
 import java.text.DecimalFormat
 
-class ProductRecyclerAdapter (
-    private var itemList : MutableList<Product>,
+class BranchRecyclerAdapter (
+    private var itemList : MutableList<PriceBranch>,
     val onItemEventClick : (EventEnum, Int) -> Boolean
-) : RecyclerView.Adapter<ProductRecyclerAdapter.ItemViewHolder>() {
+) : RecyclerView.Adapter<BranchRecyclerAdapter.ItemViewHolder>() {
 
     companion object {
         enum class EventEnum {
@@ -23,7 +23,7 @@ class ProductRecyclerAdapter (
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val binding = ItemProductBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemMarketBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ItemViewHolder(binding)
     }
 
@@ -41,17 +41,22 @@ class ProductRecyclerAdapter (
         }
     }
 
-    inner class ItemViewHolder (private val binding: ItemProductBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ItemViewHolder (private val binding: ItemMarketBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Product){
+        fun bind(item: PriceBranch){
             val strPrice = "$ ${DecimalFormat("0.00").format(item.price)}"
-            binding.txtNameItem.text = item.description
-            binding.imgItem.loadUrl(item.urlImage)
-            if(item.price > 0)
-                binding.txtPriceItem.text = strPrice
+            val strDistance = "${DecimalFormat("0.0").format(item.distance)} km"
+            binding.txtBranchDescription.text = item.description
+            binding.txtBranchAddress.text = item.address
+            binding.txtBranchType.text = item.type
+            binding.txtBranchDistance.text = strDistance
+            binding.txtBranchPrice.text = strPrice
+
+            binding.imgBranchItem.loadUrl(item.urlImage)
+
         }
 
-        fun getCardView () : CardView = binding.cardPackageItem
+        fun getCardView () : CardView = binding.cardMarketItem
 
         private fun ImageView.loadUrl(url: String) {
             Picasso
@@ -60,6 +65,7 @@ class ProductRecyclerAdapter (
                 .placeholder(R.mipmap.ic_no_picture)
                 .into(this)
         }
+
     }
 
 }
