@@ -15,12 +15,12 @@ class ProductIdStructure {
         private fun getCurrentDateTime(): Date = Calendar.getInstance().time
 
         private fun stringFromDouble(db : Double, num : Int) : String =
-            BigDecimal(db).setScale(num, RoundingMode.HALF_EVEN).toString()
+            BigDecimal(db).setScale(num, RoundingMode.HALF_UP).toString()
 
         fun getFromId(id : String) : String {
             val date = getCurrentDateTime()
-            val latitud = stringFromDouble(LocationCoordinates.latitud.toDouble(),5)
-            val longitud = stringFromDouble(LocationCoordinates.longitud.toDouble(),5)
+            val latitud = stringFromDouble(LocationCoordinates.latitud.toDouble(),4)
+            val longitud = stringFromDouble(LocationCoordinates.longitud.toDouble(),4)
             var idStructure = date.toString("yyyyMMdd")
             idStructure = "${id},${idStructure},${latitud},${longitud}"
             return idStructure

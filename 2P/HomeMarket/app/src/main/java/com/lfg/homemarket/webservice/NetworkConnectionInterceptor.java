@@ -25,10 +25,10 @@ public class NetworkConnectionInterceptor implements Interceptor {
             // Throwing our custom exception 'NoConnectivityException'
         }
         else {
-            //Response response = chain.proceed(chain.request());
-            //return response;
-            Request.Builder builder = chain.request().newBuilder();
-            return chain.proceed(builder.build());
+            Response response = chain.proceed(chain.request());
+            return response;
+            //Request.Builder builder = chain.request().newBuilder();
+            //return chain.proceed(builder.build());
         }
     }
 

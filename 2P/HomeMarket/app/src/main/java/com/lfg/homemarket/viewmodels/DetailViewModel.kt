@@ -12,6 +12,7 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -60,13 +61,10 @@ class DetailViewModel : ViewModel() {
 
     fun setViewImage (context : Context, img : ImageView, id : String)
     {
-        var strImage = if (id == "") {
+        var strImage = if (id == "")
             product.value!!.urlImage
-        } else {
-            "https://imagenes.preciosclaros.gob.ar/productos/${id}.jpg"
-        }
-        if (!URLUtil.isValidUrl(strImage))
-            strImage = "https://www.preciosclaros.gob.ar/img/no-image.png"
+        else
+            PreciosClarosServer.getProductImageUrl(id)
 
         try {
             GlideApp
@@ -105,19 +103,22 @@ class DetailViewModel : ViewModel() {
         retrofit.searchByQuery(PreciosClarosServer.getQuery(id))
     }
 
-    suspend fun getBranchListFromCloud(): Boolean {
-        var result = false
+    suspend fun getBranchListFromCloud(): String {
+        var result = ""
         val id = product.value!!.id
         val idStructure = ProductIdStructure.getFromId(id.toString())
+        // Source can be CACHE, SERVER, or DEFAULT.
+        val source = Source.DEFAULT
         //traer lista de datos
         db.collection("preciosclaros").document(idStructure)
-            .get()
+            .get(source)
             .addOnSuccessListener { snapshot ->
                 try {
                     branchList.clear()
                     val itr  = snapshot.toObject<ItemResponse>()
                     if(itr == null) {
                         searchProductData(id.toString())
+                        result = "RETROFIT"
                     }
                     else {
                         for (suc in itr?.sucursales!!) {
@@ -125,8 +126,7 @@ class DetailViewModel : ViewModel() {
                                 suc.preciosProducto.precio_unitario_con_iva.toDouble()
                             else
                                 suc.preciosProducto.precioLista.toDouble()
-                            //val urlImage = "https://imagenes.preciosclaros.gob.ar/comercios/${suc.comercioId}-${suc.banderaId}.jpg"
-                            val urlImage = "gs://home-market-82694.appspot.com/comercios/${suc.comercioId}-${suc.banderaId}.jpg"
+                            val urlImage = PreciosClarosServer.getBranchImageUrl(suc.comercioId, suc.banderaId)
 
                             val branch = PriceBranch(
                                 id,
@@ -139,15 +139,17 @@ class DetailViewModel : ViewModel() {
                             )
                             branchList.add(branch)
                         }
-                        result = true
+                        result = "OK"
                     }
                 }
                 catch (ex: Exception) {
                     Log.w("DB", "Error getting documents: ", ex)
+                    result = "Error getting documents: " + ex.message
                 }
             }
             .addOnFailureListener { exception ->
                 Log.w("DB", "Error getting documents: ", exception)
+                result = "Error getting documents: " + exception.message
             }
             .await()
 

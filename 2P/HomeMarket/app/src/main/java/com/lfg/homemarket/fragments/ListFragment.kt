@@ -99,6 +99,8 @@ class ListFragment : Fragment(){
                     ) { _, _ -> //set what would happen when positive button is clicked
                         viewModel.deleteProductInDB(viewModel.productList[position].id.toString())
                         showMessage("Se borró el elemento: " + viewModel.productList[position].description)
+                        viewModel.productList.removeAt(position)
+                        adapterP.notifyDataSetChanged()
                     } //set negative button
                     .setNegativeButton(
                         R.string.dialog_del_no
@@ -111,8 +113,14 @@ class ListFragment : Fragment(){
         return true
     }
 
+    private fun Fragment?.runOnUiThread(action: () -> Unit) {
+        this ?: return
+        if (!isAdded) return // Fragment not attached to an Activity
+        activity?.runOnUiThread(action)
+    }
+
     private fun onDataServerResponse( call : Response<ItemResponse>?) {
-        requireActivity().runOnUiThread {
+        runOnUiThread {
             if(call == null) {
                 showMessage(ItemRetrofit.lastErrorMessage, true)
             }
@@ -134,7 +142,7 @@ class ListFragment : Fragment(){
                                     if((price > 0 ) && (precio == 0.0))
                                         precio = price
                                 }
-                                val imageUrl = "https://imagenes.preciosclaros.gob.ar/productos/${pr.producto.id}.jpg"
+                                val imageUrl = PreciosClarosServer.getProductImageUrl(pr.producto.id)
                                 val prod = Product(
                                     id,
                                     pr.producto.marca,
@@ -146,7 +154,7 @@ class ListFragment : Fragment(){
                                 viewModel.productList.add(prod)
                                 viewModel.saveProductToDB(pr.producto.id, pr, prod)
                                 adapterP.notifyDataSetChanged()
-                                showMessage("Producto agregado: " + pr.producto.nombre)
+                                showMessage("Producto agregado: " + pr.producto.nombre,true)
 
                                 var lastIndex = 0
                                 for(index in 0 until viewModel.productList.size){

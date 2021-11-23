@@ -48,7 +48,7 @@ class DetailFragment : Fragment() {
 
         viewModel.product.observe(viewLifecycleOwner, { result ->
             if(result.id > 0) {
-                val strPrice = "$ ${DecimalFormat("#.00").format(result.price)}"
+                val strPrice = "$ ${DecimalFormat("0.00").format(result.price)}"
                 viewModel.setViewImage(requireContext(),binding.imgDetailProduct, result.id.toString())
                 binding.txtDetailName.text = result.description
                 binding.txtDetailBrand.text = result.brand
@@ -57,9 +57,21 @@ class DetailFragment : Fragment() {
 
                 val scope = CoroutineScope(Dispatchers.Main + Job())
                 scope.launch {
-                    if(viewModel.getBranchListFromCloud()) {
-                        adapterP.notifyDataSetChanged()
-                        binding.progressBarDetailView.visibility = ProgressBar.INVISIBLE
+                    val routineResult = viewModel.getBranchListFromCloud()
+                    runOnUiThread {
+                        when(routineResult) {
+                            "OK" -> {
+                                adapterP.notifyDataSetChanged()
+                                binding.progressBarDetailView.visibility = ProgressBar.INVISIBLE
+                            }
+                            "RETROFIT" -> {
+                            }
+                            else -> {
+                                showMessage(routineResult)
+                                //showMessage(getString(R.string.internet_msg_not_connection))
+                                binding.progressBarDetailView.visibility = ProgressBar.INVISIBLE
+                            }
+                        }
                     }
                 }
             }
@@ -98,8 +110,14 @@ class DetailFragment : Fragment() {
         return true
     }
 
+    private fun Fragment?.runOnUiThread(action: () -> Unit) {
+        this ?: return
+        if (!isAdded) return // Fragment not attached to an Activity
+        activity?.runOnUiThread(action)
+    }
+
     private fun onDataServerResponse( call : Response<ItemResponse>?) {
-        requireActivity().runOnUiThread {
+        runOnUiThread {
             if(call == null) {
                 showMessage(ItemRetrofit.lastErrorMessage, true)
             }
@@ -119,7 +137,7 @@ class DetailFragment : Fragment() {
                                     suc.preciosProducto.precio_unitario_con_iva.toDouble()
                                 else
                                     suc.preciosProducto.precioLista.toDouble()
-                                val urlImage = "https://imagenes.preciosclaros.gob.ar/comercios/${suc.comercioId}-${suc.banderaId}.jpg"
+                                val urlImage = PreciosClarosServer.getBranchImageUrl(suc.comercioId, suc.banderaId)
 
                                 val branch = PriceBranch(
                                     pr.producto.id.toLong(),

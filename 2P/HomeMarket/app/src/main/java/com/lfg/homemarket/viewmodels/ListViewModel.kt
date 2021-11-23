@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import com.lfg.homemarket.clases.*
@@ -37,10 +37,12 @@ class ListViewModel : ViewModel() {
 
     suspend fun getProductListFromCloud(): Boolean {
         var result = false
+        // Source can be CACHE, SERVER, or DEFAULT.
+        val source = Source.DEFAULT
         //traer lista de datos
         db.collection("listaproductos")
             .whereEqualTo("show", true)
-            .get()
+            .get(source)
             .addOnSuccessListener { snapshot ->
                 try {
                     productList.clear()
@@ -80,31 +82,6 @@ class ListViewModel : ViewModel() {
             }
         }
 
-
-    }
-
-    fun loadProductList() {
-        productList.clear()
-        //traer lista de datos
-        db.collection("listaproductos")
-//             .whereEqualTo("tipo", "PERRO")
-//             .limit(20)
-//             .orderBy("edad")
-            .get()
-            .addOnSuccessListener { snapshot ->
-                for (prod in snapshot) {
-                    try {
-                        val pr  = prod.toObject<Product>()
-                        productList.add(pr)
-                    }
-                    catch (ex: Exception) {
-                        Log.w("DB", "Error getting documents: ", ex)
-                    }
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.w("DB", "Error getting documents: ", exception)
-            }
 
     }
 
