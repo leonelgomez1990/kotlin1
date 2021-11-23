@@ -24,6 +24,7 @@ class DetailViewModel : ViewModel() {
     var branchList : MutableList<PriceBranch> = mutableListOf()
     private val PREF_NAME = "mySelection"
     val product = MutableLiveData<Product>()
+    val price = MutableLiveData<Double>()
     private val db = Firebase.firestore
     lateinit var retrofit: ItemRetrofit
 
@@ -46,9 +47,10 @@ class DetailViewModel : ViewModel() {
                 if (dataSnapshot != null) {
                     val pr  = dataSnapshot.toObject<Product>()
                     Log.d("Test", "DocumentSnapshot data: ${pr.toString()}")
-                    if (pr?.id!! > 0)
+                    if (pr?.id!! > 0) {
                         product.value = pr!!
-
+                        price.value = pr.price?:0.0
+                    }
                 } else {
                     Log.d("Test", "No such document")
                 }
@@ -141,7 +143,7 @@ class DetailViewModel : ViewModel() {
                                 urlImage
                             )
                             branchList.add(branch)
-                            checkNewProductValue(price)
+                            checkNewProductValue(lowPrice)
                         }
                         result = "OK"
                     }
@@ -166,12 +168,13 @@ class DetailViewModel : ViewModel() {
         db.collection("preciosclaros").document(idStructure).set(pr1)
     }
 
-    fun checkNewProductValue(price : Double) {
+    fun checkNewProductValue(newVal : Double) {
         if(product.value?.id?:0  > 0) {
             val id = product.value?.id.toString()
-            if(product.value!!.price != price) {
-                product.value!!.price = price
-                db.collection("listaproductos").document(id).update("price" , price)
+            if(product.value!!.price != newVal) {
+                product.value!!.price = newVal
+                price.value = newVal
+                db.collection("listaproductos").document(id).update("price" , newVal)
             }
         }
     }

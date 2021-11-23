@@ -45,12 +45,10 @@ class DetailFragment : Fragment() {
 
         viewModel.product.observe(viewLifecycleOwner, { result ->
             if(result.id > 0) {
-                val strPrice = "$ ${DecimalFormat("0.00").format(result.price)}"
                 viewModel.setViewImage(requireContext(),binding.imgDetailProduct, result.id.toString())
                 binding.txtDetailName.text = result.description
                 binding.txtDetailBrand.text = result.brand
                 binding.txtDetailPresentation.text = result.presentation
-                binding.txtDetailPrice.text = strPrice
 
                 val scope = CoroutineScope(Dispatchers.Main + Job())
                 scope.async {
@@ -72,6 +70,11 @@ class DetailFragment : Fragment() {
                     }
                 }
             }
+        })
+
+        viewModel.price.observe(viewLifecycleOwner, { result ->
+            val strPrice = "$ ${DecimalFormat("0.00").format(result)}"
+            binding.txtDetailPrice.text = strPrice
         })
 
         binding.imgDetailProduct.setOnClickListener {
@@ -152,7 +155,7 @@ class DetailFragment : Fragment() {
                                 )
                                 viewModel.branchList.add(branch)
                             }
-                            viewModel.checkNewProductValue(price)
+                            viewModel.checkNewProductValue(lowPrice)
 
                             viewModel.saveTodayDataToDB(pr.producto.id, pr)
                             errorText = "Producto agregado: " + pr.producto.nombre
