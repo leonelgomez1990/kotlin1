@@ -121,12 +121,15 @@ class DetailViewModel : ViewModel() {
                         result = "RETROFIT"
                     }
                     else {
+                        var lowPrice = 0.0
                         for (suc in itr?.sucursales!!) {
                             val price = if (suc.sucursalTipo == "Mayorista")
                                 suc.preciosProducto.precio_unitario_con_iva.toDouble()
                             else
                                 suc.preciosProducto.precioLista.toDouble()
                             val urlImage = PreciosClarosServer.getBranchImageUrl(suc.comercioId, suc.banderaId)
+                            if((lowPrice == 0.0) || (lowPrice > price))
+                                lowPrice = price
 
                             val branch = PriceBranch(
                                 id,
@@ -138,6 +141,7 @@ class DetailViewModel : ViewModel() {
                                 urlImage
                             )
                             branchList.add(branch)
+                            checkNewProductValue(price)
                         }
                         result = "OK"
                     }
@@ -160,6 +164,16 @@ class DetailViewModel : ViewModel() {
     fun saveTodayDataToDB(id : String, pr1 : ItemResponse) {
         val idStructure = ProductIdStructure.getFromId(id)
         db.collection("preciosclaros").document(idStructure).set(pr1)
+    }
+
+    fun checkNewProductValue(price : Double) {
+        if(product.value?.id?:0  > 0) {
+            val id = product.value?.id.toString()
+            if(product.value!!.price != price) {
+                product.value!!.price = price
+                db.collection("listaproductos").document(id).update("price" , price)
+            }
+        }
     }
 
 }

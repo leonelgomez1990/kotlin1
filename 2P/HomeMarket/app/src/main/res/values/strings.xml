@@ -10,6 +10,7 @@
     <string name="detail_txt_market">Local</string>
     <string name="detail_txt_brand">Marca</string>
     <string name="detail_txt_presentation">Presentación</string>
+    <string name="detail_txt_price_better">Precio más bajo</string>
 
     <string name="txt_add_item">Agregar item</string>
     <string name="txt_scan_title">ESCANEO DE PRODUCTO</string>

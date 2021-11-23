@@ -14,10 +14,7 @@ import com.lfg.homemarket.adapters.BranchRecyclerAdapter
 import com.lfg.homemarket.clases.*
 import com.lfg.homemarket.databinding.DetailFragmentBinding
 import com.lfg.homemarket.viewmodels.DetailViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import retrofit2.Response
 import java.text.DecimalFormat
 
@@ -56,7 +53,7 @@ class DetailFragment : Fragment() {
                 binding.txtDetailPrice.text = strPrice
 
                 val scope = CoroutineScope(Dispatchers.Main + Job())
-                scope.launch {
+                scope.async {
                     val routineResult = viewModel.getBranchListFromCloud()
                     runOnUiThread {
                         when(routineResult) {
@@ -128,15 +125,20 @@ class DetailFragment : Fragment() {
                     if (pr?.status == 200) {
                         if (pr.producto.msg != "Producto inexistente.") {
                             var precio = 0.0
+                            var lowPrice = 0.0
+                            var price = 0.0
                             Log.d("Producto", "Id: ${pr.producto.id} ${pr.producto.nombre}")
                             pr.sucursales.forEach { suc ->
                                 Log.d("Sucursal", "   ${suc.comercioRazonSocial} ${suc.preciosProducto.precioLista}")
                                 if((suc.preciosProducto.precioLista != "") && (precio == 0.0))
                                     precio = suc.preciosProducto.precioLista.toDouble()
-                                val price = if (suc.sucursalTipo == "Mayorista")
+                                price = if (suc.sucursalTipo == "Mayorista")
                                     suc.preciosProducto.precio_unitario_con_iva.toDouble()
                                 else
                                     suc.preciosProducto.precioLista.toDouble()
+                                if((lowPrice == 0.0) || (lowPrice > price))
+                                    lowPrice = price
+
                                 val urlImage = PreciosClarosServer.getBranchImageUrl(suc.comercioId, suc.banderaId)
 
                                 val branch = PriceBranch(
@@ -150,6 +152,8 @@ class DetailFragment : Fragment() {
                                 )
                                 viewModel.branchList.add(branch)
                             }
+                            viewModel.checkNewProductValue(price)
+
                             viewModel.saveTodayDataToDB(pr.producto.id, pr)
                             errorText = "Producto agregado: " + pr.producto.nombre
                             adapterP.notifyDataSetChanged()

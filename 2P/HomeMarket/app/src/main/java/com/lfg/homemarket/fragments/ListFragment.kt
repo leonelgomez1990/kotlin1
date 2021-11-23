@@ -20,10 +20,7 @@ import com.lfg.homemarket.clases.PreciosClarosServer
 import com.lfg.homemarket.clases.Product
 import com.lfg.homemarket.databinding.ListFragmentBinding
 import com.lfg.homemarket.viewmodels.ListViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import retrofit2.Response
 
 class ListFragment : Fragment(){
@@ -54,7 +51,7 @@ class ListFragment : Fragment(){
         setupRecycler()
 
         val scope = CoroutineScope(Dispatchers.Main + Job())
-        scope.launch {
+        scope.async {
             viewModel.getProductListFromCloud()
             adapterP.notifyDataSetChanged()
             binding.progressBarListView.visibility = ProgressBar.INVISIBLE
