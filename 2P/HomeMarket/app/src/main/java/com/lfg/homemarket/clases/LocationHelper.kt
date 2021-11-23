@@ -4,6 +4,8 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
+import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -41,10 +43,15 @@ class LocationHelper (
         if(allPermissionsGranted()) {
             return try {
                 mFusedLocationClient.lastLocation
-                    .addOnSuccessListener { location->
-                        Log.d (TAG,location.latitude.toString())
-                        Log.d (TAG,location.longitude.toString())
-                        onGettingLocation(location.latitude.toString(),location.longitude.toString())
+                    .addOnCompleteListener(activity) { task ->
+                        val location: Location? = task.result
+                        if (location == null) {
+                            requestNewLocationData()
+                        } else {
+                            Log.d (TAG,location.latitude.toString())
+                            Log.d (TAG,location.longitude.toString())
+                            onGettingLocation(location.latitude.toString(),location.longitude.toString())
+                        }
                     }
                 true
             } catch (ex : Exception) {
@@ -72,6 +79,31 @@ class LocationHelper (
             }
         }
         return true
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun requestNewLocationData() {
+        var mLocationRequest = LocationRequest()
+        mLocationRequest.priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
+        mLocationRequest.interval = 60000
+        mLocationRequest.fastestInterval = 360000
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
+        mFusedLocationClient!!.requestLocationUpdates(
+            mLocationRequest, mLocationCallback,
+            Looper.myLooper()
+        )
+    }
+
+    private val mLocationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            val location: Location = locationResult.lastLocation
+            if (location != null) {
+                Log.d (TAG,location.latitude.toString())
+                Log.d (TAG,location.longitude.toString())
+                onGettingLocation(location.latitude.toString(),location.longitude.toString())
+            }
+        }
     }
 
     companion object {
