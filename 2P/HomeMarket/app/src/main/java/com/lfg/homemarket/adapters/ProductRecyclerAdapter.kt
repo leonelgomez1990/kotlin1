@@ -49,6 +49,8 @@ class ProductRecyclerAdapter (
             binding.imgItem.loadUrl(item.urlImage)
             if(item.price > 0)
                 binding.txtPriceItem.text = strPrice
+            else
+                binding.txtPriceItem.text = ""
         }
 
         fun getCardView () : CardView = binding.cardPackageItem
@@ -58,6 +60,7 @@ class ProductRecyclerAdapter (
                 .get()
                 .load(url)
                 .placeholder(R.mipmap.ic_no_picture)
+                .error(R.mipmap.ic_no_picture)
                 .into(this)
         }
     }

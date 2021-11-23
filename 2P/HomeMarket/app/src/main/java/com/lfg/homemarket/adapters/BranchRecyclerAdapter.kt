@@ -86,6 +86,7 @@ class BranchRecyclerAdapter (
                         .load(gsReference)
                         .centerInside()
                         .placeholder(R.mipmap.ic_no_picture)
+                        .error(R.mipmap.ic_no_picture)
                         .listener(object : RequestListener<Drawable> {
                             override fun onLoadFailed(
                                 e: GlideException?,
@@ -117,6 +118,7 @@ class BranchRecyclerAdapter (
                     .get()
                     .load(url)
                     .placeholder(R.mipmap.ic_no_picture)
+                    .error(R.mipmap.ic_no_picture)
                     .into(this)
             }
         }
