@@ -1,5 +1,6 @@
 package com.leo.aclite
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -25,10 +26,16 @@ class MainActivity : AppCompatActivity() {
                 binding.button.visibility = View.GONE
                 binding.progress.visibility = View.VISIBLE
 
-                tryLogin(binding.user.text.toString(), binding.pass.text.toString() )
+                val success = tryLogin(binding.user.text.toString(), binding.pass.text.toString() )
+                if (success) {
+                    startActivity(Intent(this@MainActivity, NextActivity::class.java))
+                    finish()
+                }
+                else {
+                    binding.button.visibility = View.VISIBLE
+                    binding.progress.visibility = View.GONE
+                }
 
-                binding.button.visibility = View.VISIBLE
-                binding.progress.visibility = View.GONE
             }
 
         }
