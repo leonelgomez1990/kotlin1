@@ -34,12 +34,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun tryLogin(user: String, pass: String) {
+    private suspend fun tryLogin(user: String, pass: String): Boolean {
         delay(2000)
-        Toast.makeText(
-            this,
-            "user: $user, pass: $pass",
-            Toast.LENGTH_SHORT
-        ).show()
+        if (!user.contains('@')) {
+            binding.user.error = getString(R.string.user_error)
+        }
+        else {
+            binding.user.error = null
+        }
+
+        if (pass.length < 5) {
+            binding.pass.error = getString(R.string.pass_error)
+        }
+        else {
+            binding.pass.error = null
+        }
+        return binding.user.error == null && binding.pass.error == null
+
     }
 }
