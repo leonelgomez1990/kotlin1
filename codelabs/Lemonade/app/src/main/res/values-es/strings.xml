@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Limonada</string>
+    <string name="lemon_select">Haz clic para seleccionar un limón.</string>
+    <string name="lemon_squeeze">Haz clic para exprimir el limón.</string>
+    <string name="lemon_drink">Haz clic para beber la limonada.</string>
+    <string name="lemon_empty_glass">Haz clic para comenzar de nuevo.</string>
+    <string name="squeeze_count">Contador: %1$d, sigue exprimiendo!</string>
+</resources>
